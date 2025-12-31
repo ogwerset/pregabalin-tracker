@@ -3577,7 +3577,10 @@
                 const hamburgerBtn = document.getElementById('hamburger-btn');
                 const navTabs = document.getElementById('nav-tabs');
                 if (hamburgerBtn && navTabs) {
-                    hamburgerBtn.addEventListener('click', () => {
+                    hamburgerBtn.addEventListener('click', (e) => {
+                        console.log('hamburger clicked!');
+                        e.preventDefault();
+                        e.stopPropagation();
                         navTabs.classList.toggle('open');
                     });
                     // Close menu when clicking on a tab
