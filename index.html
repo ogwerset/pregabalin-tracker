@@ -3642,7 +3642,7 @@
                 // Clear data
                 const btnClear = document.getElementById('btn-clear');
                 if (btnClear) {
-                    btnClear.addEventListener('click', () => {
+                    addMobileEvent(btnClear, () => {
                         if (confirm('Czy na pewno chcesz usunąć wszystkie dane? Ta operacja jest nieodwracalna.')) {
                             if (DataStore.clear) {
                                 DataStore.clear();
@@ -3656,7 +3656,7 @@
                 // Export CSV
                 const btnExportCSV = document.getElementById('btn-export-csv');
                 if (btnExportCSV) {
-                    btnExportCSV.addEventListener('click', () => {
+                    addMobileEvent(btnExportCSV, () => {
                         if (DataStore.exportCSV) {
                             const csv = DataStore.exportCSV();
                             const blob = new Blob([csv], { type: 'text/csv' });
@@ -3674,10 +3674,10 @@
                 const btnPrint = document.getElementById('btn-print');
                 const btnExportPNG = document.getElementById('btn-export-png');
                 if (btnPrint) {
-                    btnPrint.addEventListener('click', () => this.exportSelected());
+                    addMobileEvent(btnPrint, () => this.exportSelected());
                 }
                 if (btnExportPNG) {
-                    btnExportPNG.addEventListener('click', () => this.exportAllChartsPNG());
+                    addMobileEvent(btnExportPNG, () => this.exportAllChartsPNG());
                 }
                 
                 // Segment checkboxes - synchronizacja między panel export a checkboxy przy wykresach
