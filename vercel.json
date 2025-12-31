@@ -1,14 +1,4 @@
 {
-  "cleanUrls": true,
-  "rewrites": [
-    {
-      "source": "/",
-      "destination": "/pregabalin-tracker.html"
-    },
-    {
-      "source": "/(.*)",
-      "destination": "/pregabalin-tracker.html"
-    }
-  ]
+  "cleanUrls": true
 }
 
