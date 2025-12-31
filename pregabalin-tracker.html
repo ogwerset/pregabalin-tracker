@@ -3587,10 +3587,14 @@
             },
             
             bindEvents: function() {
-                // Helper: Add click event (touchstart handled natively by iOS)
+                // Helper: Add click and touchend for mobile compatibility
                 const addMobileEvent = (element, handler) => {
                     if (!element) return;
-                    element.addEventListener('click', handler);
+                    const wrappedHandler = (e) => {
+                        handler(e);
+                    };
+                    element.addEventListener('click', wrappedHandler);
+                    element.addEventListener('touchend', wrappedHandler, { passive: true });
                 };
                 
                 // Hamburger menu toggle
