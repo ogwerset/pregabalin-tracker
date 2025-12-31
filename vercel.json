@@ -1,24 +1,17 @@
 {
-  "version": 2,
-  "builds": [
+  "rewrites": [
     {
-      "src": "pregabalin-tracker.html",
-      "use": "@vercel/static"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/",
-      "dest": "/pregabalin-tracker.html"
+      "source": "/",
+      "destination": "/pregabalin-tracker.html"
     },
     {
-      "src": "/pregabalin-tracker.html",
-      "dest": "/pregabalin-tracker.html"
+      "source": "/index.html",
+      "destination": "/pregabalin-tracker.html"
     }
   ],
   "headers": [
     {
-      "source": "/(.*)",
+      "source": "/(.*\\.html)",
       "headers": [
         {
           "key": "Content-Type",
