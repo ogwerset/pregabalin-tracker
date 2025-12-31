@@ -1,23 +1,13 @@
 {
+  "cleanUrls": true,
   "rewrites": [
     {
       "source": "/",
       "destination": "/pregabalin-tracker.html"
     },
     {
-      "source": "/index.html",
+      "source": "/(.*)",
       "destination": "/pregabalin-tracker.html"
-    }
-  ],
-  "headers": [
-    {
-      "source": "/(.*\\.html)",
-      "headers": [
-        {
-          "key": "Content-Type",
-          "value": "text/html; charset=utf-8"
-        }
-      ]
     }
   ]
 }
