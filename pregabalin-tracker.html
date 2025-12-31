@@ -547,6 +547,15 @@
         }
         
         @media (max-width: 768px) {
+            .container {
+                padding: 0 10px;
+            }
+            
+            .card, .chart-card {
+                padding: 15px;
+                margin-bottom: 15px;
+            }
+            
             header h1 {
                 font-size: 1.4rem;
             }
@@ -570,8 +579,61 @@
                 width: 100%;
             }
             
+            .chart-container {
+                min-height: 280px;
+            }
+            
+            .export-checkboxes {
+                grid-template-columns: 1fr 1fr;
+                gap: 8px;
+            }
+            
+            .segment-checkbox label {
+                font-size: 0.75rem;
+            }
+            
+            .report-section table {
+                font-size: 0.75rem;
+            }
+            
+            .report-section th,
+            .report-section td {
+                padding: 8px 4px;
+            }
+            
             .table-wrapper {
                 font-size: 0.8rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            header h1 {
+                font-size: 1.1rem;
+            }
+            
+            .nav-tab {
+                padding: 8px 12px;
+                font-size: 0.8rem;
+            }
+            
+            h2, h3 {
+                font-size: 1.1rem;
+            }
+            
+            .chart-container {
+                min-height: 220px;
+            }
+            
+            .export-checkboxes {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn-export.mt-20 {
+                display: none;
+            }
+            
+            .chart-controls .segment-checkbox {
+                display: none;
             }
         }
         
