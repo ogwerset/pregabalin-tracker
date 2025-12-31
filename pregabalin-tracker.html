@@ -842,16 +842,16 @@
                         <label for="check-chart-adhd">Wykres 3: Stabilność ADHD</label>
                     </div>
                     <div class="segment-checkbox">
-                        <input type="checkbox" id="check-stacked-area" checked>
-                        <label for="check-stacked-area">Wykres 4: Stacked Area</label>
+                        <input type="checkbox" id="check-chart-stacked-area" checked>
+                        <label for="check-chart-stacked-area">Wykres 4: Stacked Area</label>
                     </div>
                     <div class="segment-checkbox">
-                        <input type="checkbox" id="check-positive-vs-negative" checked>
-                        <label for="check-positive-vs-negative">Wykres 11: Pozytywne vs Negatywne</label>
+                        <input type="checkbox" id="check-chart-positive-vs-negative" checked>
+                        <label for="check-chart-positive-vs-negative">Wykres 11: Pozytywne vs Negatywne</label>
                     </div>
                     <div class="segment-checkbox">
-                        <input type="checkbox" id="check-metrics-by-time" checked>
-                        <label for="check-metrics-by-time">Wykres 12: Metryki per Pora</label>
+                        <input type="checkbox" id="check-chart-metrics-by-time" checked>
+                        <label for="check-chart-metrics-by-time">Wykres 12: Metryki per Pora</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-correlation" checked>
@@ -3573,16 +3573,10 @@
             },
             
             bindEvents: function() {
-                // Helper: Add both click and touchstart for iOS compatibility
+                // Helper: Add click event (touchstart handled natively by iOS)
                 const addMobileEvent = (element, handler) => {
                     if (!element) return;
-                    const wrappedHandler = (e) => {
-                        e.preventDefault();
-                        e.stopPropagation();
-                        handler(e);
-                    };
-                    element.addEventListener('click', wrappedHandler);
-                    element.addEventListener('touchstart', wrappedHandler, { passive: false });
+                    element.addEventListener('click', handler);
                 };
                 
                 // Hamburger menu toggle
@@ -3685,10 +3679,14 @@
                     'check-chart-gad': 'chart-gad',
                     'check-chart-intraday': 'chart-intraday',
                     'check-chart-adhd': 'chart-adhd',
-                    'check-stacked-area': 'chart-stacked-area',
+                    'check-chart-stacked-area': 'chart-stacked-area',
                     'check-chart-correlation': 'chart-correlation',
-                    'check-positive-vs-negative': 'chart-positive-vs-negative',
-                    'check-metrics-by-time': 'chart-metrics-by-time',
+                    'check-chart-positive-vs-negative': 'chart-positive-vs-negative',
+                    'check-chart-metrics-by-time': 'chart-metrics-by-time',
+                    'check-chart-sleep': 'chart-sleep',
+                    'check-chart-sleep-anxiety': 'chart-sleep-anxiety',
+                    'check-chart-rolling-avg': 'chart-rolling-avg',
+                    'check-chart-weekly': 'chart-weekly',
                     'check-report': 'report'
                 };
                 
