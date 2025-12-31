@@ -488,6 +488,26 @@
             height: 400px;
         }
         
+        /* ===== HAMBURGER MENU ===== */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            gap: 5px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            padding: 10px;
+            z-index: 101;
+        }
+        
+        .hamburger span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            border-radius: 2px;
+            transition: 0.3s;
+        }
+        
         /* ===== DARK MODE TOGGLE ===== */
         .theme-toggle {
             background: var(--bg-hover);
@@ -547,28 +567,66 @@
         }
         
         @media (max-width: 768px) {
+            header {
+                padding: 10px 15px;
+                position: sticky;
+                top: 0;
+                z-index: 100;
+                background: var(--bg-primary);
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .hamburger {
+                display: flex;
+            }
+            
+            .nav-tabs {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                right: 0;
+                background: var(--bg-card);
+                flex-direction: column;
+                border-bottom: 1px solid var(--border);
+                z-index: 100;
+                margin-top: 0;
+                box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            }
+            
+            .nav-tabs.open {
+                display: flex;
+            }
+            
+            .nav-tab {
+                width: 100%;
+                text-align: left;
+                padding: 15px 20px;
+                border-bottom: 1px solid var(--border);
+                border-radius: 0;
+            }
+            
             .container {
-                padding: 0 10px;
+                padding: 10px;
             }
             
             .card, .chart-card {
                 padding: 15px;
+                border-radius: 10px;
                 margin-bottom: 15px;
             }
             
+            .chart-card {
+                padding: 12px;
+            }
+            
+            .chart-card h3 {
+                font-size: 1rem;
+                margin-bottom: 10px;
+            }
+            
             header h1 {
-                font-size: 1.4rem;
-            }
-            
-            .nav-tabs {
-                overflow-x: auto;
-                -webkit-overflow-scrolling: touch;
-            }
-            
-            .nav-tab {
-                padding: 10px 16px;
-                font-size: 0.9rem;
-                white-space: nowrap;
+                font-size: 1.2rem;
             }
             
             .button-group {
@@ -580,60 +638,72 @@
             }
             
             .chart-container {
-                min-height: 280px;
+                min-height: 320px;
+            }
+            
+            .charts-grid {
+                gap: 15px;
+            }
+            
+            .export-panel .card {
+                padding: 12px;
             }
             
             .export-checkboxes {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
+                display: none;
             }
             
-            .segment-checkbox label {
-                font-size: 0.75rem;
+            .report-section {
+                overflow-x: auto;
+                -webkit-overflow-scrolling: touch;
             }
             
             .report-section table {
-                font-size: 0.75rem;
+                min-width: 500px;
+                font-size: 0.8rem;
             }
             
             .report-section th,
             .report-section td {
-                padding: 8px 4px;
+                padding: 8px 6px;
+                white-space: nowrap;
             }
             
             .table-wrapper {
                 font-size: 0.8rem;
             }
+            
+            #toast-container {
+                left: 10px;
+                right: 10px;
+                bottom: 10px;
+                max-width: none;
+            }
+            
+            .toast {
+                width: 100%;
+                padding: 12px 15px;
+                font-size: 0.9rem;
+                border-radius: 8px;
+            }
         }
         
         @media (max-width: 480px) {
             header h1 {
-                font-size: 1.1rem;
+                font-size: 1.2rem;
             }
             
             .nav-tab {
-                padding: 8px 12px;
-                font-size: 0.8rem;
+                padding: 12px 20px;
+                font-size: 0.85rem;
             }
             
             h2, h3 {
-                font-size: 1.1rem;
+                font-size: 1.15rem;
             }
             
             .chart-container {
-                min-height: 220px;
-            }
-            
-            .export-checkboxes {
-                grid-template-columns: 1fr;
-            }
-            
-            .btn-export.mt-20 {
-                display: none;
-            }
-            
-            .chart-controls .segment-checkbox {
-                display: none;
+                min-height: 300px;
             }
         }
         
@@ -675,6 +745,11 @@
     <header>
         <div class="container">
             <div class="header-content">
+                <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </button>
                 <h1>📊 Pregabalina Tracker</h1>
                 <div class="header-actions">
                     <button class="theme-toggle" id="theme-toggle" title="Przełącz tryb jasny/ciemny">
@@ -684,7 +759,7 @@
             </div>
             
             <!-- Navigation Tabs -->
-            <nav class="nav-tabs">
+            <nav class="nav-tabs" id="nav-tabs">
                 <button class="nav-tab active" data-tab="tab-import">Import Danych</button>
                 <button class="nav-tab" data-tab="tab-dashboard">Dashboard</button>
                 <button class="nav-tab" data-tab="tab-table">Tabela</button>
@@ -1827,27 +1902,45 @@
             // Plotly templates
             getTemplate: function() {
                 const isDark = this.currentTheme === 'dark';
+                const isMobile = window.innerWidth < 768;
+                const isSmallMobile = window.innerWidth < 480;
+                
+                const fontSize = isSmallMobile ? 10 : (isMobile ? 11 : 12);
+                const titleSize = isSmallMobile ? 13 : (isMobile ? 14 : 16);
+                const tickFontSize = isSmallMobile ? 9 : (isMobile ? 10 : 11);
+                
                 return {
                     paper_bgcolor: 'transparent',
                     plot_bgcolor: 'transparent',
                     font: { 
                         color: isDark ? '#F1F5F9' : '#1E293B',
                         family: 'Outfit, sans-serif',
-                        size: 12
+                        size: fontSize
+                    },
+                    title: {
+                        font: { size: titleSize, family: 'Outfit, sans-serif' }
                     },
                     xaxis: {
                         gridcolor: isDark ? '#334155' : '#E2E8F0',
                         linecolor: isDark ? '#334155' : '#E2E8F0',
                         color: isDark ? '#94A3B8' : '#64748B',
-                        tickfont: { family: 'Outfit, sans-serif' }
+                        tickfont: { family: 'Outfit, sans-serif', size: tickFontSize }
                     },
                     yaxis: {
                         gridcolor: isDark ? '#334155' : '#E2E8F0',
                         linecolor: isDark ? '#334155' : '#E2E8F0',
                         color: isDark ? '#94A3B8' : '#64748B',
-                        tickfont: { family: 'Outfit, sans-serif' }
+                        tickfont: { family: 'Outfit, sans-serif', size: tickFontSize }
                     }
                 };
+            },
+            
+            // Helper: Get mobile-aware margin
+            getMobileMargin: function() {
+                const isMobile = window.innerWidth < 768;
+                return isMobile 
+                    ? { t: 35, r: 10, b: 35, l: 35 }
+                    : { t: 60, r: 20, b: 60, l: 60 };
             },
             
             // Ustaw theme
@@ -1995,7 +2088,7 @@
                         borderwidth: 1
                     },
                     hovermode: 'x unified',
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, traces, layout, {responsive: true});
@@ -2051,7 +2144,10 @@
                     },
                     barmode: 'group',
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 80, l: 60 }
+                    margin: (() => {
+                        const m = ChartRenderer.getMobileMargin();
+                        return { t: m.t, r: m.r, b: m.b + 20, l: m.l };
+                    })()
                 };
                 
                 Plotly.react(containerId, [trace1, trace2], layout, {responsive: true});
@@ -2153,7 +2249,7 @@
                         borderwidth: 1
                     },
                     hovermode: 'x unified',
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, [trace1, trace2, trace3], layout, {responsive: true});
@@ -2277,7 +2373,7 @@
                         range: [0, null]
                     },
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {responsive: true});
@@ -2379,7 +2475,7 @@
                         range: [0, 10]
                     },
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, traces, layout, {responsive: true});
@@ -2494,7 +2590,7 @@
                     },
                     barmode: 'group',
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {responsive: true});
@@ -2594,7 +2690,10 @@
                         color: '#8B5CF6'
                     },
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 60, b: 80, l: 60 }
+                    margin: (() => {
+                        const m = ChartRenderer.getMobileMargin();
+                        return { t: m.t, r: m.r + 40, b: m.b + 20, l: m.l };
+                    })()
                 };
                 
                 Plotly.newPlot(containerId, [trace1, trace2], layout, {responsive: true});
@@ -2685,7 +2784,7 @@
                         range: [0, 10]
                     },
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, traces, layout, {responsive: true});
@@ -2774,7 +2873,7 @@
                         range: [0, 10]
                     },
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {responsive: true});
@@ -2878,7 +2977,7 @@
                     },
                     barmode: 'group',
                     legend: { orientation: 'h', y: -0.2 },
-                    margin: { t: 60, r: 20, b: 60, l: 60 }
+                    margin: this.getMobileMargin()
                 };
                 
                 Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {responsive: true});
@@ -2946,7 +3045,10 @@
                         font: { size: 16, family: 'Outfit, sans-serif' }
                     },
                     showlegend: false,
-                    margin: { t: 80, r: 20, b: 20, l: 20 }
+                    margin: (() => {
+                        const isMobile = window.innerWidth < 768;
+                        return isMobile ? { t: 50, r: 10, b: 10, l: 10 } : { t: 80, r: 20, b: 20, l: 20 };
+                    })()
                 };
                 
                 // Purge i stwórz nowy wykres
@@ -3539,6 +3641,21 @@
             },
             
             bindEvents: function() {
+                // Hamburger menu toggle
+                const hamburgerBtn = document.getElementById('hamburger-btn');
+                const navTabs = document.getElementById('nav-tabs');
+                if (hamburgerBtn && navTabs) {
+                    hamburgerBtn.addEventListener('click', () => {
+                        navTabs.classList.toggle('open');
+                    });
+                    // Close menu when clicking on a tab
+                    document.querySelectorAll('.nav-tab').forEach(tab => {
+                        tab.addEventListener('click', () => {
+                            navTabs.classList.remove('open');
+                        });
+                    });
+                }
+                
                 // Theme toggle
                 const themeToggle = document.getElementById('theme-toggle');
                 if (themeToggle) {
