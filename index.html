@@ -81,6 +81,7 @@
             top: 0;
             z-index: 100;
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            min-height: 60px;
         }
         
         header .container {
@@ -597,6 +598,10 @@
                 touch-action: manipulation;
             }
             
+            .hamburger span {
+                display: block;
+            }
+            
             header h1 {
                 font-size: 1.1rem;
                 margin: 0 10px;
@@ -609,14 +614,16 @@
             .nav-tabs.open {
                 display: flex;
                 flex-direction: column;
-                position: absolute;
-                top: 100%;
+                position: fixed;
+                top: 60px;
                 left: 0;
                 right: 0;
                 background: var(--bg-card);
                 z-index: 999;
                 margin-top: 0;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+                max-height: calc(100vh - 60px);
+                overflow-y: auto;
             }
             
             .nav-tab {
@@ -671,7 +678,10 @@
             }
             
             .export-checkboxes {
-                display: none;
+                display: grid;
+                grid-template-columns: 1fr;
+                gap: 8px;
+                font-size: 0.85rem;
             }
             
             .report-section {
