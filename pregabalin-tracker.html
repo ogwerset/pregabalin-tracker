@@ -3573,19 +3573,29 @@
             },
             
             bindEvents: function() {
+                // Helper: Add both click and touchstart for iOS compatibility
+                const addMobileEvent = (element, handler) => {
+                    if (!element) return;
+                    const wrappedHandler = (e) => {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        handler(e);
+                    };
+                    element.addEventListener('click', wrappedHandler);
+                    element.addEventListener('touchstart', wrappedHandler, { passive: false });
+                };
+                
                 // Hamburger menu toggle
                 const hamburgerBtn = document.getElementById('hamburger-btn');
                 const navTabs = document.getElementById('nav-tabs');
                 if (hamburgerBtn && navTabs) {
-                    hamburgerBtn.addEventListener('click', (e) => {
+                    addMobileEvent(hamburgerBtn, () => {
                         console.log('hamburger clicked!');
-                        e.preventDefault();
-                        e.stopPropagation();
                         navTabs.classList.toggle('open');
                     });
                     // Close menu when clicking on a tab
                     document.querySelectorAll('.nav-tab').forEach(tab => {
-                        tab.addEventListener('click', () => {
+                        addMobileEvent(tab, () => {
                             navTabs.classList.remove('open');
                         });
                     });
@@ -3594,12 +3604,12 @@
                 // Theme toggle
                 const themeToggle = document.getElementById('theme-toggle');
                 if (themeToggle) {
-                    themeToggle.addEventListener('click', () => this.toggleTheme());
+                    addMobileEvent(themeToggle, () => this.toggleTheme());
                 }
                 
                 // Tab navigation
                 document.querySelectorAll('.nav-tab').forEach(btn => {
-                    btn.addEventListener('click', () => {
+                    addMobileEvent(btn, () => {
                         this.switchTab(btn.dataset.tab);
                     });
                 });
@@ -3608,10 +3618,10 @@
                 const btnImport = document.getElementById('btn-import');
                 const btnAppend = document.getElementById('btn-append');
                 if (btnImport) {
-                    btnImport.addEventListener('click', () => this.handleImport('replace'));
+                    addMobileEvent(btnImport, () => this.handleImport('replace'));
                 }
                 if (btnAppend) {
-                    btnAppend.addEventListener('click', () => this.handleImport('append'));
+                    addMobileEvent(btnAppend, () => this.handleImport('append'));
                 }
                 
                 // CSV upload
