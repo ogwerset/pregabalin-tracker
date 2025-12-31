@@ -70,6 +70,8 @@
         
         main.container {
             overflow-x: hidden;
+            position: relative;
+            z-index: 1;
         }
         
         /* ===== HEADER ===== */
@@ -608,11 +610,12 @@
             }
             
             .nav-tabs {
-                display: none;
+                display: none !important;
+                pointer-events: none;
             }
             
             .nav-tabs.open {
-                display: flex;
+                display: flex !important;
                 flex-direction: column;
                 position: fixed;
                 top: 60px;
@@ -624,6 +627,7 @@
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
                 max-height: calc(100vh - 60px);
                 overflow-y: auto;
+                pointer-events: auto;
             }
             
             .nav-tab {
