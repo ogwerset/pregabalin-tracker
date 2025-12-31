@@ -83,6 +83,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
         
         header h1 {
@@ -569,15 +570,20 @@
         @media (max-width: 768px) {
             header {
                 padding: 10px 15px;
-                position: sticky;
-                top: 0;
-                z-index: 100;
-                background: var(--bg-primary);
-                border-bottom: 1px solid var(--border);
+            }
+            
+            .header-content {
+                position: relative;
             }
             
             .hamburger {
                 display: flex;
+                order: -1;
+            }
+            
+            header h1 {
+                flex: 1;
+                text-align: center;
             }
             
             .nav-tabs {
@@ -986,17 +992,6 @@
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-weekly', 'weekly-comparison')">Pobierz PNG</button>
                 </div>
 
-                <div class="chart-card" id="chart-radar">
-                    <div class="chart-controls">
-                        <h3>Wykres 10: Radar Profilu</h3>
-                        <div class="segment-checkbox">
-                            <input type="checkbox" id="check-radar" checked>
-                            <label for="check-radar">Eksport</label>
-                        </div>
-                    </div>
-                    <div id="plot-radar" class="chart-container"></div>
-                    <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-radar', 'day-radar')">Pobierz PNG</button>
-                </div>
             </div>
         </section>
         
@@ -1952,7 +1947,7 @@
             // Aktualizuj wszystkie wykresy
             updateAllCharts: function() {
                 const template = this.getTemplate();
-                const chartIds = ['plot-gad', 'plot-intraday', 'plot-adhd', 'plot-stacked-area', 'plot-correlation', 'plot-sleep', 'plot-sleep-anxiety', 'plot-rolling-avg', 'plot-weekly', 'plot-radar', 'plot-positive-vs-negative', 'plot-metrics-by-time'];
+                const chartIds = ['plot-gad', 'plot-intraday', 'plot-adhd', 'plot-stacked-area', 'plot-correlation', 'plot-sleep', 'plot-sleep-anxiety', 'plot-rolling-avg', 'plot-weekly', 'plot-positive-vs-negative', 'plot-metrics-by-time'];
                 chartIds.forEach(id => {
                     const element = document.getElementById(id);
                     if (element && element.data) {
@@ -2982,80 +2977,6 @@
                 
                 Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {responsive: true});
             },
-            
-            // Wykres 10: Radar Profilu Dnia
-            renderDayRadar: function(containerId, dailyData) {
-                if (!dailyData || dailyData.length === 0) return;
-                
-                // Oblicz średnie dla wszystkich metryk
-                const metrics = {
-                    'Lęk': dailyData.map(d => d.lek).filter(v => v !== null),
-                    'Napięcie': dailyData.map(d => d.napiecie).filter(v => v !== null),
-                    'Fokus': dailyData.map(d => d.fokus).filter(v => v !== null),
-                    'Energia': dailyData.map(d => d.energia).filter(v => v !== null),
-                    'Klarowność': dailyData.map(d => d.brainfog !== null ? 11 - d.brainfog : null).filter(v => v !== null),
-                    'Jakość Snu': dailyData.map(d => d.jakoscSnu).filter(v => v !== null)
-                };
-                
-                const means = {};
-                Object.keys(metrics).forEach(key => {
-                    const vals = metrics[key];
-                    means[key] = vals.length > 0 ? vals.reduce((a, b) => a + b, 0) / vals.length : 0;
-                });
-                
-                // Przygotuj dane dla radar chart
-                const theta = Object.keys(means);
-                const r = theta.map(k => means[k]);
-                
-                // Plotly scatterpolar wymaga zamkniętego kształtu (pierwszy punkt na końcu)
-                const thetaClosed = [...theta, theta[0]];
-                const rClosed = [...r, r[0]];
-                
-                const trace = {
-                    type: 'scatterpolar',
-                    r: rClosed,
-                    theta: thetaClosed,
-                    fill: 'toself',
-                    name: 'Średni Profil',
-                    line: { color: '#8B5CF6', width: 3 },
-                    marker: { color: '#8B5CF6', size: 8 },
-                    hovertemplate: '%{theta}: %{r:.2f}<extra></extra>'
-                };
-                
-                const template = this.getTemplate();
-                const layout = {
-                    ...template,
-                    polar: {
-                        radialaxis: {
-                            visible: true,
-                            range: [0, 10],
-                            tickfont: { family: 'Outfit, sans-serif', size: 11 },
-                            tickmode: 'linear',
-                            tick0: 0,
-                            dtick: 2
-                        },
-                        angularaxis: {
-                            tickfont: { family: 'Outfit, sans-serif', size: 11 },
-                            rotation: 90,
-                            direction: 'counterclockwise'
-                        }
-                    },
-                    title: {
-                        text: 'Radar Profilu - Holistyczny Widok',
-                        font: { size: 16, family: 'Outfit, sans-serif' }
-                    },
-                    showlegend: false,
-                    margin: (() => {
-                        const isMobile = window.innerWidth < 768;
-                        return isMobile ? { t: 50, r: 10, b: 10, l: 10 } : { t: 80, r: 20, b: 20, l: 20 };
-                    })()
-                };
-                
-                // Purge i stwórz nowy wykres
-                Plotly.purge(containerId);
-                Plotly.newPlot(containerId, [trace], layout, {responsive: true});
-            },
-            
             updateCorrelationSummary: function(correlationData) {
                 const summaryDiv = document.getElementById('correlation-text-summary');
                 if (!summaryDiv) return;
@@ -3145,10 +3066,7 @@
                 // 9. Porównanie Tygodniowe
                 this.renderWeeklyComparison('plot-weekly', dailyData);
 
-                // 10. Radar Profilu
-                this.renderDayRadar('plot-radar', dailyData);
-
-                // 11. Pozytywne vs Negatywne
+                // 10. Pozytywne vs Negatywne
                 this.renderPositiveVsNegative('plot-positive-vs-negative', dailyData);
 
                 // 12. Metryki per Pora Dnia
@@ -3566,7 +3484,6 @@
                 'chart-sleep-anxiety': true,
                 'chart-rolling-avg': true,
                 'chart-weekly': true,
-                'chart-radar': true,
                 'chart-positive-vs-negative': true,
                 'chart-metrics-by-time': true,
                 'report': true
@@ -4006,7 +3923,6 @@
                     'chart-sleep-anxiety': 'plot-sleep-anxiety',
                     'chart-rolling-avg': 'plot-rolling-avg',
                     'chart-weekly': 'plot-weekly',
-                    'chart-radar': 'plot-radar',
                     'chart-positive-vs-negative': 'plot-positive-vs-negative',
                     'chart-metrics-by-time': 'plot-metrics-by-time'
                 };
