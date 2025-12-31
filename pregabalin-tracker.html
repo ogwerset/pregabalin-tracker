@@ -59,7 +59,6 @@
             color: var(--text-primary);
             line-height: 1.6;
             transition: background-color 0.3s, color 0.3s;
-            overflow-x: hidden;
         }
         
         /* ===== LAYOUT ===== */
@@ -129,6 +128,8 @@
             cursor: pointer;
             transition: all 0.3s;
             font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+            touch-action: manipulation;
         }
         
         .nav-tab:hover {
@@ -231,6 +232,8 @@
             cursor: pointer;
             transition: all 0.3s;
             font-family: 'Outfit', sans-serif;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+            touch-action: manipulation;
         }
         
         .btn-primary {
@@ -501,17 +504,6 @@
         /* ===== HAMBURGER MENU ===== */
         .hamburger {
             display: none;
-            flex-direction: column;
-            gap: 5px;
-            background: none;
-            border: none;
-            cursor: pointer;
-            padding: 10px;
-            z-index: 101;
-            position: absolute;
-            left: 0;
-            top: 50%;
-            transform: translateY(-50%);
         }
         
         .hamburger span {
@@ -532,6 +524,8 @@
             color: var(--text-primary);
             font-size: 1.2rem;
             transition: all 0.3s;
+            -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+            touch-action: manipulation;
         }
         
         .theme-toggle:hover {
@@ -586,41 +580,43 @@
             }
             
             .header-content {
-                position: relative;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
             }
             
             .hamburger {
                 display: flex;
-                position: relative;
-                left: auto;
-                top: auto;
-                transform: none;
-                z-index: 102;
+                flex-direction: column;
+                gap: 5px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                padding: 12px;
+                -webkit-tap-highlight-color: rgba(0,0,0,0.1);
+                touch-action: manipulation;
             }
             
             header h1 {
-                flex: 1;
-                text-align: center;
+                font-size: 1.1rem;
+                margin: 0 10px;
             }
             
             .nav-tabs {
                 display: none;
+            }
+            
+            .nav-tabs.open {
+                display: flex;
+                flex-direction: column;
                 position: absolute;
                 top: 100%;
                 left: 0;
                 right: 0;
                 background: var(--bg-card);
-                flex-direction: column;
-                border-bottom: 1px solid var(--border);
-                z-index: 100;
+                z-index: 999;
                 margin-top: 0;
                 box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-                pointer-events: none;
-            }
-            
-            .nav-tabs.open {
-                display: flex;
-                pointer-events: auto;
             }
             
             .nav-tab {
