@@ -21,19 +21,21 @@ const ChartRenderer = {
                 size: fontSize
             },
             title: {
-                font: { size: titleSize, family: 'Merriweather, serif', weight: 700 }
+                font: { size: titleSize, family: 'Merriweather, serif', weight: 700, color: '#D6D3CE' }
             },
             xaxis: {
                 gridcolor: isDark ? 'var(--border)' : 'var(--border)',
                 linecolor: isDark ? 'var(--border)' : 'var(--border)',
-                color: isDark ? 'var(--text-secondary)' : 'var(--text-secondary)',
-                tickfont: { family: 'Inter, sans-serif', size: tickFontSize }
+                color: '#57534E',
+                title: { font: { color: '#57534E' } },
+                tickfont: { family: 'Inter, sans-serif', size: tickFontSize, color: '#57534E' }
             },
             yaxis: {
                 gridcolor: isDark ? 'var(--border)' : 'var(--border)',
                 linecolor: isDark ? 'var(--border)' : 'var(--border)',
-                color: isDark ? 'var(--text-secondary)' : 'var(--text-secondary)',
-                tickfont: { family: 'Inter, sans-serif', size: tickFontSize }
+                color: '#57534E',
+                title: { font: { color: '#57534E' } },
+                tickfont: { family: 'Inter, sans-serif', size: tickFontSize, color: '#57534E' }
             },
             // Disable drag on mobile for better touch experience
             dragmode: isMobile ? false : 'zoom'
