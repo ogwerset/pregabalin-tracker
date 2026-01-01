@@ -12,6 +12,7 @@ const DoctorReport = {
             ${this.renderGADEffectiveness(stats)}
             ${this.renderADHDStability(stats)}
             ${this.renderIntradayPatterns(stats)}
+            ${this.renderCorrelationMatrix(stats)}
             ${this.renderConclusions(stats)}
         `;
         
@@ -103,7 +104,7 @@ const DoctorReport = {
                 <h3>Analiza Okresów 3-Dniowych</h3>
                 <p style="color: var(--text-secondary); margin-bottom: 15px;">
                     Średnie wartości objawów i trendy (slope) dla każdego 3-dniowego okresu obserwacji.
-                    <br><small>Trend: wartości ujemne (zielone) = poprawa, wartości dodatnie (czerwone) = pogorszenie</small>
+                    <br><small>Trend: dla Lęku/Napięcia - wartości ujemne (zielone) = poprawa, wartości dodatnie (czerwone) = pogorszenie. Dla Fokusu/Energii/Klarowności/Jakości Snu - wartości dodatnie (zielone) = poprawa, wartości ujemne (czerwone) = pogorszenie.</small>
                 </p>
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.9rem;">
@@ -207,6 +208,73 @@ const DoctorReport = {
                 </ul>
             </div>
         `;
+    },
+    
+    // Sekcja: Macierz Korelacji
+    renderCorrelationMatrix: function(stats) {
+        // Pobierz dane z localStorage lub wygeneruj na nowo
+        const rawData = DataStore.getAll();
+        if (!rawData || rawData.length === 0) return '';
+        
+        const variables = ['lek', 'napiecie', 'jakoscSnu', 'brainfog', 'energia', 'fokus', 'pregabalina'];
+        const corrData = StatsEngine.correlationMatrix(rawData, variables);
+        const labels = ['Lęk', 'Napięcie', 'Sen (Jakość)', 'Klarowność', 'Energia', 'Fokus', 'Pregabalina'];
+        
+        if (!corrData || !corrData.matrix || corrData.matrix.length === 0) return '';
+        
+        const { matrix } = corrData;
+        
+        let html = `
+            <div class="report-section">
+                <h3>Wykres 5: Macierz Korelacji</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                    Wartości korelacji Pearsona między zmiennymi. Wartości bliskie 1 lub -1 oznaczają silną korelację.
+                </p>
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center;">
+                        <thead>
+                            <tr style="background: var(--bg-hover); border-bottom: 2px solid var(--border);">
+                                <th style="padding: 10px 8px; text-align: left; font-weight: 600;">Zmienna</th>
+                                ${labels.map(l => `<th style="padding: 10px 8px; font-weight: 600;">${l}</th>`).join('')}
+                            </tr>
+                        </thead>
+                        <tbody>
+        `;
+        
+        matrix.forEach((row, i) => {
+            html += `<tr><td style="padding: 10px 8px; background: var(--bg-hover); font-weight: 600; text-align: left; border-right: 2px solid var(--border);">${labels[i]}</td>`;
+            row.forEach((val, j) => {
+                let bgColor = 'transparent';
+                let textColor = 'inherit';
+                const absVal = Math.abs(val);
+                
+                if (i === j) {
+                    bgColor = 'var(--bg-hover)';
+                    html += `<td style="padding: 10px 8px; border: 1px solid var(--border); background: ${bgColor}; font-weight: 600;">1.00</td>`;
+                } else if (i > j) {
+                    // Lower triangle
+                    if (absVal > 0.5) {
+                        bgColor = val > 0 ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)';
+                    } else if (absVal > 0.3) {
+                        bgColor = val > 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+                    }
+                    html += `<td style="padding: 10px 8px; border: 1px solid var(--border); background: ${bgColor}; color: ${textColor};">${val.toFixed(2)}</td>`;
+                } else {
+                    // Upper triangle - empty
+                    html += `<td style="padding: 10px 8px; border: 1px solid var(--border);"></td>`;
+                }
+            });
+            html += '</tr>';
+        });
+        
+        html += `
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        `;
+        
+        return html;
     },
     
     // Sekcja: Wnioski
