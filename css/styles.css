@@ -674,6 +674,17 @@ tr:hover {
     background: var(--border);
 }
 
+/* Theme toggle in navigation menu (mobile) */
+.nav-tab-theme {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.nav-tab-theme .theme-icon-nav {
+    font-size: 1.1rem;
+}
+
 /* ===== EXPORT SELECTION PANEL ===== */
 .export-panel {
     background: var(--bg-card);
@@ -748,7 +759,8 @@ tr:hover {
 
 @media (max-width: 768px) {
     header {
-        padding: 10px 15px;
+        padding: 8px 12px;
+        min-height: 50px;
     }
     
     .header-content {
@@ -761,9 +773,24 @@ tr:hover {
         display: flex;
     }
     
+    .logo-icon {
+        width: 28px;
+        height: 28px;
+    }
+    
     header h1 {
-        font-size: 1.1rem;
-        margin: 0 10px;
+        font-size: 1rem;
+        margin: 0 8px;
+    }
+    
+    /* Hide theme toggle in header on mobile */
+    .header-actions .theme-toggle {
+        display: none;
+    }
+    
+    /* Show theme toggle in nav menu on mobile */
+    .nav-tab-theme {
+        display: flex !important;
     }
     
     /* FIX: Remove pointer-events: none, use display toggle only */
@@ -829,11 +856,21 @@ tr:hover {
     
     .chart-container {
         min-height: 300px;
-        aspect-ratio: 4 / 3; /* Better mobile aspect ratio */
+        width: 100% !important;
+        max-width: 100% !important;
+        aspect-ratio: unset;
+        height: auto;
+    }
+    
+    .chart-card {
+        overflow: hidden;
+        width: 100%;
+        max-width: 100%;
     }
     
     .chart-card.full-width .chart-container {
-        aspect-ratio: 16 / 9;
+        aspect-ratio: unset;
+        min-height: 350px;
     }
     
     .charts-grid {
@@ -878,6 +915,31 @@ tr:hover {
     
     .table-wrapper {
         font-size: 0.8rem;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        width: 100%;
+        max-width: 100%;
+    }
+    
+    table {
+        min-width: 600px;
+        width: 100%;
+    }
+    
+    th, td {
+        padding: 8px 6px;
+        font-size: 0.75rem;
+    }
+    
+    .table-controls {
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .table-controls input,
+    .table-controls select {
+        width: 100%;
+        font-size: 0.9rem;
     }
     
     #toast-container {
@@ -897,13 +959,18 @@ tr:hover {
 }
 
 @media (max-width: 480px) {
+    header {
+        padding: 6px 10px;
+        min-height: 48px;
+    }
+    
     header h1 {
-        font-size: 1.2rem;
+        font-size: 0.95rem;
     }
     
     .logo-icon {
-        width: 32px;
-        height: 32px;
+        width: 24px;
+        height: 24px;
     }
     
     .nav-tab {
@@ -917,11 +984,22 @@ tr:hover {
     
     .chart-container {
         min-height: 280px;
-        aspect-ratio: 1 / 1; /* Square on very small screens */
+        aspect-ratio: unset;
+        height: auto;
     }
     
     .chart-card.full-width .chart-container {
-        aspect-ratio: 4 / 3;
+        aspect-ratio: unset;
+        min-height: 300px;
+    }
+    
+    table {
+        min-width: 500px;
+        font-size: 0.7rem;
+    }
+    
+    th, td {
+        padding: 6px 4px;
     }
 }
 

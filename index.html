@@ -55,6 +55,9 @@
                 <button class="nav-tab" data-tab="tab-dashboard">Dashboard</button>
                 <button class="nav-tab" data-tab="tab-table">Tabela</button>
                 <button class="nav-tab" data-tab="tab-report">Raport dla Lekarza</button>
+                <button class="nav-tab nav-tab-theme" id="nav-theme-toggle" style="display: none;">
+                    <span class="theme-icon-nav">🌙</span> Przełącz motyw
+                </button>
             </nav>
         </div>
     </header>
@@ -90,6 +93,19 @@
                     <button class="btn-secondary" id="btn-export-csv">Eksportuj dane jako CSV</button>
                     <button class="btn-danger" id="btn-clear">Wyczyść wszystkie dane</button>
                 </div>
+            </div>
+            
+            <div class="card">
+                <h3>Ustawienia Raportu</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 15px;">
+                    Edytuj informacje o lekach, które będą wyświetlane w raporcie dla lekarza
+                </p>
+                <label for="medications-input" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary);">
+                    Leki:
+                </label>
+                <textarea id="medications-input" placeholder="Elvanse 70mg/d + Pregabalina 225mg/d (75mg rano + 150mg wieczorem)" style="min-height: 80px; font-family: 'Inter', sans-serif;">Elvanse 70mg/d + Pregabalina 225mg/d (75mg rano + 150mg wieczorem)</textarea>
+                <button class="btn-primary mt-20" id="btn-save-meds" style="margin-top: 15px;">Zapisz ustawienia</button>
+                <div id="meds-feedback" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none; font-size: 0.9rem;"></div>
             </div>
         </section>
         

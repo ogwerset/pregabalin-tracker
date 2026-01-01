@@ -32,6 +32,11 @@ const UIController = {
         if (icon) {
             icon.textContent = theme === 'dark' ? '🌙' : '☀️';
         }
+        // Update mobile menu icon too
+        const navIcon = document.querySelector('#nav-theme-toggle .theme-icon-nav');
+        if (navIcon) {
+            navIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
     },
     
     toggleTheme: function() {
@@ -131,10 +136,23 @@ const UIController = {
             });
         }
         
-        // Theme toggle
+        // Theme toggle (header)
         const themeToggle = document.getElementById('theme-toggle');
         if (themeToggle) {
             addTapEvent(themeToggle, () => this.toggleTheme());
+        }
+        
+        // Theme toggle (mobile menu)
+        const navThemeToggle = document.getElementById('nav-theme-toggle');
+        if (navThemeToggle) {
+            addTapEvent(navThemeToggle, () => {
+                this.toggleTheme();
+                // Close menu after toggle
+                const navTabs = document.getElementById('nav-tabs');
+                if (navTabs) {
+                    navTabs.classList.remove('open');
+                }
+            });
         }
         
         // Tab navigation
@@ -289,6 +307,40 @@ const UIController = {
             filterTimeOfDay.addEventListener('change', () => {
                 if (TableManager.filter) {
                     TableManager.filter({ timeOfDay: filterTimeOfDay.value || null });
+                }
+            });
+        }
+        
+        // Load and save medications
+        const medicationsInput = document.getElementById('medications-input');
+        const btnSaveMeds = document.getElementById('btn-save-meds');
+        const medsFeedback = document.getElementById('meds-feedback');
+        
+        // Load saved medications
+        if (medicationsInput) {
+            const savedMeds = localStorage.getItem(CONFIG.MEDS_KEY);
+            if (savedMeds) {
+                medicationsInput.value = savedMeds;
+            }
+        }
+        
+        // Save medications
+        if (btnSaveMeds) {
+            addTapEvent(btnSaveMeds, () => {
+                if (medicationsInput && medicationsInput.value.trim()) {
+                    localStorage.setItem(CONFIG.MEDS_KEY, medicationsInput.value.trim());
+                    if (medsFeedback) {
+                        medsFeedback.style.display = 'block';
+                        medsFeedback.style.background = 'rgba(16, 185, 129, 0.1)';
+                        medsFeedback.style.border = '1px solid var(--accent-green)';
+                        medsFeedback.style.color = 'var(--accent-green)';
+                        medsFeedback.textContent = '✓ Ustawienia zapisane';
+                        setTimeout(() => {
+                            medsFeedback.style.display = 'none';
+                        }, 3000);
+                    }
+                    // Refresh report if it's visible
+                    this.refreshDashboard();
                 }
             });
         }

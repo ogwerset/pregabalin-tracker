@@ -21,6 +21,8 @@ const DoctorReport = {
     // Sekcja: Informacje o pacjencie
     renderPatientInfo: function(stats) {
         const period = stats.period || {};
+        // Load medications from localStorage
+        const medications = localStorage.getItem(CONFIG.MEDS_KEY) || 'Elvanse 70mg/d + Pregabalina 225mg/d (75mg rano + 150mg wieczorem)';
         return `
             <div class="report-section">
                 <h3>Informacje o Pacjencie</h3>
@@ -28,7 +30,7 @@ const DoctorReport = {
                 <p><strong>Liczba dni:</strong> <strong>${period.days || 0}</strong></p>
                 <p><strong>Liczba pomiarów:</strong> <strong>${period.measurements || 0}</strong></p>
                 <p><strong>Średnia pomiarów/dzień:</strong> <strong>${period.measurements && period.days ? (period.measurements / period.days).toFixed(1) : '-'}</strong></p>
-                <p><strong>Leki:</strong> Elvanse 70mg/d + Pregabalina 225mg/d (75mg rano + 150mg wieczorem)</p>
+                <p><strong>Leki:</strong> ${medications}</p>
             </div>
         `;
     },
