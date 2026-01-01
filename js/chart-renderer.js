@@ -204,6 +204,10 @@ const ChartRenderer = {
             legend: { 
                 x: 0.02,
                 y: 0.98,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1,
                 bgcolor: this.currentTheme === 'dark' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255,255,255,0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
@@ -269,7 +273,14 @@ const ChartRenderer = {
                 range: [0, 11]
             },
             barmode: 'group',
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
                 return { t: m.t, r: m.r, b: m.b + 20, l: m.l };
@@ -375,7 +386,8 @@ const ChartRenderer = {
             legend: { 
                 x: 0.02,
                 y: 0.02,
-                bgcolor: this.currentTheme === 'dark' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255,255,255,0.95)',
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: this.currentTheme === 'dark' ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255,255,255,0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
             },
@@ -506,7 +518,14 @@ const ChartRenderer = {
                 title: 'Suma Wartości',
                 range: [0, null]
             },
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: this.getMobileMargin()
         };
         
@@ -611,7 +630,14 @@ const ChartRenderer = {
                 title: 'Średnia Objawów Negatywnych (Lęk + Napięcie)',
                 range: [0, 10]
             },
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: this.getMobileMargin()
         };
         
@@ -731,7 +757,14 @@ const ChartRenderer = {
                 range: [0, 10]
             },
             barmode: 'group',
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: this.getMobileMargin()
         };
         
@@ -834,7 +867,14 @@ const ChartRenderer = {
                 showgrid: false,
                 color: '#14B8A6' // Medical teal
             },
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
                 return { t: m.t, r: m.r + 40, b: m.b + 20, l: m.l };
@@ -931,7 +971,14 @@ const ChartRenderer = {
                 title: 'Poziom Objawów (dzień N+1)',
                 range: [0, 10]
             },
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: this.getMobileMargin()
         };
         
@@ -1025,7 +1072,14 @@ const ChartRenderer = {
                 title: 'Poziom (skala 1-10)',
                 range: [0, 10]
             },
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: this.getMobileMargin()
         };
         
@@ -1132,7 +1186,14 @@ const ChartRenderer = {
                 range: [0, 10]
             },
             barmode: 'group',
-            legend: { orientation: 'h', y: -0.2 },
+            legend: { 
+                orientation: 'h', 
+                y: -0.2,
+                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            },
             margin: this.getMobileMargin()
         };
         
