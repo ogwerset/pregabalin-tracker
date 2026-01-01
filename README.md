@@ -1,23 +1,71 @@
-# Pregabalin Tracker Dashboard v2.0
+# Pregabalina Tracker Dashboard v2.5
 
-Modern, modular dashboard do wizualizacji dawkowania pregabaliny i efektów leczenia GAD/ADHD.
+Modern, modularny dashboard do wizualizacji dawkowania pregabaliny i efektów leczenia GAD/ADHD.
 
-## ✨ Nowości w v2.0
+## ✨ Nowości w v2.5
 
-- 🎨 **Nowy Design System**: Medyczny, czysty design z paletą szarości i medycznego teal/niebieskiego
-- 📱 **Naprawione Problemy Mobilne**: Wszystkie przyciski działają poprawnie na urządzeniach dotykowych
-- 🏗️ **Modularna Struktura**: Kod podzielony na osobne pliki (CSS, JS) dla lepszej utrzymywalności
-- 📊 **Responsywne Wykresy**: Automatyczne dostosowanie do zmiany rozmiaru okna (ResizeObserver)
-- 🎯 **Ulepszona Kolorystyka**: Wykresy używają medycznej palety kolorów
+- 🎨 **Przeprojektowane przyciski**: Ciemne guziki z kolorowymi akcentami (teal/coral)
+- 📱 **Naprawione wykresy mobile**: Stałe wysokości, bez ucinania
+- 📊 **Naprawiony raport dla lekarza**: Poprawione wyświetlanie macierzy korelacji
+- 🔤 **Lepsza czytelność**: Jaśniejsze tytuły wykresów
+- 📋 **Poprawiona tabela mobile**: Równe szerokości kolumn
+- 🏷️ **Numer wersji**: Widoczny w stopce strony
+
+## Poprzednie wersje
+
+### v2.4
+- Usunięty dark/light mode toggle (domyślnie ciemny motyw)
+- Naprawione skalowanie wykresów w druku PDF
+- Poprawiona logika kolorów trendów w raporcie
+- Naprawione dane macierzy korelacji (Klarowność)
+
+### v2.1-2.3
+- Nowa typografia (Merriweather + Inter)
+- Responsywne wykresy z fullscreen overlay
+- Edytowalny wpis leków w raporcie
+- Hamburger menu z theme toggle
+
+### v2.0
+- Modularna struktura kodu
+- Medyczny design system
+- Naprawione event handling na mobile
 
 ## Funkcje
 
-- 📊 **12 wykresów analitycznych**: Trajektoria GAD, Profil Dobowy, Stabilność ADHD, Stacked Area, Korelacje, Sen vs Objawy, Rolling Average, Porównanie Tygodniowe, Pozytywne vs Negatywne, Metryki per Pora Dnia
-- 📈 **Raport dla Lekarza**: Automatycznie generowany raport z analizą statystyczną i tabelą okresów 3-dniowych
-- 💾 **Import Danych**: Wsparcie dla CSV i tekstowego formatu z walidacją
-- 🎨 **Dark/Light Mode**: Przełączanie motywów z zapisem preferencji
-- 📱 **Responsywny Design**: W pełni funkcjonalny na desktop i mobile
-- 🖨️ **Eksport**: PNG dla wykresów, PDF dla raportu, CSV dla danych
+- 📊 **12 wykresów analitycznych**: 
+  - Trajektoria GAD
+  - Profil Dobowy
+  - Stabilność ADHD
+  - Stacked Area
+  - Pozytywne vs Negatywne
+  - Metryki per Pora Dnia
+  - Analiza Snu
+  - Macierz Korelacji
+  - Sen vs Lęk
+  - Rolling Average
+  - Porównanie Tygodniowe
+
+- 📈 **Raport dla Lekarza**: 
+  - Automatycznie generowany raport
+  - Analiza statystyczna
+  - Tabela okresów 3-dniowych
+  - Macierz korelacji
+  - Eksport do PDF
+
+- 💾 **Import Danych**: 
+  - Format CSV
+  - Format tekstowy z walidacją
+  - Edytowalny wpis leków
+
+- 📱 **Responsywny Design**: 
+  - Hamburger menu na mobile
+  - Fullscreen wykresy
+  - Touch-friendly controls
+
+- 🖨️ **Eksport**: 
+  - PNG dla wykresów
+  - PDF dla raportu
+  - CSV dla danych
 
 ## Struktura Projektu
 
@@ -37,39 +85,41 @@ pregabalin-tracker/
 │   ├── doctor-report.js    # Generowanie raportu
 │   ├── ui-controller.js    # Kontroler UI i event handling
 │   └── app.js              # Inicjalizacja aplikacji
-└── vercel.json              # Konfiguracja Vercel
+├── vercel.json             # Konfiguracja Vercel
+└── README.md               # Dokumentacja
 ```
-
-## Użycie
-
-1. Otwórz `index.html` w przeglądarce lub wdróż na Vercel
-2. Zaimportuj dane w zakładce "Import Danych"
-3. Przejrzyj wykresy w zakładce "Dashboard"
-4. Wygeneruj raport w zakładce "Raport dla Lekarza"
 
 ## Technologie
 
 - **Plotly.js** - Wykresy interaktywne
-- **jStat** - Obliczenia statystyczne
+- **jStat** - Obliczenia statystyczne (korelacje, regresja)
 - **LocalStorage** - Persystencja danych
 - **Vanilla JavaScript** - Zero zależności buildowych
 - **CSS Variables** - Dynamiczne motywy
 
 ## Design System
 
-Aplikacja używa nowoczesnego, medycznego design systemu:
+Aplikacja używa ciepłego, medycznego design systemu:
 
-- **Kolory podstawowe**: Szarości (neutralne) + Medyczny Teal (#14B8A6) + Medyczny Niebieski (#3B82F6)
-- **Typografia**: Outfit (UI) + JetBrains Mono (dane)
-- **Spacing**: Systematyczny spacing scale
-- **Shadows**: Subtelne cienie dla głębi
-- **Responsywność**: Mobile-first approach
+### Kolory
+- **Tło**: Ciepłe szarości (#1C1917 - #FAF9F7)
+- **Akcent główny**: Warm Teal (#0D9488)
+- **Akcent dodatkowy**: Coral (#F97316)
+- **Info**: Medical Blue (#3B82F6)
+
+### Typografia
+- **Nagłówki**: Merriweather (serif)
+- **UI/Body**: Inter (sans-serif)
+- **Dane/Kod**: JetBrains Mono (monospace)
+
+### Komponenty
+- Border-radius: 8px (sm), 12px (md), 16px (lg)
+- Shadows: Subtelne cienie dla głębi
+- Transitions: 150-500ms ease
 
 ## Deploy
 
 ### Vercel (Zalecane)
-
-Projekt jest skonfigurowany do automatycznego deploy na Vercel:
 
 ```bash
 git push origin main
@@ -79,20 +129,23 @@ Vercel automatycznie wykryje zmiany i wdroży nową wersję.
 
 ### Lokalny Development
 
-Po prostu otwórz `index.html` w przeglądarce. Wszystkie zależności są ładowane z CDN.
+```bash
+# Po prostu otwórz w przeglądarce
+open index.html
 
-## Changelog
+# Lub użyj lokalnego serwera
+python -m http.server 8000
+```
 
-### v2.0 (2025)
-- Refaktoryzacja do modułowej struktury
-- Nowy design system z medyczną paletą kolorów
-- Naprawione problemy z event handling na mobile
-- Dodany ResizeObserver dla responsywnych wykresów
-- Ulepszona kolorystyka wykresów
-- Poprawione CSS dla hamburger menu
+## Użycie
 
-### v1.0
-- Początkowa wersja single-file HTML
+1. Otwórz aplikację w przeglądarce
+2. Przejdź do zakładki **"Import Danych"**
+3. Wklej dane w formacie CSV lub tekstowym
+4. Kliknij **"Importuj"**
+5. Przejrzyj wykresy w zakładce **"Dashboard"**
+6. Wygeneruj raport w zakładce **"Raport dla Lekarza"**
+7. Eksportuj wykresy lub raport do PDF
 
 ## Licencja
 

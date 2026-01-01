@@ -246,19 +246,23 @@ const DoctorReport = {
             row.forEach((val, j) => {
                 let bgColor = 'transparent';
                 let textColor = 'inherit';
-                const absVal = Math.abs(val);
                 
                 if (i === j) {
                     bgColor = 'var(--bg-hover)';
                     html += `<td style="padding: 10px 8px; border: 1px solid var(--border); background: ${bgColor}; font-weight: 600;">1.00</td>`;
                 } else if (i > j) {
-                    // Lower triangle
-                    if (absVal > 0.5) {
-                        bgColor = val > 0 ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)';
-                    } else if (absVal > 0.3) {
-                        bgColor = val > 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+                    // Lower triangle - check for null/undefined
+                    if (val !== null && val !== undefined && !isNaN(val)) {
+                        const absVal = Math.abs(val);
+                        if (absVal > 0.5) {
+                            bgColor = val > 0 ? 'rgba(16, 185, 129, 0.3)' : 'rgba(239, 68, 68, 0.3)';
+                        } else if (absVal > 0.3) {
+                            bgColor = val > 0 ? 'rgba(16, 185, 129, 0.15)' : 'rgba(239, 68, 68, 0.15)';
+                        }
+                        html += `<td style="padding: 10px 8px; border: 1px solid var(--border); background: ${bgColor}; color: ${textColor};">${val.toFixed(2)}</td>`;
+                    } else {
+                        html += `<td style="padding: 10px 8px; border: 1px solid var(--border);">-</td>`;
                     }
-                    html += `<td style="padding: 10px 8px; border: 1px solid var(--border); background: ${bgColor}; color: ${textColor};">${val.toFixed(2)}</td>`;
                 } else {
                     // Upper triangle - empty
                     html += `<td style="padding: 10px 8px; border: 1px solid var(--border);"></td>`;
