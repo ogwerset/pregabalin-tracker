@@ -8,7 +8,7 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700;900&family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
     
     <!-- Plotly.js Basic -->
     <script src="https://cdn.plot.ly/plotly-basic-2.27.0.min.js"></script>
@@ -30,10 +30,21 @@
                     <span></span>
                     <span></span>
                 </button>
-                <h1>📊 Pregabalina Tracker</h1>
+                <div class="logo-container">
+                    <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+                        <rect width="40" height="40" rx="8" fill="currentColor" opacity="0.1"/>
+                        <path d="M8 20 L12 16 L16 20 L20 14 L24 20 L28 16 L32 20" 
+                              stroke="currentColor" 
+                              stroke-width="2.5" 
+                              fill="none" 
+                              stroke-linecap="round" 
+                              stroke-linejoin="round"/>
+                    </svg>
+                    <h1>Pregabalina Tracker</h1>
+                </div>
                 <div class="header-actions">
-                    <button class="theme-toggle" id="theme-toggle" title="Przełącz tryb jasny/ciemny">
-                        🌙
+                    <button class="theme-toggle" id="theme-toggle" title="Przełącz tryb jasny/ciemny" aria-label="Przełącz motyw">
+                        <span class="theme-icon">🌙</span>
                     </button>
                 </div>
             </div>
@@ -137,7 +148,13 @@
                             <label for="check-gad">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-gad" class="chart-container"></div>
+                    <div id="plot-gad" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-gad', 'Wykres 1: Trajektoria Leczenia GAD')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-gad', 'gad-trajectory')">Pobierz PNG</button>
                 </div>
                 
@@ -149,7 +166,13 @@
                             <label for="check-intraday">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-intraday" class="chart-container"></div>
+                    <div id="plot-intraday" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-intraday', 'Wykres 2: Profil Dobowy Objawów')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-intraday', 'intraday-profile')">Pobierz PNG</button>
                 </div>
                 
@@ -161,7 +184,13 @@
                             <label for="check-adhd">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-adhd" class="chart-container"></div>
+                    <div id="plot-adhd" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-adhd', 'Wykres 3: Kontrola Stabilności ADHD')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-adhd', 'adhd-stability')">Pobierz PNG</button>
                 </div>
                 
@@ -173,7 +202,13 @@
                             <label for="check-stacked-area">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-stacked-area" class="chart-container"></div>
+                    <div id="plot-stacked-area" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-stacked-area', 'Wykres 4: Objawy w Ciągu Dnia (Stacked Area)')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-stacked-area', 'stacked-area')">Pobierz PNG</button>
                 </div>
 
@@ -185,7 +220,13 @@
                             <label for="check-positive-vs-negative">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-positive-vs-negative" class="chart-container"></div>
+                    <div id="plot-positive-vs-negative" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-positive-vs-negative', 'Wykres 11: Korelacja Pozytywne vs Negatywne')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-positive-vs-negative', 'positive-vs-negative')">Pobierz PNG</button>
                 </div>
 
@@ -197,7 +238,13 @@
                             <label for="check-metrics-by-time">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-metrics-by-time" class="chart-container"></div>
+                    <div id="plot-metrics-by-time" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-metrics-by-time', 'Wykres 12: Metryki per Pora Dnia')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-metrics-by-time', 'metrics-by-time')">Pobierz PNG</button>
                 </div>
                 
@@ -209,7 +256,13 @@
                             <label for="check-sleep">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-sleep" class="chart-container"></div>
+                    <div id="plot-sleep" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-sleep', 'Wykres 6: Jakość i Godziny Snu')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-sleep', 'sleep-analysis')">Pobierz PNG</button>
                 </div>
 
@@ -238,7 +291,13 @@
                             <label for="check-sleep-anxiety">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-sleep-anxiety" class="chart-container"></div>
+                    <div id="plot-sleep-anxiety" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-sleep-anxiety', 'Wykres 7: Sen vs Objawy Następnego Dnia')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-sleep-anxiety', 'sleep-vs-anxiety')">Pobierz PNG</button>
                 </div>
 
@@ -250,7 +309,13 @@
                             <label for="check-rolling-avg">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-rolling-avg" class="chart-container"></div>
+                    <div id="plot-rolling-avg" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-rolling-avg', 'Wykres 8: Trend z Wygładzeniem')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-rolling-avg', 'rolling-average')">Pobierz PNG</button>
                 </div>
 
@@ -262,7 +327,13 @@
                             <label for="check-weekly">Eksport</label>
                         </div>
                     </div>
-                    <div id="plot-weekly" class="chart-container"></div>
+                    <div id="plot-weekly" class="chart-container">
+                        <button class="btn-expand-chart" onclick="UIController.openChartFullscreen('plot-weekly', 'Wykres 9: Porównanie Tygodniowe')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                        </button>
+                    </div>
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-weekly', 'weekly-comparison')">Pobierz PNG</button>
                 </div>
 

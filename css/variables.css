@@ -1,30 +1,39 @@
-/* ===== DESIGN TOKENS - MEDICAL CLEAN THEME ===== */
+/* ===== DESIGN TOKENS - WARM MEDICAL THEME ===== */
 
 :root {
-  /* Neutral Greys - Clean Medical Feel */
-  --grey-50: #FAFAFA;
-  --grey-100: #F5F5F5;
-  --grey-200: #E5E5E5;
-  --grey-300: #D4D4D4;
-  --grey-400: #A3A3A3;
-  --grey-500: #737373;
-  --grey-600: #525252;
-  --grey-700: #404040;
-  --grey-800: #262626;
-  --grey-900: #171717;
+  /* Warm Neutral Greys - Soft, approachable */
+  --grey-50: #FAF9F7;
+  --grey-100: #F5F3F0;
+  --grey-200: #E8E6E1;
+  --grey-300: #D6D3CE;
+  --grey-400: #A8A29E;
+  --grey-500: #78716C;
+  --grey-600: #57534E;
+  --grey-700: #44403C;
+  --grey-800: #292524;
+  --grey-900: #1C1917;
   
-  /* Medical Teal/Green - Primary Accent */
+  /* Warm Medical Teal - Primary Accent (warmer, more approachable) */
   --medical-50: #F0FDFA;
   --medical-100: #CCFBF1;
   --medical-200: #99F6E4;
   --medical-300: #5EEAD4;
   --medical-400: #2DD4BF;
-  --medical-500: #14B8A6;  /* Primary */
-  --medical-600: #0D9488;
-  --medical-700: #0F766E;
-  --medical-800: #115E59;
+  --medical-500: #0D9488;  /* Primary - warmer teal */
+  --medical-600: #0F766E;
+  --medical-700: #115E59;
+  --medical-800: #134E4A;
   
-  /* Medical Blue - Secondary */
+  /* Warm Coral Accent - Soft, supportive */
+  --coral-50: #FFF7ED;
+  --coral-100: #FFEDD5;
+  --coral-200: #FED7AA;
+  --coral-300: #FDBA74;
+  --coral-400: #FB923C;
+  --coral-500: #F97316;
+  --coral-600: #EA580C;
+  
+  /* Medical Blue - Secondary (slightly warmer) */
   --blue-50: #EFF6FF;
   --blue-100: #DBEAFE;
   --blue-200: #BFDBFE;
@@ -34,7 +43,7 @@
   --blue-600: #2563EB;
   --blue-700: #1D4ED8;
   
-  /* Semantic Colors */
+  /* Semantic Colors - Warmer tones */
   --success: #10B981;
   --warning: #F59E0B;
   --error: #EF4444;
@@ -53,11 +62,11 @@
   --accent-red: var(--error);
   --accent-amber: var(--warning);
   
-  /* Shadows - Subtle Medical Feel */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
-  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  /* Shadows - Softer, warmer feel */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -67,11 +76,11 @@
   --spacing-xl: 2rem;
   --spacing-2xl: 3rem;
   
-  /* Border Radius */
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
+  /* Border Radius - More rounded for warm feel */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-xl: 20px;
   
   /* Transitions */
   --transition-fast: 150ms ease;

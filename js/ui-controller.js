@@ -28,7 +28,7 @@ const UIController = {
     },
     
     updateThemeIcon: function(theme) {
-        const icon = document.getElementById('theme-toggle');
+        const icon = document.querySelector('#theme-toggle .theme-icon') || document.getElementById('theme-toggle');
         if (icon) {
             icon.textContent = theme === 'dark' ? '🌙' : '☀️';
         }
@@ -509,5 +509,107 @@ const UIController = {
         }
         
         this.showToast('success', `Eksportowano ${selectedCharts.length} wykresów`);
+    },
+    
+    // Fullscreen chart functionality
+    openChartFullscreen: function(chartId, title) {
+        const chartElement = document.getElementById(chartId);
+        if (!chartElement || !chartElement.data) {
+            this.showToast('warning', 'Wykres nie jest jeszcze załadowany');
+            return;
+        }
+        
+        // Create fullscreen overlay
+        const overlay = document.createElement('div');
+        overlay.className = 'chart-fullscreen';
+        overlay.id = 'chart-fullscreen-overlay';
+        
+        const isMobile = window.innerWidth < 768;
+        const isLandscape = window.innerWidth > window.innerHeight;
+        
+        overlay.innerHTML = `
+            <div class="chart-fullscreen-header">
+                <h2 class="chart-fullscreen-title">${title}</h2>
+                <button class="chart-fullscreen-close" id="chart-fullscreen-close-btn" aria-label="Zamknij">
+                    Zamknij
+                </button>
+            </div>
+            <div class="chart-fullscreen-container">
+                <div id="chart-fullscreen-${chartId}" style="width: 100%; height: 100%; min-height: 400px;"></div>
+            </div>
+            ${isMobile && !isLandscape ? '<div class="chart-fullscreen-hint">💡 Obróć urządzenie poziomo dla lepszego widoku</div>' : ''}
+        `;
+        
+        document.body.appendChild(overlay);
+        document.body.style.overflow = 'hidden';
+        
+        // Bind close button
+        const closeBtn = document.getElementById('chart-fullscreen-close-btn');
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeChartFullscreen());
+            closeBtn.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                this.closeChartFullscreen();
+            }, { passive: false });
+        }
+        
+        // Clone chart data and render in fullscreen
+        const fullscreenContainer = document.getElementById(`chart-fullscreen-${chartId}`);
+        const originalData = JSON.parse(JSON.stringify(chartElement.data));
+        const originalLayout = JSON.parse(JSON.stringify(chartElement.layout));
+        
+        // Calculate proper dimensions
+        const containerHeight = Math.max(600, window.innerHeight - 200);
+        const containerWidth = fullscreenContainer.offsetWidth || window.innerWidth - 40;
+        
+        // Update layout for fullscreen
+        const fullscreenLayout = {
+            ...originalLayout,
+            width: containerWidth,
+            height: containerHeight,
+            margin: { t: 60, r: 40, b: 60, l: 60 }
+        };
+        
+        Plotly.newPlot(fullscreenContainer.id, originalData, fullscreenLayout, {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: ['lasso2d', 'select2d']
+        });
+        
+        // Handle resize
+        const resizeHandler = () => {
+            if (fullscreenContainer && fullscreenContainer.data) {
+                const newHeight = Math.max(600, window.innerHeight - 200);
+                const newWidth = fullscreenContainer.offsetWidth || window.innerWidth - 40;
+                Plotly.relayout(fullscreenContainer.id, {
+                    width: newWidth,
+                    height: newHeight
+                });
+            }
+        };
+        
+        window.addEventListener('resize', resizeHandler);
+        overlay.dataset.resizeHandler = 'true';
+        
+        // Close on Escape key
+        const escapeHandler = (e) => {
+            if (e.key === 'Escape') {
+                this.closeChartFullscreen();
+            }
+        };
+        document.addEventListener('keydown', escapeHandler);
+        overlay.dataset.escapeHandler = 'true';
+    },
+    
+    closeChartFullscreen: function() {
+        const overlay = document.getElementById('chart-fullscreen-overlay');
+        if (overlay) {
+            // Clean up event listeners
+            window.removeEventListener('resize', () => {});
+            document.removeEventListener('keydown', () => {});
+            
+            overlay.remove();
+            document.body.style.overflow = '';
+        }
     }
 };

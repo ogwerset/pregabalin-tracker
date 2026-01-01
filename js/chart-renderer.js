@@ -17,24 +17,26 @@ const ChartRenderer = {
             plot_bgcolor: 'transparent',
             font: { 
                 color: isDark ? 'var(--text-primary)' : 'var(--text-primary)',
-                family: 'Outfit, sans-serif',
+                family: 'Inter, sans-serif',
                 size: fontSize
             },
             title: {
-                font: { size: titleSize, family: 'Outfit, sans-serif' }
+                font: { size: titleSize, family: 'Merriweather, serif', weight: 700 }
             },
             xaxis: {
                 gridcolor: isDark ? 'var(--border)' : 'var(--border)',
                 linecolor: isDark ? 'var(--border)' : 'var(--border)',
                 color: isDark ? 'var(--text-secondary)' : 'var(--text-secondary)',
-                tickfont: { family: 'Outfit, sans-serif', size: tickFontSize }
+                tickfont: { family: 'Inter, sans-serif', size: tickFontSize }
             },
             yaxis: {
                 gridcolor: isDark ? 'var(--border)' : 'var(--border)',
                 linecolor: isDark ? 'var(--border)' : 'var(--border)',
                 color: isDark ? 'var(--text-secondary)' : 'var(--text-secondary)',
-                tickfont: { family: 'Outfit, sans-serif', size: tickFontSize }
-            }
+                tickfont: { family: 'Inter, sans-serif', size: tickFontSize }
+            },
+            // Disable drag on mobile for better touch experience
+            dragmode: isMobile ? false : 'zoom'
         };
     },
     
@@ -210,7 +212,12 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, traces, layout, {responsive: true});
+        const isMobile = window.innerWidth < 768;
+        Plotly.newPlot(containerId, traces, layout, {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+        });
         this.setupResizeObserver(containerId);
     },
     
@@ -270,7 +277,12 @@ const ChartRenderer = {
             })()
         };
         
-        Plotly.react(containerId, [trace1, trace2], layout, {responsive: true});
+        const isMobile = window.innerWidth < 768;
+        Plotly.react(containerId, [trace1, trace2], layout, {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+        });
         this.setupResizeObserver(containerId);
     },
     
@@ -328,7 +340,7 @@ const ChartRenderer = {
             ...template,
             title: {
                 text: 'Kontrola Stabilności Leczenia ADHD (Elvanse 70mg)',
-                font: { size: 16, family: 'Outfit, sans-serif' }
+                font: { size: 16, family: 'Merriweather, serif', weight: 700 }
             },
             xaxis: {
                 ...template.xaxis,
@@ -357,7 +369,7 @@ const ChartRenderer = {
                 y: 7.5,
                 text: 'STREFA OPTYMALNEGO FUNKCJONOWANIA',
                 showarrow: false,
-                font: { color: '#10B981', size: 10, family: 'Outfit, sans-serif' },
+                font: { color: '#10B981', size: 10, family: 'Inter, sans-serif' },
                 bgcolor: 'rgba(16, 185, 129, 0.2)',
                 bordercolor: '#10B981',
                 borderwidth: 1
@@ -599,7 +611,12 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, traces, layout, {responsive: true});
+        const isMobile = window.innerWidth < 768;
+        Plotly.newPlot(containerId, traces, layout, {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+        });
         this.setupResizeObserver(containerId);
     },
     
@@ -909,7 +926,12 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, traces, layout, {responsive: true});
+        const isMobile = window.innerWidth < 768;
+        Plotly.newPlot(containerId, traces, layout, {
+            responsive: true,
+            displayModeBar: true,
+            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+        });
         this.setupResizeObserver(containerId);
     },
     
