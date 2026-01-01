@@ -111,47 +111,13 @@
         
         <!-- TAB 2: Dashboard Wykresów -->
         <section id="tab-dashboard" class="tab-content">
-            <!-- Export Selection Panel -->
-            <div class="export-panel">
-                <h3>Wybierz segmenty do eksportu</h3>
-                <div class="export-checkboxes">
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-gad" checked>
-                        <label for="check-chart-gad">Wykres 1: Trajektoria GAD</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-intraday" checked>
-                        <label for="check-chart-intraday">Wykres 2: Profil Dobowy</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-adhd" checked>
-                        <label for="check-chart-adhd">Wykres 3: Stabilność ADHD</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-stacked-area" checked>
-                        <label for="check-chart-stacked-area">Wykres 4: Stacked Area</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-positive-vs-negative" checked>
-                        <label for="check-chart-positive-vs-negative">Wykres 11: Pozytywne vs Negatywne</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-metrics-by-time" checked>
-                        <label for="check-chart-metrics-by-time">Wykres 12: Metryki per Pora</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-chart-correlation" checked>
-                        <label for="check-chart-correlation">Wykres 5: Macierz Korelacji</label>
-                    </div>
-                    <div class="segment-checkbox">
-                        <input type="checkbox" id="check-report" checked>
-                        <label for="check-report">Raport dla Lekarza</label>
-                    </div>
-                </div>
-                <div class="button-group">
-                    <button class="btn-primary" id="btn-print">Drukuj / Zapisz PDF (tylko wybrane)</button>
-                    <button class="btn-export" id="btn-export-png">Eksportuj wybrane jako PNG</button>
-                </div>
+            <!-- Export Reference Link at Top -->
+            <div class="card" style="margin-bottom: 20px; padding: 15px;">
+                <p style="color: var(--text-secondary); margin: 0; text-align: center;">
+                    <a href="#export-panel" style="color: var(--accent); text-decoration: none; font-weight: 600; border-bottom: 2px solid var(--accent); padding-bottom: 2px; transition: all var(--transition-base);">
+                        ↓ Przejdź do panelu eksportu na dole strony
+                    </a>
+                </p>
             </div>
             
             <!-- Charts Grid -->
@@ -353,6 +319,49 @@
                     <button class="btn-export mt-20" onclick="ChartRenderer.exportChart('plot-weekly', 'weekly-comparison')">Pobierz PNG</button>
                 </div>
 
+            </div>
+            
+            <!-- Export Selection Panel (moved to bottom) -->
+            <div class="export-panel" id="export-panel">
+                <h3>Wybierz segmenty do eksportu</h3>
+                <div class="export-checkboxes">
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-gad" checked>
+                        <label for="check-chart-gad">Wykres 1: Trajektoria GAD</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-intraday" checked>
+                        <label for="check-chart-intraday">Wykres 2: Profil Dobowy</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-adhd" checked>
+                        <label for="check-chart-adhd">Wykres 3: Stabilność ADHD</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-stacked-area" checked>
+                        <label for="check-chart-stacked-area">Wykres 4: Stacked Area</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-positive-vs-negative" checked>
+                        <label for="check-chart-positive-vs-negative">Wykres 11: Pozytywne vs Negatywne</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-metrics-by-time" checked>
+                        <label for="check-chart-metrics-by-time">Wykres 12: Metryki per Pora</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-correlation" checked>
+                        <label for="check-chart-correlation">Wykres 5: Macierz Korelacji</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-report" checked>
+                        <label for="check-report">Raport dla Lekarza</label>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="btn-primary" id="btn-print">Drukuj / Zapisz PDF (tylko wybrane)</button>
+                    <button class="btn-export" id="btn-export-png">Eksportuj wybrane jako PNG</button>
+                </div>
             </div>
         </section>
         

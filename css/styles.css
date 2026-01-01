@@ -84,16 +84,16 @@ header h1 {
 /* ===== NAVIGATION TABS ===== */
 .nav-tabs {
     display: flex;
-    gap: 5px;
+    gap: 8px;
     margin-top: 20px;
-    border-bottom: 2px solid var(--border);
+    border-bottom: none;
 }
 
 .nav-tab {
-    padding: 12px 24px;
+    padding: 10px 20px;
     background: transparent;
     border: none;
-    border-bottom: 3px solid transparent;
+    border-radius: var(--radius-md);
     color: var(--text-secondary);
     font-size: 1rem;
     font-weight: 600;
@@ -111,8 +111,13 @@ header h1 {
 }
 
 .nav-tab.active {
-    color: var(--accent);
-    border-bottom-color: var(--accent);
+    color: white;
+    background: var(--accent);
+    box-shadow: var(--shadow-sm);
+}
+
+.nav-tab.active:hover {
+    background: var(--medical-600);
 }
 
 /* ===== TAB CONTENT ===== */
@@ -461,7 +466,6 @@ button {
 
 .segment-hidden {
     opacity: 0.3;
-    pointer-events: none;
 }
 
 /* ===== TABLE ===== */
@@ -685,14 +689,37 @@ tr:hover {
     font-size: 1.1rem;
 }
 
+/* Visual separation for theme toggle in mobile menu */
+@media (max-width: 768px) {
+    .nav-tabs.open .nav-tab-theme {
+        border-top: 2px solid var(--border);
+        margin-top: 10px;
+        padding-top: 20px;
+        background: var(--bg-hover);
+    }
+}
+
 /* ===== EXPORT SELECTION PANEL ===== */
 .export-panel {
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: var(--radius-lg);
     padding: 20px;
+    margin-top: 40px;
     margin-bottom: 30px;
     box-shadow: var(--shadow);
+    scroll-margin-top: 20px; /* For smooth scroll anchor */
+}
+
+/* Smooth scroll for anchor links */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Export reference link hover */
+a[href="#export-panel"]:hover {
+    color: var(--medical-600) !important;
+    border-bottom-color: var(--medical-600) !important;
 }
 
 .export-panel h3 {

@@ -155,11 +155,13 @@ const UIController = {
             });
         }
         
-        // Tab navigation
+        // Tab navigation (skip theme toggle which has no data-tab)
         document.querySelectorAll('.nav-tab').forEach(btn => {
-            addTapEvent(btn, () => {
-                this.switchTab(btn.dataset.tab);
-            });
+            if (btn.dataset.tab) { // Only bind if it has a data-tab attribute
+                addTapEvent(btn, () => {
+                    this.switchTab(btn.dataset.tab);
+                });
+            }
         });
         
         // Import buttons
