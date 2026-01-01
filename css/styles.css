@@ -898,10 +898,10 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-container {
-        height: 300px; /* Stała wysokość */
+        height: 280px;
         width: 100% !important;
         max-width: 100% !important;
-        min-height: 300px;
+        min-height: 280px;
         aspect-ratio: unset !important;
         overflow: hidden;
     }
@@ -915,10 +915,20 @@ a[href="#export-panel"]:hover {
         overflow: hidden;
         width: 100%;
         max-width: 100%;
-        padding: 15px;
+        padding: 12px;
+    }
+    
+    .chart-section {
+        width: 100%;
+        margin-top: 25px;
+        margin-bottom: 12px;
+        padding-bottom: 10px;
     }
     
     .charts-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
         width: 100%;
         max-width: 100%;
         padding: 0;
@@ -932,13 +942,9 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-card.full-width .chart-container {
-        height: 340px;
-        min-height: 340px;
+        height: 320px;
+        min-height: 320px;
         aspect-ratio: unset !important;
-    }
-    
-    .charts-grid {
-        gap: 15px;
     }
     
     .export-panel .card {
