@@ -326,13 +326,7 @@ button {
     grid-column: 1 / -1;
 }
 
-.chart-card h3 {
-    font-size: 1.2rem;
-    margin-bottom: 15px;
-    color: var(--grey-50);
-    font-weight: 600;
-    letter-spacing: -0.01em;
-}
+/* Chart titles removed - using section headers instead */
 
 .chart-container {
     min-height: 400px;
@@ -885,10 +879,7 @@ a[href="#export-panel"]:hover {
         padding: 12px;
     }
     
-    .chart-card h3 {
-        font-size: 1rem;
-        margin-bottom: 10px;
-    }
+    /* Chart titles removed */
     
     .button-group {
         flex-direction: column;
@@ -1103,11 +1094,7 @@ a[href="#export-panel"]:hover {
         margin-bottom: 20px !important;
     }
     
-    .chart-card h3 {
-        font-size: 14pt !important;
-        margin-bottom: 10px !important;
-        color: black !important;
-    }
+    /* Chart titles removed */
     
     .chart-container {
         background: white !important;
