@@ -206,7 +206,7 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
@@ -214,7 +214,7 @@ const ChartRenderer = {
             hovermode: 'x unified',
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -280,14 +280,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -392,7 +392,7 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
@@ -400,7 +400,7 @@ const ChartRenderer = {
             hovermode: 'x unified',
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -532,14 +532,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -649,14 +649,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -781,14 +781,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -896,7 +896,7 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.15,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -1002,14 +1002,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -1108,14 +1108,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         
@@ -1227,14 +1227,14 @@ const ChartRenderer = {
                 x: 0.5,
                 xanchor: 'center',
                 y: -0.2,
-                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 50, l: m.l };
             })()
         };
         

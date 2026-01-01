@@ -453,6 +453,46 @@ button {
     letter-spacing: 0.02em;
 }
 
+/* Checkbox eksportu jako guzik */
+.btn-export-checkbox {
+    flex: 1;
+    background: var(--grey-800);
+    color: white;
+    border: 1px solid var(--grey-700);
+    border-radius: var(--radius-md);
+    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all var(--transition-base);
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    box-shadow: var(--shadow-sm);
+    letter-spacing: 0.02em;
+    margin: 0;
+}
+
+.btn-export-checkbox input[type="checkbox"] {
+    margin: 0;
+    cursor: pointer;
+    width: 18px;
+    height: 18px;
+    accent-color: var(--medical-500);
+}
+
+.btn-export-checkbox:hover {
+    background: var(--grey-700);
+    border-color: var(--medical-400);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
 .btn-chart:hover {
     background: var(--grey-700);
     border-color: var(--medical-400);
@@ -549,7 +589,7 @@ table {
 th {
     background: var(--bg-hover);
     padding: 12px;
-    text-align: left;
+    text-align: center;
     font-weight: 600;
     border-bottom: 2px solid var(--border);
     color: var(--accent);
@@ -586,6 +626,7 @@ th:hover {
 td {
     padding: 10px 12px;
     border-bottom: 1px solid var(--border);
+    text-align: center;
 }
 
 /* Komórki Data i Czas - pogrubione i oddzielone */
@@ -594,6 +635,11 @@ td:nth-child(2) {
     font-weight: 600;
     border-right: 2px solid var(--border);
     background: var(--bg-card);
+    text-align: center;
+}
+
+th {
+    text-align: center;
 }
 
 tr:hover {
@@ -928,10 +974,10 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-container {
-        height: 280px;
+        height: 320px;
         width: 100% !important;
         max-width: 100% !important;
-        min-height: 280px;
+        min-height: 320px;
         aspect-ratio: unset !important;
         overflow: hidden;
     }
@@ -972,8 +1018,8 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-card.full-width .chart-container {
-        height: 320px;
-        min-height: 320px;
+        height: 360px;
+        min-height: 360px;
         aspect-ratio: unset !important;
     }
     
