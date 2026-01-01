@@ -410,6 +410,7 @@ const ChartRenderer = {
             responsive: true,
             displayModeBar: false
         });
+        this.setupResizeObserver(containerId);
     },
     
     // Wykres 4: Stacked Area Chart - Objawy w ciągu dnia
@@ -549,6 +550,7 @@ const ChartRenderer = {
             responsive: true,
             displayModeBar: false
         });
+        this.setupResizeObserver(containerId);
     },
     
     // Wykres 11: Pozytywne vs Negatywne Objawy
@@ -798,6 +800,7 @@ const ChartRenderer = {
             responsive: true,
             displayModeBar: false
         });
+        this.setupResizeObserver(containerId);
     },
     
     // Wykres 5: Correlation Table (Readable grid)
@@ -913,6 +916,7 @@ const ChartRenderer = {
             responsive: true,
             displayModeBar: false
         });
+        this.setupResizeObserver(containerId);
     },
     
     // Wykres 7: Sen vs Lęk Następnego Dnia (Scatter z regresją)
@@ -1125,6 +1129,7 @@ const ChartRenderer = {
             responsive: true,
             displayModeBar: false
         });
+        this.setupResizeObserver(containerId);
     },
     
     // Wykres 9: Porównanie Tygodni
@@ -1244,6 +1249,7 @@ const ChartRenderer = {
             responsive: true,
             displayModeBar: false
         });
+        this.setupResizeObserver(containerId);
     },
     updateCorrelationSummary: function(correlationData) {
         const summaryDiv = document.getElementById('correlation-text-summary');

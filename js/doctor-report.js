@@ -247,7 +247,7 @@ const DoctorReport = {
     // Sekcja: Macierz Korelacji
     renderCorrelationMatrix: function(stats) {
         // Pobierz dane z localStorage lub wygeneruj na nowo
-        const rawData = DataStore.getAll();
+        const rawData = DataStore.load();
         if (!rawData || rawData.length === 0) return '';
         
         const variables = ['lek', 'napiecie', 'jakoscSnu', 'brainfog', 'energia', 'fokus', 'pregabalina'];

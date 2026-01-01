@@ -208,7 +208,7 @@ const UIController = {
         });
         
         // Checkboxy przy wykresach
-        document.querySelectorAll('.chart-controls input[type="checkbox"]').forEach(checkbox => {
+        document.querySelectorAll('.chart-buttons input[type="checkbox"]').forEach(checkbox => {
             checkbox.addEventListener('change', (e) => {
                 const chartId = e.target.closest('.chart-card')?.id;
                 if (chartId) {
@@ -444,7 +444,7 @@ const UIController = {
             mainCheckbox.checked = this.selectedSegments[segmentId];
         }
         
-        const chartCheckbox = document.querySelector(`#${segmentId} .chart-controls input[type="checkbox"]`);
+        const chartCheckbox = document.querySelector(`#${segmentId} .chart-buttons input[type="checkbox"]`);
         if (chartCheckbox) {
             chartCheckbox.checked = this.selectedSegments[segmentId];
         }
