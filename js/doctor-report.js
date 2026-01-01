@@ -6,15 +6,49 @@ const DoctorReport = {
             return '<p style="color: var(--text-secondary); text-align: center; padding: 40px;">Brak danych. Zaimportuj dane w zakładce "Import Danych", aby wygenerować raport.</p>';
         }
         
-        const html = `
-            ${this.renderPatientInfo(stats)}
-            ${this.render3DayPeriodsTable(stats)}
-            ${this.renderGADEffectiveness(stats)}
-            ${this.renderADHDStability(stats)}
-            ${this.renderIntradayPatterns(stats)}
-            ${this.renderCorrelationMatrix(stats)}
-            ${this.renderConclusions(stats)}
-        `;
+        let html = '';
+        
+        try {
+            html += this.renderPatientInfo(stats);
+        } catch (e) {
+            console.error('Error rendering patient info:', e);
+        }
+        
+        try {
+            html += this.render3DayPeriodsTable(stats);
+        } catch (e) {
+            console.error('Error rendering 3-day periods:', e);
+        }
+        
+        try {
+            html += this.renderGADEffectiveness(stats);
+        } catch (e) {
+            console.error('Error rendering GAD effectiveness:', e);
+        }
+        
+        try {
+            html += this.renderADHDStability(stats);
+        } catch (e) {
+            console.error('Error rendering ADHD stability:', e);
+        }
+        
+        try {
+            html += this.renderIntradayPatterns(stats);
+        } catch (e) {
+            console.error('Error rendering intraday patterns:', e);
+        }
+        
+        try {
+            html += this.renderCorrelationMatrix(stats);
+        } catch (e) {
+            console.error('Error rendering correlation matrix:', e);
+        }
+        
+        try {
+            html += this.renderConclusions(stats);
+        } catch (e) {
+            console.error('Error rendering conclusions:', e);
+        }
         
         return html;
     },

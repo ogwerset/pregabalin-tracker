@@ -16,7 +16,7 @@ const ChartRenderer = {
             paper_bgcolor: 'transparent',
             plot_bgcolor: 'transparent',
             font: { 
-                color: isDark ? 'var(--text-primary)' : 'var(--text-primary)',
+                color: '#D6D3CE',
                 family: 'Inter, sans-serif',
                 size: fontSize
             },
@@ -202,9 +202,11 @@ const ChartRenderer = {
             shapes: shapes,
             annotations: annotations,
             legend: { 
-                x: 0.02,
-                y: 0.98,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
@@ -271,9 +273,11 @@ const ChartRenderer = {
             },
             barmode: 'group',
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -381,10 +385,12 @@ const ChartRenderer = {
                 borderwidth: 1
             }],
             legend: { 
-                x: 0.02,
-                y: 0.02,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: this.currentTheme === 'dark' ? 'rgba(31, 41, 55, 0.95)' : 'rgba(255,255,255,0.95)',
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
             },
@@ -516,9 +522,11 @@ const ChartRenderer = {
                 range: [0, null]
             },
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -628,9 +636,11 @@ const ChartRenderer = {
                 range: [0, 10]
             },
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -755,9 +765,11 @@ const ChartRenderer = {
             },
             barmode: 'group',
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -865,9 +877,11 @@ const ChartRenderer = {
                 color: '#14B8A6' // Medical teal
             },
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -969,9 +983,11 @@ const ChartRenderer = {
                 range: [0, 10]
             },
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -1070,9 +1086,11 @@ const ChartRenderer = {
                 range: [0, 10]
             },
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
@@ -1184,9 +1202,11 @@ const ChartRenderer = {
             },
             barmode: 'group',
             legend: { 
-                orientation: 'h', 
-                y: -0.2,
-                font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15,
+                font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
