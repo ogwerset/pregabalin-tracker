@@ -329,7 +329,7 @@ button {
 /* Chart titles removed - using section headers instead */
 
 .chart-container {
-    min-height: 400px;
+    min-height: 420px;
     background: var(--bg-card);
     border-radius: var(--radius-md);
     position: relative;
@@ -346,12 +346,12 @@ button {
 @media (min-width: 769px) {
     .chart-card:not(.full-width) .chart-container {
         aspect-ratio: 4 / 3;
-        min-height: 350px;
+        min-height: 420px;
     }
     
     .chart-card.full-width .chart-container {
         aspect-ratio: 21 / 9;
-        min-height: 400px;
+        min-height: 420px;
     }
 }
 
@@ -974,10 +974,10 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-container {
-        height: 320px;
+        height: 380px;
         width: 100% !important;
         max-width: 100% !important;
-        min-height: 320px;
+        min-height: 380px;
         aspect-ratio: unset !important;
         overflow: hidden;
     }
@@ -1018,8 +1018,8 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-card.full-width .chart-container {
-        height: 360px;
-        min-height: 360px;
+        height: 400px;
+        min-height: 400px;
         aspect-ratio: unset !important;
     }
     
