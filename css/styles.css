@@ -543,6 +543,7 @@ table {
     border-collapse: collapse;
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.9rem;
+    table-layout: fixed; /* Równe szerokości kolumn */
 }
 
 th {
@@ -557,6 +558,27 @@ th {
     min-height: 44px; /* Touch target */
 }
 
+/* Kolumny Data i Czas - pogrubione i oddzielone */
+th:nth-child(1),
+th:nth-child(2) {
+    font-weight: 700;
+    border-right: 2px solid var(--border);
+    background: var(--bg-card);
+}
+
+th:nth-child(1) {
+    width: 120px; /* Data - stała szerokość */
+}
+
+th:nth-child(2) {
+    width: 80px; /* Czas - stała szerokość */
+}
+
+/* Pozostałe kolumny - równe szerokości */
+th:nth-child(n+3) {
+    width: auto; /* Równomierne rozłożenie */
+}
+
 th:hover {
     background: var(--border);
 }
@@ -564,6 +586,14 @@ th:hover {
 td {
     padding: 10px 12px;
     border-bottom: 1px solid var(--border);
+}
+
+/* Komórki Data i Czas - pogrubione i oddzielone */
+td:nth-child(1),
+td:nth-child(2) {
+    font-weight: 600;
+    border-right: 2px solid var(--border);
+    background: var(--bg-card);
 }
 
 tr:hover {
@@ -994,15 +1024,34 @@ a[href="#export-panel"]:hover {
     table {
         min-width: 600px;
         width: 100%;
-        table-layout: fixed; /* Równe szerokości kolumn */
+        table-layout: fixed;
     }
     
     th, td {
-        padding: 8px 6px;
-        font-size: 0.75rem;
-        width: auto; /* Równomierne rozłożenie */
+        padding: 8px 4px;
+        font-size: 0.7rem;
         overflow: hidden;
         text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+    
+    /* Mobile - Data i Czas mniejsze ale nadal oddzielone */
+    th:nth-child(1),
+    td:nth-child(1) {
+        width: 90px;
+        font-size: 0.7rem;
+    }
+    
+    th:nth-child(2),
+    td:nth-child(2) {
+        width: 60px;
+        font-size: 0.7rem;
+    }
+    
+    /* Pozostałe kolumny - równomierne */
+    th:nth-child(n+3),
+    td:nth-child(n+3) {
+        width: auto;
     }
     
     .table-controls {
