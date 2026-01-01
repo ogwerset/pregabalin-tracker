@@ -205,14 +205,17 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
             },
             hovermode: 'x unified',
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         const isMobile = window.innerWidth < 768;
@@ -276,7 +279,7 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
@@ -284,7 +287,7 @@ const ChartRenderer = {
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 20, l: m.l };
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
             })()
         };
         
@@ -388,14 +391,17 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
             },
             hovermode: 'x unified',
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         Plotly.newPlot(containerId, [trace1, trace2, trace3], layout, {
@@ -525,13 +531,16 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {
@@ -639,13 +648,16 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         const isMobile = window.innerWidth < 768;
@@ -768,13 +780,16 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {
@@ -888,7 +903,7 @@ const ChartRenderer = {
             },
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r + 40, b: m.b + 20, l: m.l };
+                return { t: m.t, r: m.r + 40, b: m.b + 40, l: m.l };
             })()
         };
         
@@ -986,13 +1001,16 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         const isMobile = window.innerWidth < 768;
@@ -1089,13 +1107,16 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {
@@ -1205,13 +1226,16 @@ const ChartRenderer = {
                 orientation: 'h',
                 x: 0.5,
                 xanchor: 'center',
-                y: -0.15,
+                y: -0.2,
                 font: { color: '#D6D3CE', family: 'Inter, sans-serif', size: 12 },
                 bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
-            margin: this.getMobileMargin()
+            margin: (() => {
+                const m = ChartRenderer.getMobileMargin();
+                return { t: m.t, r: m.r, b: m.b + 40, l: m.l };
+            })()
         };
         
         Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {
