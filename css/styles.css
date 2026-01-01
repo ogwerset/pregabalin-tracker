@@ -283,6 +283,29 @@ button {
     overflow: hidden;
 }
 
+/* ===== CHART SECTIONS ===== */
+.chart-section {
+    grid-column: 1 / -1;
+    margin-top: 40px;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid var(--border);
+}
+
+.chart-section:first-child {
+    margin-top: 0;
+}
+
+.section-header {
+    font-family: 'Merriweather', serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--grey-50);
+    margin: 0;
+    padding: 0;
+    letter-spacing: -0.02em;
+}
+
 .chart-card {
     background: var(--bg-card);
     border: 1px solid var(--border);

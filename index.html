@@ -116,9 +116,13 @@
             
             <!-- Charts Grid -->
             <div class="charts-grid">
+                <!-- Sekcja 1: Lęk i Napięcie -->
+                <div class="chart-section">
+                    <h2 class="section-header">Lęk i Napięcie</h2>
+                </div>
+                
                 <div class="chart-card" id="chart-gad">
                     <div class="chart-controls">
-                        <h3>Wykres 1: Trajektoria Leczenia GAD</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-gad" checked>
                             <label for="check-gad">Eksport</label>
@@ -126,7 +130,7 @@
                     </div>
                     <div id="plot-gad" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-gad', 'Wykres 1: Trajektoria Leczenia GAD')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-gad', 'Trajektoria Leczenia GAD')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -138,7 +142,6 @@
                 
                 <div class="chart-card" id="chart-intraday">
                     <div class="chart-controls">
-                        <h3>Wykres 2: Profil Dobowy Objawów</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-intraday" checked>
                             <label for="check-intraday">Eksport</label>
@@ -146,7 +149,7 @@
                     </div>
                     <div id="plot-intraday" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-intraday', 'Wykres 2: Profil Dobowy Objawów')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-intraday', 'Profil Dobowy Objawów')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -156,9 +159,13 @@
                     </div>
                 </div>
                 
+                <!-- Sekcja 2: ADHD i Funkcjonowanie -->
+                <div class="chart-section">
+                    <h2 class="section-header">ADHD i Funkcjonowanie</h2>
+                </div>
+                
                 <div class="chart-card full-width" id="chart-adhd">
                     <div class="chart-controls">
-                        <h3>Wykres 3: Kontrola Stabilności ADHD</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-adhd" checked>
                             <label for="check-adhd">Eksport</label>
@@ -166,7 +173,7 @@
                     </div>
                     <div id="plot-adhd" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-adhd', 'Wykres 3: Kontrola Stabilności ADHD')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-adhd', 'Kontrola Stabilności ADHD')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -176,9 +183,13 @@
                     </div>
                 </div>
                 
+                <!-- Sekcja 4: Trendy i Porównania -->
+                <div class="chart-section">
+                    <h2 class="section-header">Trendy i Porównania</h2>
+                </div>
+                
                 <div class="chart-card full-width" id="chart-stacked-area">
                     <div class="chart-controls">
-                        <h3>Wykres 4: Objawy w Ciągu Dnia (Stacked Area)</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-stacked-area" checked>
                             <label for="check-stacked-area">Eksport</label>
@@ -186,7 +197,7 @@
                     </div>
                     <div id="plot-stacked-area" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-stacked-area', 'Wykres 4: Objawy w Ciągu Dnia (Stacked Area)')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-stacked-area', 'Objawy w Ciągu Dnia (Stacked Area)')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -198,7 +209,6 @@
 
                 <div class="chart-card" id="chart-positive-vs-negative">
                     <div class="chart-controls">
-                        <h3>Wykres 5: Korelacja Pozytywne vs Negatywne</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-positive-vs-negative" checked>
                             <label for="check-positive-vs-negative">Eksport</label>
@@ -206,7 +216,7 @@
                     </div>
                     <div id="plot-positive-vs-negative" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-positive-vs-negative', 'Wykres 5: Korelacja Pozytywne vs Negatywne')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-positive-vs-negative', 'Korelacja Pozytywne vs Negatywne')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -218,7 +228,6 @@
 
                 <div class="chart-card" id="chart-metrics-by-time">
                     <div class="chart-controls">
-                        <h3>Wykres 6: Metryki per Pora Dnia</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-metrics-by-time" checked>
                             <label for="check-metrics-by-time">Eksport</label>
@@ -226,7 +235,7 @@
                     </div>
                     <div id="plot-metrics-by-time" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-metrics-by-time', 'Wykres 6: Metryki per Pora Dnia')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-metrics-by-time', 'Metryki per Pora Dnia')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -236,9 +245,13 @@
                     </div>
                 </div>
                 
+                <!-- Sekcja 3: Sen i Regeneracja -->
+                <div class="chart-section">
+                    <h2 class="section-header">Sen i Regeneracja</h2>
+                </div>
+                
                 <div class="chart-card full-width" id="chart-sleep">
                     <div class="chart-controls">
-                        <h3>Wykres 7: Jakość i Godziny Snu</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-sleep" checked>
                             <label for="check-sleep">Eksport</label>
@@ -246,7 +259,7 @@
                     </div>
                     <div id="plot-sleep" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-sleep', 'Wykres 7: Jakość i Godziny Snu')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-sleep', 'Jakość i Godziny Snu')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -256,9 +269,13 @@
                     </div>
                 </div>
 
+                <!-- Sekcja 5: Korelacje i Zależności -->
+                <div class="chart-section">
+                    <h2 class="section-header">Korelacje i Zależności</h2>
+                </div>
+                
                 <div class="chart-card full-width" id="chart-correlation">
                     <div class="chart-controls">
-                        <h3>Wykres 8: Macierz Korelacji (Zależności)</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-correlation" checked>
                             <label for="check-correlation">Eksport</label>
@@ -275,7 +292,6 @@
 
                 <div class="chart-card" id="chart-sleep-anxiety">
                     <div class="chart-controls">
-                        <h3>Wykres 9: Sen vs Objawy Następnego Dnia</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-sleep-anxiety" checked>
                             <label for="check-sleep-anxiety">Eksport</label>
@@ -283,7 +299,7 @@
                     </div>
                     <div id="plot-sleep-anxiety" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-sleep-anxiety', 'Wykres 9: Sen vs Objawy Następnego Dnia')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-sleep-anxiety', 'Sen vs Objawy Następnego Dnia')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -295,7 +311,6 @@
 
                 <div class="chart-card" id="chart-rolling-avg">
                     <div class="chart-controls">
-                        <h3>Wykres 10: Trend z Wygładzeniem</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-rolling-avg" checked>
                             <label for="check-rolling-avg">Eksport</label>
@@ -303,7 +318,7 @@
                     </div>
                     <div id="plot-rolling-avg" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-rolling-avg', 'Wykres 10: Trend z Wygładzeniem')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-rolling-avg', 'Trend z Wygładzeniem')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
@@ -315,7 +330,6 @@
 
                 <div class="chart-card full-width" id="chart-weekly">
                     <div class="chart-controls">
-                        <h3>Wykres 11: Porównanie Tygodniowe</h3>
                         <div class="segment-checkbox">
                             <input type="checkbox" id="check-weekly" checked>
                             <label for="check-weekly">Eksport</label>
@@ -323,7 +337,7 @@
                     </div>
                     <div id="plot-weekly" class="chart-container"></div>
                     <div class="chart-buttons">
-                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-weekly', 'Wykres 11: Porównanie Tygodniowe')" aria-label="Rozwiń wykres">
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-weekly', 'Porównanie Tygodniowe')" aria-label="Rozwiń wykres">
                             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
                             </svg>
