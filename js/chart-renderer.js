@@ -215,8 +215,7 @@ const ChartRenderer = {
         const isMobile = window.innerWidth < 768;
         Plotly.newPlot(containerId, traces, layout, {
             responsive: true,
-            displayModeBar: true,
-            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+            displayModeBar: false
         });
         this.setupResizeObserver(containerId);
     },
@@ -280,8 +279,7 @@ const ChartRenderer = {
         const isMobile = window.innerWidth < 768;
         Plotly.react(containerId, [trace1, trace2], layout, {
             responsive: true,
-            displayModeBar: true,
-            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+            displayModeBar: false
         });
         this.setupResizeObserver(containerId);
     },
@@ -385,7 +383,10 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, [trace1, trace2, trace3], layout, {responsive: true});
+        Plotly.newPlot(containerId, [trace1, trace2, trace3], layout, {
+            responsive: true,
+            displayModeBar: false
+        });
     },
     
     // Wykres 4: Stacked Area Chart - Objawy w ciągu dnia
@@ -509,7 +510,10 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {responsive: true});
+        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {
+            responsive: true,
+            displayModeBar: false
+        });
     },
     
     // Wykres 11: Pozytywne vs Negatywne Objawy
@@ -614,8 +618,7 @@ const ChartRenderer = {
         const isMobile = window.innerWidth < 768;
         Plotly.newPlot(containerId, traces, layout, {
             responsive: true,
-            displayModeBar: true,
-            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+            displayModeBar: false
         });
         this.setupResizeObserver(containerId);
     },
@@ -732,7 +735,10 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {responsive: true});
+        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {
+            responsive: true,
+            displayModeBar: false
+        });
     },
     
     // Wykres 5: Correlation Table (Readable grid)
@@ -835,7 +841,10 @@ const ChartRenderer = {
             })()
         };
         
-        Plotly.newPlot(containerId, [trace1, trace2], layout, {responsive: true});
+        Plotly.newPlot(containerId, [trace1, trace2], layout, {
+            responsive: true,
+            displayModeBar: false
+        });
     },
     
     // Wykres 7: Sen vs Lęk Następnego Dnia (Scatter z regresją)
@@ -929,8 +938,7 @@ const ChartRenderer = {
         const isMobile = window.innerWidth < 768;
         Plotly.newPlot(containerId, traces, layout, {
             responsive: true,
-            displayModeBar: true,
-            modeBarButtonsToRemove: isMobile ? ['lasso2d', 'select2d', 'pan2d'] : ['lasso2d', 'select2d']
+            displayModeBar: false
         });
         this.setupResizeObserver(containerId);
     },
@@ -1021,7 +1029,10 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {responsive: true});
+        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {
+            responsive: true,
+            displayModeBar: false
+        });
     },
     
     // Wykres 9: Porównanie Tygodni
@@ -1125,7 +1136,10 @@ const ChartRenderer = {
             margin: this.getMobileMargin()
         };
         
-        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {responsive: true});
+        Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4], layout, {
+            responsive: true,
+            displayModeBar: false
+        });
     },
     updateCorrelationSummary: function(correlationData) {
         const summaryDiv = document.getElementById('correlation-text-summary');
