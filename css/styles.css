@@ -5,12 +5,16 @@
     box-sizing: border-box;
 }
 
+html, body {
+    overflow-x: hidden;
+    max-width: 100vw;
+}
+
 body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     background: var(--bg-primary);
     color: var(--text-primary);
     line-height: 1.6;
-    transition: background-color var(--transition-base), color var(--transition-base);
 }
 
 /* Typography - Serif headings, sans-serif body */
@@ -25,12 +29,15 @@ h1, h2, h3, h4, h5, h6 {
     max-width: 1400px;
     margin: 0 auto;
     padding: 0 20px;
+    max-width: 100%;
+    overflow-x: hidden;
 }
 
 main.container {
     overflow-x: hidden;
     position: relative;
     z-index: 1;
+    max-width: 100%;
 }
 
 /* ===== HEADER ===== */
@@ -262,13 +269,8 @@ button {
     background: var(--accent-green);
     color: white;
     font-size: 0.9rem;
-    padding: 8px 16px;
-}
-
-.btn-export:hover {
-    background: #059669;
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-md);
+    padding: 10px 16px;
+    min-height: 44px;
 }
 
 /* ===== CHARTS CONTAINERS ===== */
@@ -277,6 +279,8 @@ button {
     grid-template-columns: repeat(2, 1fr);
     gap: 30px;
     margin-bottom: 30px;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .chart-card {
@@ -287,6 +291,8 @@ button {
     position: relative;
     box-shadow: var(--shadow);
     transition: box-shadow var(--transition-base);
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .chart-card:hover {
@@ -398,37 +404,64 @@ button {
     border-radius: var(--radius-md);
 }
 
-.btn-expand-chart {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: var(--accent);
-    color: white;
-    border: none;
+/* Chart buttons container */
+.chart-buttons {
+    display: flex;
+    gap: 12px;
+    margin-top: 15px;
+    align-items: stretch;
+}
+
+.btn-chart {
+    flex: 1;
+    background: var(--bg-hover);
+    color: var(--text-primary);
+    border: 1px solid var(--border);
     border-radius: var(--radius-md);
-    padding: 8px 12px;
-    font-size: 0.85rem;
-    font-weight: 600;
+    padding: 10px 16px;
+    font-size: 0.9rem;
+    font-weight: 500;
     cursor: pointer;
-    z-index: 10;
-    min-height: 36px;
-    min-width: 36px;
+    min-height: 44px;
     display: flex;
     align-items: center;
     justify-content: center;
-    box-shadow: var(--shadow);
+    gap: 8px;
     transition: all var(--transition-base);
+    font-family: 'Inter', sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+    box-shadow: var(--shadow-sm);
 }
 
-.btn-expand-chart:hover {
-    background: var(--medical-600);
-    transform: translateY(-2px);
+.btn-chart:hover {
+    background: var(--border);
+    border-color: var(--accent);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow);
+}
+
+.btn-chart:active {
+    transform: translateY(0);
+    box-shadow: var(--shadow-sm);
+}
+
+.btn-chart svg {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+}
+
+.btn-chart.btn-download {
+    background: var(--accent-green);
+    color: white;
+    border-color: var(--accent-green);
+}
+
+.btn-chart.btn-download:hover {
+    background: #059669;
+    border-color: #059669;
     box-shadow: var(--shadow-md);
-}
-
-.btn-expand-chart svg {
-    width: 18px;
-    height: 18px;
 }
 
 .chart-controls {
@@ -655,49 +688,6 @@ tr:hover {
     display: block;
 }
 
-/* ===== DARK MODE TOGGLE ===== */
-.theme-toggle {
-    background: var(--bg-hover);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    padding: 8px 12px;
-    cursor: pointer;
-    color: var(--text-primary);
-    font-size: 1.2rem;
-    transition: all var(--transition-base);
-    min-width: 44px;
-    min-height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    -webkit-tap-highlight-color: transparent;
-    touch-action: manipulation;
-}
-
-.theme-toggle:hover {
-    background: var(--border);
-}
-
-/* Theme toggle in navigation menu (mobile) */
-.nav-tab-theme {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.nav-tab-theme .theme-icon-nav {
-    font-size: 1.1rem;
-}
-
-/* Visual separation for theme toggle in mobile menu */
-@media (max-width: 768px) {
-    .nav-tabs.open .nav-tab-theme {
-        border-top: 2px solid var(--border);
-        margin-top: 10px;
-        padding-top: 20px;
-        background: var(--bg-hover);
-    }
-}
 
 /* ===== EXPORT SELECTION PANEL ===== */
 .export-panel {
@@ -810,16 +800,6 @@ a[href="#export-panel"]:hover {
         margin: 0 8px;
     }
     
-    /* Hide theme toggle in header on mobile */
-    .header-actions .theme-toggle {
-        display: none;
-    }
-    
-    /* Show theme toggle in nav menu on mobile */
-    .nav-tab-theme {
-        display: flex !important;
-    }
-    
     /* FIX: Remove pointer-events: none, use display toggle only */
     .nav-tabs {
         display: none;
@@ -882,11 +862,11 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-container {
-        min-height: 300px;
+        height: 280px; /* Stała wysokość zamiast min-height */
         width: 100% !important;
         max-width: 100% !important;
-        aspect-ratio: unset;
-        height: auto;
+        aspect-ratio: unset !important;
+        overflow: hidden;
     }
     
     .chart-card {
@@ -896,8 +876,8 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-card.full-width .chart-container {
-        aspect-ratio: unset;
-        min-height: 350px;
+        height: 320px; /* Nieco wyższy dla full-width */
+        aspect-ratio: unset !important;
     }
     
     .charts-grid {
@@ -1010,14 +990,13 @@ a[href="#export-panel"]:hover {
     }
     
     .chart-container {
-        min-height: 280px;
-        aspect-ratio: unset;
-        height: auto;
+        height: 260px; /* Stała wysokość dla bardzo małych ekranów */
+        aspect-ratio: unset !important;
     }
     
     .chart-card.full-width .chart-container {
-        aspect-ratio: unset;
-        min-height: 300px;
+        height: 300px; /* Nieco wyższy dla full-width */
+        aspect-ratio: unset !important;
     }
     
     table {
@@ -1037,7 +1016,6 @@ a[href="#export-panel"]:hover {
     .button-group,
     .chart-controls,
     .export-panel,
-    .theme-toggle,
     #toast-container {
         display: none !important;
     }

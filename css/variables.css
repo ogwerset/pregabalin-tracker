@@ -49,18 +49,24 @@
   --error: #EF4444;
   --info: var(--blue-500);
   
-  /* Light Mode */
-  --bg-primary: var(--grey-50);
-  --bg-card: #FFFFFF;
-  --bg-hover: var(--grey-100);
-  --text-primary: var(--grey-900);
-  --text-secondary: var(--grey-500);
-  --border: var(--grey-200);
+  /* Dark Mode (default) */
+  --bg-primary: var(--grey-900);
+  --bg-card: var(--grey-800);
+  --bg-hover: var(--grey-700);
+  --text-primary: var(--grey-100);
+  --text-secondary: var(--grey-400);
+  --border: var(--grey-700);
   --accent: var(--medical-500);
   --accent-blue: var(--blue-500);
   --accent-green: var(--success);
   --accent-red: var(--error);
   --accent-amber: var(--warning);
+  
+  /* Adjust shadows for dark mode */
+  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
   
   /* Shadows - Softer, warmer feel */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
@@ -88,19 +94,4 @@
   --transition-slow: 500ms ease;
 }
 
-[data-theme="dark"] {
-  /* Dark Mode */
-  --bg-primary: var(--grey-900);
-  --bg-card: var(--grey-800);
-  --bg-hover: var(--grey-700);
-  --text-primary: var(--grey-100);
-  --text-secondary: var(--grey-400);
-  --border: var(--grey-700);
-  
-  /* Adjust shadows for dark mode */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-}
 

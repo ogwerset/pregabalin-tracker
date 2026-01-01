@@ -50,10 +50,17 @@ const DoctorReport = {
         };
         
         const formatValue = (val) => val !== null && val !== undefined ? val.toFixed(2) : '-';
-        const formatTrend = (trend) => {
+        const formatTrend = (trend, isPositiveMetric = false) => {
             if (trend === null || trend === undefined || isNaN(trend)) return '-';
             const sign = trend > 0 ? '+' : '';
-            const color = trend < -0.1 ? 'var(--accent-green)' : trend > 0.1 ? 'var(--accent-red)' : 'var(--text-secondary)';
+            // Dla pozytywnych metryk (Fokus, Energia, Jakość Snu): trend + = zielony, trend - = czerwony
+            // Dla negatywnych metryk (Lęk, Napięcie): trend - = zielony, trend + = czerwony
+            let color;
+            if (isPositiveMetric) {
+                color = trend > 0.1 ? 'var(--accent-green)' : trend < -0.1 ? 'var(--accent-red)' : 'var(--text-secondary)';
+            } else {
+                color = trend < -0.1 ? 'var(--accent-green)' : trend > 0.1 ? 'var(--accent-red)' : 'var(--text-secondary)';
+            }
             return `<span style="color: ${color};">${sign}${trend.toFixed(3)}</span>`;
         };
         
@@ -70,9 +77,12 @@ const DoctorReport = {
             if (metric === 'brainfog') {
                 // Dla Klarowności odwracamy trend (spadek brainfog = wzrost klarowności)
                 const trend = period.trends[metric];
-                return formatTrend(trend !== null ? -trend : null);
+                return formatTrend(trend !== null ? -trend : null, true); // Klarowność to pozytywna metryka
             }
-            return formatTrend(period.trends[metric]);
+            // Pozytywne metryki: fokus, energia, jakoscSnu
+            const positiveMetrics = ['fokus', 'energia', 'jakoscSnu'];
+            const isPositive = positiveMetrics.includes(metric);
+            return formatTrend(period.trends[metric], isPositive);
         };
         
         const rows = periods.map(period => {

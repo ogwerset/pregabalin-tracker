@@ -257,7 +257,12 @@ const StatsEngine = {
         const varData = {};
         variables.forEach(v => {
             const field = fieldMap[v.toLowerCase()] || v.toLowerCase();
-            varData[v] = dailyData.map(d => d[field]).filter(v => v !== null && v !== undefined);
+            let values = dailyData.map(d => d[field]).filter(v => v !== null && v !== undefined);
+            // Dla brainfog odwracamy wartości (11 - brainfog) bo label mówi "Klarowność"
+            if (field === 'brainfog') {
+                values = values.map(val => 11 - val);
+            }
+            varData[v] = values;
         });
         
         // Oblicz macierz korelacji

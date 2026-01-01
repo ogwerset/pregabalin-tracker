@@ -16,42 +16,9 @@ const UIController = {
     },
     
     init: function() {
-        this.initTheme();
         this.bindEvents();
         this.loadData();
     },
-    
-    initTheme: function() {
-        const saved = localStorage.getItem(CONFIG.THEME_KEY) || 'dark';
-        document.documentElement.setAttribute('data-theme', saved);
-        this.updateThemeIcon(saved);
-    },
-    
-    updateThemeIcon: function(theme) {
-        const icon = document.querySelector('#theme-toggle .theme-icon') || document.getElementById('theme-toggle');
-        if (icon) {
-            icon.textContent = theme === 'dark' ? '🌙' : '☀️';
-        }
-        // Update mobile menu icon too
-        const navIcon = document.querySelector('#nav-theme-toggle .theme-icon-nav');
-        if (navIcon) {
-            navIcon.textContent = theme === 'dark' ? '🌙' : '☀️';
-        }
-    },
-    
-    toggleTheme: function() {
-        const current = document.documentElement.getAttribute('data-theme');
-        const next = current === 'dark' ? 'light' : 'dark';
-        document.documentElement.setAttribute('data-theme', next);
-        localStorage.setItem(CONFIG.THEME_KEY, next);
-        this.updateThemeIcon(next);
-        
-        // Update charts theme if ChartRenderer is ready
-        if (ChartRenderer.setTheme) {
-            ChartRenderer.setTheme(next);
-        }
-    },
-    
     
     switchTab: function(tabId) {
         // Hide all tabs
@@ -136,26 +103,7 @@ const UIController = {
             });
         }
         
-        // Theme toggle (header)
-        const themeToggle = document.getElementById('theme-toggle');
-        if (themeToggle) {
-            addTapEvent(themeToggle, () => this.toggleTheme());
-        }
-        
-        // Theme toggle (mobile menu)
-        const navThemeToggle = document.getElementById('nav-theme-toggle');
-        if (navThemeToggle) {
-            addTapEvent(navThemeToggle, () => {
-                this.toggleTheme();
-                // Close menu after toggle
-                const navTabs = document.getElementById('nav-tabs');
-                if (navTabs) {
-                    navTabs.classList.remove('open');
-                }
-            });
-        }
-        
-        // Tab navigation (skip theme toggle which has no data-tab)
+        // Tab navigation
         document.querySelectorAll('.nav-tab').forEach(btn => {
             if (btn.dataset.tab) { // Only bind if it has a data-tab attribute
                 addTapEvent(btn, () => {
