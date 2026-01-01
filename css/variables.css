@@ -1,17 +1,17 @@
 /* ===== DESIGN TOKENS - WARM MEDICAL THEME ===== */
 
 :root {
-  /* Neutral Greys - More neutral, less brownish */
-  --grey-50: #F9FAFB;
-  --grey-100: #F3F4F6;
-  --grey-200: #E5E7EB;
-  --grey-300: #D1D5DB;
-  --grey-400: #9CA3AF;
-  --grey-500: #6B7280;
-  --grey-600: #4B5563;
-  --grey-700: #374151;
-  --grey-800: #1F2937;
-  --grey-900: #111827;
+  /* Warm Neutral Greys - Soft, approachable */
+  --grey-50: #FAF9F7;
+  --grey-100: #F5F3F0;
+  --grey-200: #E8E6E1;
+  --grey-300: #D6D3CE;
+  --grey-400: #A8A29E;
+  --grey-500: #78716C;
+  --grey-600: #57534E;
+  --grey-700: #44403C;
+  --grey-800: #292524;
+  --grey-900: #1C1917;
   
   /* Warm Medical Teal - Primary Accent (warmer, more approachable) */
   --medical-50: #F0FDFA;

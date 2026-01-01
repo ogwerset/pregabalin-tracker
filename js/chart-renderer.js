@@ -205,10 +205,7 @@ const ChartRenderer = {
                 x: 0.02,
                 y: 0.98,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
-                bordercolor: 'var(--border)',
-                borderwidth: 1,
-                bgcolor: this.currentTheme === 'dark' ? 'rgba(30, 41, 59, 0.95)' : 'rgba(255,255,255,0.95)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: template.xaxis.gridcolor,
                 borderwidth: 1
             },
@@ -277,7 +274,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -522,7 +519,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -634,7 +631,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -761,7 +758,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -871,7 +868,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -975,7 +972,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -1076,7 +1073,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
@@ -1190,7 +1187,7 @@ const ChartRenderer = {
                 orientation: 'h', 
                 y: -0.2,
                 font: { color: 'var(--text-primary)', family: 'Inter, sans-serif', size: 12 },
-                bgcolor: isDark ? 'rgba(31, 41, 55, 0.9)' : 'rgba(255, 255, 255, 0.9)',
+                bgcolor: 'rgba(31, 41, 55, 0.95)',
                 bordercolor: 'var(--border)',
                 borderwidth: 1
             },
