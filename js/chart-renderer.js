@@ -4,7 +4,7 @@ const ChartRenderer = {
     
     // Plotly templates
     getTemplate: function() {
-        const isDark = this.currentTheme === 'dark';
+        const isDark = true; // Always dark mode
         const isMobile = window.innerWidth < 768;
         const isSmallMobile = window.innerWidth < 480;
         

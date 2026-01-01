@@ -1026,6 +1026,7 @@ a[href="#export-panel"]:hover {
     .nav-tabs,
     .button-group,
     .chart-controls,
+    .chart-buttons,
     .export-panel,
     #toast-container {
         display: none !important;
@@ -1038,16 +1039,75 @@ a[href="#export-panel"]:hover {
     body {
         background: white;
         color: black;
+        font-size: 12pt;
     }
     
     .card,
     .chart-card {
         break-inside: avoid;
         page-break-inside: avoid;
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+        padding: 15px !important;
+        margin-bottom: 20px !important;
+    }
+    
+    .chart-card h3 {
+        font-size: 14pt !important;
+        margin-bottom: 10px !important;
+        color: black !important;
     }
     
     .chart-container {
         background: white !important;
+        min-height: 400px !important;
+        height: auto !important;
+        width: 100% !important;
+        max-width: 100% !important;
+        aspect-ratio: unset !important;
+        page-break-inside: avoid;
+    }
+    
+    .chart-card:not(.full-width) .chart-container {
+        min-height: 350px !important;
+        height: 350px !important;
+    }
+    
+    .chart-card.full-width .chart-container {
+        min-height: 400px !important;
+        height: 400px !important;
+    }
+    
+    /* Ensure Plotly charts scale properly */
+    .chart-container .plotly {
+        width: 100% !important;
+        height: 100% !important;
+    }
+    
+    /* Report sections */
+    .report-section {
+        break-inside: avoid;
+        page-break-inside: avoid;
+        margin-bottom: 20px !important;
+    }
+    
+    .report-section h3 {
+        font-size: 16pt !important;
+        color: black !important;
+        border-bottom: 2px solid #ddd !important;
+    }
+    
+    .report-section h4 {
+        font-size: 14pt !important;
+        color: black !important;
+    }
+    
+    table {
+        font-size: 10pt !important;
+    }
+    
+    th, td {
+        padding: 8px 6px !important;
     }
 }
 
