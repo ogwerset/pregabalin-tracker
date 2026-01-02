@@ -1,17 +1,24 @@
-# Pregabalina Tracker Dashboard v2.5
+# Pregabalina Tracker Dashboard v3.0.0
 
 Modern, modularny dashboard do wizualizacji dawkowania pregabaliny i efektów leczenia GAD/ADHD.
 
-## ✨ Nowości w v2.5
+## ✨ Nowości w v3.0.0
 
+- 🐛 **Naprawiony błąd DataStore**: Zmieniono `DataStore.getAll()` na `DataStore.load()` w `doctor-report.js`
+- 🎯 **Poprawione selektory checkboxów**: Naprawiono selektor `.chart-controls` → `.chart-buttons` w `ui-controller.js`
+- 📐 **Responsywne wykresy**: Dodano brakujące wywołania `setupResizeObserver` dla 6 wykresów (ADHD Stability, Stacked Area, Metrics by Time, Sleep Chart, Rolling Average, Weekly Comparison)
+- 🧹 **Czysty kod**: Usunięto całą instrumentację debugową
+- 🔄 **Cache busting**: Wersjonowanie JS importów (`?v=3.0.0`) dla wymuszenia odświeżenia cache przeglądarki
+
+## Poprzednie wersje
+
+### v2.5
 - 🎨 **Przeprojektowane przyciski**: Ciemne guziki z kolorowymi akcentami (teal/coral)
 - 📱 **Naprawione wykresy mobile**: Stałe wysokości, bez ucinania
 - 📊 **Naprawiony raport dla lekarza**: Poprawione wyświetlanie macierzy korelacji
 - 🔤 **Lepsza czytelność**: Jaśniejsze tytuły wykresów
 - 📋 **Poprawiona tabela mobile**: Równe szerokości kolumn
 - 🏷️ **Numer wersji**: Widoczny w stopce strony
-
-## Poprzednie wersje
 
 ### v2.4
 - Usunięty dark/light mode toggle (domyślnie ciemny motyw)

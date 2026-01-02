@@ -2,7 +2,7 @@
 
 ## Kontekst Projektu
 
-Budujesz **single-file HTML dashboard** do wizualizacji danych o działaniu pregabaliny.
+Budujesz **modularny HTML dashboard** do wizualizacji danych o działaniu pregabaliny.
 - Użytkownik przyjmuje pregabalinę (75mg rano + 150mg wieczorem) od 22/12/2025
 - Równolegle przyjmuje Elvanse 70mg (ADHD)
 - Dane zbierane są przez Apple Shortcut do notatnika
@@ -16,20 +16,45 @@ Budujesz **single-file HTML dashboard** do wizualizacji danych o działaniu preg
 | `references/dataset.md` | Przykładowe dane - używaj do testowania |
 | `references/evaluation.txt` | Wzorcowa analiza Python - logika obliczeń i format raportów |
 | `old/pregabalin-dashboard.html` | Stara wersja z gotowymi wykresami Plotly - referencja stylu |
+| `CURSOR-CONTEXT.md` | Kontekst dla nowych sesji AI - aktualny stan projektu |
 
-## Struktura Modułów JS
+## Struktura Modułów JS (Modular Architecture)
 
-Wszystkie moduły są obiektami w jednym `<script>`:
+Projekt używa **modularnej architektury** z osobnymi plikami JS:
 
+```
+js/
+├── config.js           # CONFIG - stałe konfiguracyjne (localStorage keys)
+├── data-parser.js      # DataParser - parsowanie i walidacja danych CSV/RAW
+├── data-store.js       # DataStore - localStorage CRUD, eksport CSV
+├── stats-engine.js     # StatsEngine - obliczenia statystyczne (regresja, korelacje)
+├── chart-renderer.js   # ChartRenderer - renderowanie wykresów Plotly
+├── table-manager.js    # TableManager - zarządzanie tabelą danych (sort, filter)
+├── doctor-report.js    # DoctorReport - generowanie HTML raportu dla lekarza
+├── ui-controller.js    # UIController - kontroler UI, event handling, nawigacja
+└── app.js              # Inicjalizacja aplikacji (DOMContentLoaded)
+```
+
+### Cache Busting
+
+Wszystkie importy JS w `index.html` używają wersjonowania query params:
+```html
+<script src="js/config.js?v=3.0.0"></script>
+```
+**WAŻNE**: Przy każdej zmianie kodu JS, zaktualizuj wersję w `index.html` aby wymusić odświeżenie cache przeglądarki.
+
+### Moduły jako Obiekty
+
+Każdy moduł jest obiektem JavaScript z metodami:
 ```javascript
-const CONFIG = { /* stałe konfiguracyjne */ };
-const DataParser = { /* parsowanie i walidacja */ };
-const DataStore = { /* localStorage CRUD */ };
-const StatsEngine = { /* obliczenia statystyczne */ };
-const ChartRenderer = { /* wykresy Plotly */ };
-const TableManager = { /* tabela danych */ };
-const DoctorReport = { /* raport dla lekarza */ };
-const UIController = { /* interakcje UI */ };
+// Przykład: js/data-store.js
+const DataStore = {
+    STORAGE_KEY: CONFIG.STORAGE_KEY,
+    save: function(data) { /* ... */ },
+    load: function() { /* ... */ },
+    append: function(newData) { /* ... */ },
+    // ...
+};
 ```
 
 ---
@@ -682,6 +707,7 @@ Integracja wszystkich modułów, testy, cleanup.
 
 ## Final structure check
 
+### Plik HTML (index.html)
 ```html
 <!DOCTYPE html>
 <html lang="pl">
@@ -690,29 +716,49 @@ Integracja wszystkich modułów, testy, cleanup.
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Pregabalina Tracker</title>
     <!-- Google Fonts -->
-    <style>/* ~500 lines CSS */</style>
+    <link rel="stylesheet" href="css/variables.css">
+    <link rel="stylesheet" href="css/styles.css">
 </head>
-<body data-theme="dark">
-    <!-- ~200 lines HTML structure -->
+<body>
+    <!-- ~450 lines HTML structure -->
     
     <!-- CDN Libraries -->
-    <script src="plotly..."></script>
-    <script src="jstat..."></script>
+    <script src="https://cdn.plot.ly/plotly-basic-2.27.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
     
-    <script>
-        /* CONFIG (~20 lines) */
-        /* DataParser (~100 lines) */
-        /* DataStore (~80 lines) */
-        /* StatsEngine (~150 lines) */
-        /* ChartRenderer (~300 lines) */
-        /* TableManager (~80 lines) */
-        /* DoctorReport (~150 lines) */
-        /* UIController (~100 lines) */
-        /* Init (~10 lines) */
-    </script>
+    <!-- Modular JS Files -->
+    <script src="js/config.js?v=3.0.0"></script>
+    <script src="js/data-parser.js?v=3.0.0"></script>
+    <script src="js/data-store.js?v=3.0.0"></script>
+    <script src="js/stats-engine.js?v=3.0.0"></script>
+    <script src="js/chart-renderer.js?v=3.0.0"></script>
+    <script src="js/table-manager.js?v=3.0.0"></script>
+    <script src="js/doctor-report.js?v=3.0.0"></script>
+    <script src="js/ui-controller.js?v=3.0.0"></script>
+    <script src="js/app.js?v=3.0.0"></script>
 </body>
 </html>
 ```
 
-**Łączna estymacja: ~1500-2000 linii kodu**
+### Struktura plików
+```
+pregabalin-tracker/
+├── index.html              # ~467 lines - główny HTML
+├── css/
+│   ├── variables.css       # ~98 lines - design tokens
+│   └── styles.css          # ~1260 lines - style komponentów
+├── js/
+│   ├── config.js           # ~8 lines
+│   ├── data-parser.js      # ~213 lines
+│   ├── data-store.js       # ~120 lines
+│   ├── stats-engine.js     # ~503 lines
+│   ├── chart-renderer.js   # ~1365 lines
+│   ├── table-manager.js    # ~140 lines
+│   ├── doctor-report.js    # ~361 lines
+│   ├── ui-controller.js    # ~618 lines
+│   └── app.js              # ~5 lines
+└── README.md
+```
+
+**Łączna estymacja: ~5000+ linii kodu (modularna architektura)**
 
