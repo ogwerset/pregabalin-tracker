@@ -21,11 +21,13 @@
 
 ## 🏗️ Architecture
 
-### Current State: v3.0.0
+### Current State: v4.0.0
 
 **Deployment**: Vercel (automatyczny deploy z GitHub)
 
 **Architecture Pattern**: Modular JavaScript (9 plików JS) + 2 pliki CSS + 1 HTML entry point
+
+**New Libraries**: html2canvas 1.4.1, jsPDF 2.5.1 + autoTable plugin
 
 ### File Structure
 ```
@@ -70,34 +72,71 @@ app.js
 
 ---
 
-## 🔧 Recent Session Summary (v3.0.0)
+## 🔧 Recent Session Summary (v4.0.0)
+
+### Major Features Added
+1. **Liquid Glass UI** (iOS 26 style)
+   - Glassmorphism effects on menu, export panel, cards
+   - Backdrop blur with saturation
+   - Smooth animations and transitions
+
+2. **Landing Page**
+   - Beautiful welcome screen for new users
+   - Feature cards with icons
+   - Auto-hides when data is imported
+
+3. **Improved Import UI**
+   - Tabs: Paste text vs File upload
+   - Drag & drop file support
+   - Better visual feedback
+
+4. **Pharmacokinetics Chart**
+   - New chart showing medication concentration over 24h
+   - Based on actual dose times from data
+   - Visual therapeutic windows
+
+5. **Long Image Export**
+   - Export all charts + report as single PNG
+   - High quality (scale: 2)
+   - Uses html2canvas
+
+6. **PDF Export**
+   - Professional PDF report for doctor
+   - Includes tables, statistics, conclusions
+   - Auto-pagination
 
 ### Bugs Fixed
-1. **DataStore.getAll() Error** (`js/doctor-report.js:250`)
-   - **Issue**: `DataStore.getAll is not a function`
-   - **Fix**: Changed to `DataStore.load()` (correct method name)
-   - **Impact**: Doctor report correlation matrix now works
+1. **iOS Safari Viewport Bug** (110% zoom)
+   - **Issue**: Viewport too wide on iOS Safari
+   - **Fix**: Changed `100vw` to `100%`, added safe-area-inset support
+   - **Impact**: Proper display on all iOS devices
 
-2. **Chart Checkbox Selector** (`js/ui-controller.js:211`)
-   - **Issue**: Incorrect selector `.chart-controls` (element doesn't exist)
-   - **Fix**: Changed to `.chart-buttons` (correct class name)
-   - **Impact**: Chart export checkboxes now work
+2. **Hamburger Menu Padding**
+   - **Issue**: Menu didn't inherit container padding
+   - **Fix**: Changed `left: 0; right: 0` to match container padding
+   - **Impact**: Menu properly aligned with content
 
-3. **Missing ResizeObserver** (`js/chart-renderer.js`)
-   - **Issue**: 6 charts not responsive (missing `setupResizeObserver` calls)
-   - **Fix**: Added `this.setupResizeObserver(containerId)` to:
-     - `renderADHDStability`
-     - `renderStackedAreaByTimeOfDay`
-     - `renderMetricsByTimeOfDay`
-     - `renderSleepChart`
-     - `renderRollingAverage`
-     - `renderWeeklyComparison`
-   - **Impact**: All charts now resize properly on window resize
+3. **Chart Legends in Fullscreen**
+   - **Issue**: Legends overlapped content in fullscreen view
+   - **Fix**: Adjusted margins and legend position
+   - **Impact**: Clean fullscreen display
+
+4. **Weekly Comparison Sorting**
+   - **Issue**: Weeks 0,1 appeared before weeks 52,53 at year boundary
+   - **Fix**: Implemented ISO week calculation with year
+   - **Impact**: Chronological sorting across year boundaries
+
+### Privacy & Anonymization
+- All hardcoded medication names moved to CONFIG
+- Generic chart titles (no disease-specific references)
+- Configurable disease context via UI or CSV
+- App renamed to "Symptom Tracker" (generic)
 
 ### Code Quality
-- Removed all debug instrumentation (fetch logs)
-- Added version query params to JS imports (`?v=3.0.0`) for cache busting
-- Updated footer version display to v3.0.0
+- Updated version to v4.0.0
+- All JS imports versioned (`?v=4.0.0`)
+- Added iOS safe-area-inset support
+- Improved error handling
 
 ---
 
@@ -252,14 +291,15 @@ Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,
 
 ## 🔄 Version History
 
-- **v3.0.0** (Current): Bug fixes (DataStore, selectors, ResizeObserver)
+- **v4.0.0** (Current): Liquid Glass UI, landing page, pharmacokinetics chart, PDF export, iOS fixes, anonymization
+- **v3.0.0**: Bug fixes (DataStore, selectors, ResizeObserver)
 - **v2.5**: UI improvements, mobile fixes
 - **v2.4**: Dark mode removal, print fixes
 - **v2.0**: Modular architecture
 
 ---
 
-**Last Updated**: v3.0.0 release
+**Last Updated**: v4.0.0 release
 **Maintainer**: User (ogwerset)
 **Repository**: GitHub (auto-deployed to Vercel)
 

@@ -2,8 +2,10 @@
 <html lang="pl">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pregabalina Tracker - Dashboard</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <title>Symptom Tracker - Dashboard</title>
     
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -15,6 +17,13 @@
     
     <!-- jStat -->
     <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
+    
+    <!-- html2canvas for long image export -->
+    <script src="https://cdn.jsdelivr.net/npm/html2canvas@1.4.1/dist/html2canvas.min.js"></script>
+    
+    <!-- jsPDF for PDF export -->
+    <script src="https://cdn.jsdelivr.net/npm/jspdf@2.5.1/dist/jspdf.umd.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jspdf-autotable@3.8.1/dist/jspdf.plugin.autotable.min.js"></script>
     
     <!-- CSS -->
     <link rel="stylesheet" href="css/variables.css">
@@ -30,24 +39,20 @@
                     <span></span>
                     <span></span>
                 </button>
-                <div class="logo-container">
-                    <svg class="logo-icon" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-                        <rect width="40" height="40" rx="8" fill="currentColor" opacity="0.1"/>
-                        <path d="M8 20 L12 16 L16 20 L20 14 L24 20 L28 16 L32 20" 
-                              stroke="currentColor" 
-                              stroke-width="2.5" 
-                              fill="none" 
-                              stroke-linecap="round" 
-                              stroke-linejoin="round"/>
-                    </svg>
-                    <h1>Pregabalina Tracker</h1>
-                </div>
+                
                 <div class="header-actions">
+                    <button class="btn-back-to-landing" id="btn-back-to-landing" style="display: none;" aria-label="Powrót do startu">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M19 12H5M12 19l-7-7 7-7"/>
+                        </svg>
+                        <span>Start</span>
+                    </button>
                 </div>
             </div>
             
             <!-- Navigation Tabs -->
             <nav class="nav-tabs" id="nav-tabs">
+                <button class="nav-tab" data-tab="landing-page">Start</button>
                 <button class="nav-tab active" data-tab="tab-import">Import Danych</button>
                 <button class="nav-tab" data-tab="tab-dashboard">Dashboard</button>
                 <button class="nav-tab" data-tab="tab-table">Tabela</button>
@@ -58,24 +63,94 @@
     
     <!-- ===== MAIN CONTENT ===== -->
     <main class="container">
+        <!-- LANDING PAGE (always accessible) -->
+        <section id="landing-page" class="tab-content landing-page" style="display: none;">
+            <div class="landing-hero">
+                <h1 class="landing-title">Symptom Tracker</h1>
+                <p class="landing-subtitle">Wybierz sekcję, aby rozpocząć</p>
+                
+                <div class="landing-nav-grid">
+                    <a href="#" class="nav-card" data-tab="tab-import" style="--delay: 0;">
+                        <div class="nav-card-icon">📥</div>
+                        <div class="nav-card-content">
+                            <h3>Import Danych</h3>
+                            <p>Wklej lub załaduj dane CSV</p>
+                        </div>
+                        <div class="nav-card-arrow">→</div>
+                    </a>
+                    
+                    <a href="#" class="nav-card" data-tab="tab-dashboard" style="--delay: 1;">
+                        <div class="nav-card-icon">📊</div>
+                        <div class="nav-card-content">
+                            <h3>Dashboard</h3>
+                            <p>12 wykresów analitycznych</p>
+                        </div>
+                        <div class="nav-card-arrow">→</div>
+                    </a>
+                    
+                    <a href="#" class="nav-card" data-tab="tab-data" style="--delay: 2;">
+                        <div class="nav-card-icon">📋</div>
+                        <div class="nav-card-content">
+                            <h3>Tabela Danych</h3>
+                            <p>Przeglądaj wszystkie wpisy</p>
+                        </div>
+                        <div class="nav-card-arrow">→</div>
+                    </a>
+                    
+                    <a href="#" class="nav-card" data-tab="tab-report" style="--delay: 3;">
+                        <div class="nav-card-icon">📄</div>
+                        <div class="nav-card-content">
+                            <h3>Raport dla Lekarza</h3>
+                            <p>Eksportuj do PDF</p>
+                        </div>
+                        <div class="nav-card-arrow">→</div>
+                    </a>
+                </div>
+            </div>
+        </section>
+        
         <!-- TAB 1: Import Danych -->
-        <section id="tab-import" class="tab-content active">
-            <div class="card">
-                <h2>Importuj dane z trackera</h2>
-                <p style="color: var(--text-secondary); margin-bottom: 15px;">
-                    Wklej dane RAW z notatnika lub załaduj plik CSV
-                </p>
-                
-                <textarea id="raw-input" placeholder="Wklej tutaj dane z trackera...&#10;&#10;Format:&#10;Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,Notatki,Elvanse,ElvanseGodzina,Pregabalina,PregabalinaGodzina&#10;22/12/2025,11:32,3,5,2,6,8,6,6,RANO,-,TAK(70MG),-,TAK(75MG),-"></textarea>
-                
-                <input type="file" id="csv-upload" accept=".csv,.txt">
-                
-                <div class="button-group">
-                    <button class="btn-primary" id="btn-import">Importuj dane (zastąp istniejące)</button>
-                    <button class="btn-secondary" id="btn-append">Dodaj do istniejących</button>
+        <section id="tab-import" class="tab-content">
+            <div class="card glass-card">
+                <div class="import-header">
+                    <h2>Importuj dane</h2>
+                    <p class="import-subtitle">Wklej dane z notatnika lub załaduj plik CSV</p>
                 </div>
                 
-                <div id="import-feedback" style="margin-top: 15px; padding: 15px; border-radius: 8px; display: none;"></div>
+                <div class="import-tabs">
+                    <button class="import-tab active" data-mode="paste">📋 Wklej tekst</button>
+                    <button class="import-tab" data-mode="file">📁 Załaduj plik</button>
+                </div>
+                
+                <div class="import-content">
+                    <div id="import-paste" class="import-panel active">
+                        <textarea id="raw-input" placeholder="Wklej tutaj dane z trackera...&#10;&#10;Format CSV:&#10;Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,Notatki,Lek1,Lek1Godzina,Lek2,Lek2Godzina&#10;&#10;Przykład:&#10;22/12/2025,11:32,3,5,2,6,8,6,6,RANO,-,TAK(DAWKA),-,TAK(DAWKA),-"></textarea>
+                    </div>
+                    
+                    <div id="import-file" class="import-panel">
+                        <div class="file-upload-area" id="file-upload-area">
+                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                                <polyline points="17 8 12 3 7 8"/>
+                                <line x1="12" y1="3" x2="12" y2="15"/>
+                            </svg>
+                            <p><strong>Kliknij aby wybrać plik</strong> lub przeciągnij i upuść</p>
+                            <p class="file-hint">Obsługiwane formaty: .csv, .txt</p>
+                            <input type="file" id="csv-upload" accept=".csv,.txt" style="display: none;">
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn-primary" id="btn-import">
+                        <span>Importuj (zastąp istniejące)</span>
+                    </button>
+                    <button class="btn-secondary" id="btn-append">
+                        <span>Dodaj do istniejących</span>
+                    </button>
+                </div>
+                
+                <div id="import-feedback" class="import-feedback" style="display: none;"></div>
             </div>
             
             <div class="card">
@@ -97,7 +172,7 @@
                 <label for="medications-input" style="display: block; margin-bottom: 8px; font-weight: 600; color: var(--text-primary);">
                     Leki:
                 </label>
-                <textarea id="medications-input" placeholder="Elvanse 70mg/d + Pregabalina 225mg/d (75mg rano + 150mg wieczorem)" style="min-height: 80px; font-family: 'Inter', sans-serif;">Elvanse 70mg/d + Pregabalina 225mg/d (75mg rano + 150mg wieczorem)</textarea>
+                <textarea id="medications-input" placeholder="Wpisz informacje o przyjmowanych lekach, np:&#10;Lek 1: Dawka i częstotliwość&#10;Lek 2: Dawka i częstotliwość" style="min-height: 80px; font-family: 'Inter', sans-serif;"></textarea>
                 <button class="btn-primary mt-20" id="btn-save-meds" style="margin-top: 15px;">Zapisz ustawienia</button>
                 <div id="meds-feedback" style="margin-top: 10px; padding: 10px; border-radius: 8px; display: none; font-size: 0.9rem;"></div>
             </div>
@@ -116,9 +191,9 @@
             
             <!-- Charts Grid -->
             <div class="charts-grid">
-                <!-- Sekcja 1: Lęk i Napięcie -->
+                <!-- Sekcja 1: Objawy Główne -->
                 <div class="chart-section">
-                    <h2 class="section-header">Lęk i Napięcie</h2>
+                    <h2 class="section-header">Objawy Główne</h2>
                 </div>
                 
                 <div class="chart-card" id="chart-gad">
@@ -155,9 +230,9 @@
                         </div>
                     </div>
                 
-                <!-- Sekcja 2: ADHD i Funkcjonowanie -->
+                <!-- Sekcja 2: Funkcjonowanie Poznawcze -->
                 <div class="chart-section">
-                    <h2 class="section-header">ADHD i Funkcjonowanie</h2>
+                    <h2 class="section-header">Funkcjonowanie Poznawcze</h2>
                 </div>
                 
                 <div class="chart-card full-width" id="chart-adhd">
@@ -197,6 +272,23 @@
                         </button>
                         <button class="btn-chart btn-download" onclick="ChartRenderer.exportChart('plot-stacked-area', 'stacked-area')">Pobierz PNG</button>
                         </div>
+                </div>
+
+                <div class="chart-card full-width" id="chart-pharmacokinetics">
+                    <div id="plot-pharmacokinetics" class="chart-container"></div>
+                    <div class="chart-buttons">
+                        <label class="btn-chart btn-export-checkbox">
+                            <input type="checkbox" id="check-pharmacokinetics" checked>
+                            Eksport
+                        </label>
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-pharmacokinetics', 'Profil Stężenia Leków')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                            Rozwiń
+                        </button>
+                        <button class="btn-chart btn-download" onclick="ChartRenderer.exportChart('plot-pharmacokinetics', 'pharmacokinetics')">Pobierz PNG</button>
+                    </div>
                 </div>
 
                 <div class="chart-card" id="chart-positive-vs-negative">
@@ -350,32 +442,36 @@
                         <label for="check-chart-stacked-area">Wykres 4: Stacked Area</label>
                     </div>
                     <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-pharmacokinetics" checked>
+                        <label for="check-chart-pharmacokinetics">Wykres 5: Profil Stężenia Leków</label>
+                    </div>
+                    <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-positive-vs-negative" checked>
-                        <label for="check-chart-positive-vs-negative">Wykres 5: Pozytywne vs Negatywne</label>
+                        <label for="check-chart-positive-vs-negative">Wykres 6: Pozytywne vs Negatywne</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-metrics-by-time" checked>
-                        <label for="check-chart-metrics-by-time">Wykres 6: Metryki per Pora</label>
+                        <label for="check-chart-metrics-by-time">Wykres 7: Metryki per Pora</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-sleep" checked>
-                        <label for="check-chart-sleep">Wykres 7: Jakość Snu</label>
+                        <label for="check-chart-sleep">Wykres 8: Jakość Snu</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-correlation" checked>
-                        <label for="check-chart-correlation">Wykres 8: Macierz Korelacji</label>
+                        <label for="check-chart-correlation">Wykres 9: Macierz Korelacji</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-sleep-anxiety" checked>
-                        <label for="check-chart-sleep-anxiety">Wykres 9: Sen vs Objawy</label>
+                        <label for="check-chart-sleep-anxiety">Wykres 10: Sen vs Objawy</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-rolling-avg" checked>
-                        <label for="check-chart-rolling-avg">Wykres 10: Trend z Wygładzeniem</label>
+                        <label for="check-chart-rolling-avg">Wykres 11: Trend z Wygładzeniem</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-weekly" checked>
-                        <label for="check-chart-weekly">Wykres 11: Porównanie Tygodniowe</label>
+                        <label for="check-chart-weekly">Wykres 12: Porównanie Tygodniowe</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-report" checked>
@@ -385,6 +481,7 @@
                 <div class="button-group">
                     <button class="btn-primary" id="btn-print">Drukuj / Zapisz PDF (tylko wybrane)</button>
                     <button class="btn-export" id="btn-export-png">Eksportuj wybrane jako PNG</button>
+                    <button class="btn-export" id="btn-export-long-image">Eksportuj Wszystko jako Obraz</button>
                 </div>
             </div>
         </section>
@@ -434,7 +531,12 @@
         <!-- TAB 4: Raport dla Lekarza -->
         <section id="tab-report" class="tab-content">
             <div class="card">
-                <h2>Raport dla Lekarza</h2>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h2 style="margin: 0;">Raport dla Lekarza</h2>
+                    <button class="btn-primary" id="btn-export-pdf" style="display: none;">
+                        <span>📄 Pobierz Raport PDF</span>
+                    </button>
+                </div>
                 <div class="report-container" id="doctor-report">
                     <p style="color: var(--text-secondary); text-align: center; padding: 40px;">
                         Brak danych. Zaimportuj dane w zakładce "Import Danych", aby wygenerować raport.
@@ -448,19 +550,19 @@
     <div id="toast-container"></div>
     
     <!-- ===== FOOTER ===== -->
-    <footer style="text-align: center; padding: 20px; color: var(--text-secondary); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px;">
-        <p>Pregabalina Tracker <strong>v3.0.0</strong></p>
+    <footer style="text-align: center; padding: 20px; padding-bottom: max(20px, env(safe-area-inset-bottom)); color: var(--text-secondary); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px;">
+        <p>Symptom Tracker <strong>v4.1.0</strong></p>
     </footer>
 
     <!-- ===== JAVASCRIPT MODULES ===== -->
-    <script src="js/config.js?v=3.0.0"></script>
-    <script src="js/data-parser.js?v=3.0.0"></script>
-    <script src="js/data-store.js?v=3.0.0"></script>
-    <script src="js/stats-engine.js?v=3.0.0"></script>
-    <script src="js/chart-renderer.js?v=3.0.0"></script>
-    <script src="js/table-manager.js?v=3.0.0"></script>
-    <script src="js/doctor-report.js?v=3.0.0"></script>
-    <script src="js/ui-controller.js?v=3.0.0"></script>
-    <script src="js/app.js?v=3.0.0"></script>
+    <script src="js/config.js?v=4.1.0"></script>
+    <script src="js/data-parser.js?v=4.1.0"></script>
+    <script src="js/data-store.js?v=4.1.0"></script>
+    <script src="js/stats-engine.js?v=4.1.0"></script>
+    <script src="js/chart-renderer.js?v=4.1.0"></script>
+    <script src="js/table-manager.js?v=4.1.0"></script>
+    <script src="js/doctor-report.js?v=4.1.0"></script>
+    <script src="js/ui-controller.js?v=4.1.0"></script>
+    <script src="js/app.js?v=4.1.0"></script>
 </body>
 </html>

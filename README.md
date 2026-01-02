@@ -1,14 +1,20 @@
-# Pregabalina Tracker Dashboard v3.0.0
+# Symptom Tracker Dashboard v4.0.0
 
-Modern, modularny dashboard do wizualizacji dawkowania pregabaliny i efektów leczenia GAD/ADHD.
+Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawansowanymi wykresami i raportami.
 
-## ✨ Nowości w v3.0.0
+## ✨ Nowości w v4.0.0
 
-- 🐛 **Naprawiony błąd DataStore**: Zmieniono `DataStore.getAll()` na `DataStore.load()` w `doctor-report.js`
-- 🎯 **Poprawione selektory checkboxów**: Naprawiono selektor `.chart-controls` → `.chart-buttons` w `ui-controller.js`
-- 📐 **Responsywne wykresy**: Dodano brakujące wywołania `setupResizeObserver` dla 6 wykresów (ADHD Stability, Stacked Area, Metrics by Time, Sleep Chart, Rolling Average, Weekly Comparison)
-- 🧹 **Czysty kod**: Usunięto całą instrumentację debugową
-- 🔄 **Cache busting**: Wersjonowanie JS importów (`?v=3.0.0`) dla wymuszenia odświeżenia cache przeglądarki
+- 🎨 **Liquid Glass UI**: Nowa estetyka inspirowana iOS 26 z glassmorphism i blur effects
+- 📱 **Naprawiony iOS Safari**: Poprawiony viewport bug (110% zoom) i overflow issues
+- 🍔 **Ulepszone menu mobilne**: Animacje, backdrop overlay, lepsze pozycjonowanie
+- 📊 **Wykres Farmakokinetyki**: Nowy wykres pokazujący profil stężenia leków w czasie (0-24h)
+- 📄 **Eksport Long Image**: Eksport wszystkich wykresów jako jeden długi obraz PNG
+- 📑 **Eksport PDF**: Profesjonalny raport PDF dla lekarza z tabelami i statystykami
+- 🏠 **Landing Page**: Piękna strona powitalna dla nowych użytkowników
+- 📥 **Ulepszony Import**: Tabs (wklej/plik), drag & drop, lepsze feedback
+- 🔒 **Anonimizacja**: Generyczne tytuły wykresów, konfigurowalny kontekst choroby
+- 🐛 **Naprawione tygodnie**: Poprawione sortowanie tygodni na przełomie roku (ISO week)
+- 📐 **Naprawione legendy**: Poprawione wyświetlanie legend w fullscreen view
 
 ## Poprzednie wersje
 
@@ -40,39 +46,46 @@ Modern, modularny dashboard do wizualizacji dawkowania pregabaliny i efektów le
 ## Funkcje
 
 - 📊 **12 wykresów analitycznych**: 
-  - Trajektoria GAD
-  - Profil Dobowy
-  - Stabilność ADHD
-  - Stacked Area
+  - Trajektoria Głównych Objawów
+  - Profil Dobowy Nasilenia
+  - Stabilność Funkcjonowania Poznawczego
+  - Stacked Area (Objawy w ciągu dnia)
+  - **Profil Stężenia Leków** (NOWY - farmakokinetyka)
   - Pozytywne vs Negatywne
   - Metryki per Pora Dnia
   - Analiza Snu
   - Macierz Korelacji
-  - Sen vs Lęk
-  - Rolling Average
-  - Porównanie Tygodniowe
+  - Sen vs Objawy Następnego Dnia
+  - Trend z Wygładzeniem
+  - Porównanie Tygodniowe (naprawione sortowanie)
 
 - 📈 **Raport dla Lekarza**: 
-  - Automatycznie generowany raport
-  - Analiza statystyczna
+  - Automatycznie generowany raport HTML
+  - Analiza statystyczna (regresja, korelacje, p-values)
   - Tabela okresów 3-dniowych
   - Macierz korelacji
-  - Eksport do PDF
+  - **Eksport do PDF** (NOWY - profesjonalny format)
 
 - 💾 **Import Danych**: 
-  - Format CSV
-  - Format tekstowy z walidacją
-  - Edytowalny wpis leków
+  - Format CSV z walidacją
+  - Format tekstowy (RAW)
+  - **Drag & Drop** (NOWY)
+  - **Tabs: Wklej/Plik** (NOWY)
+  - Edytowalny wpis leków i kontekstu choroby
 
 - 📱 **Responsywny Design**: 
-  - Hamburger menu na mobile
-  - Fullscreen wykresy
+  - **Liquid Glass UI** (NOWY - iOS 26 style)
+  - Hamburger menu z animacjami
+  - Fullscreen wykresy (naprawione legendy)
   - Touch-friendly controls
+  - **iOS safe-area support** (NOWY)
 
 - 🖨️ **Eksport**: 
-  - PNG dla wykresów
-  - PDF dla raportu
+  - PNG dla pojedynczych wykresów
+  - **Long Image PNG** (NOWY - wszystkie wykresy razem)
+  - PDF dla raportu (z tabelami)
   - CSV dla danych
+  - Print-friendly layout
 
 ## Struktura Projektu
 
@@ -98,11 +111,13 @@ pregabalin-tracker/
 
 ## Technologie
 
-- **Plotly.js** - Wykresy interaktywne
-- **jStat** - Obliczenia statystyczne (korelacje, regresja)
+- **Plotly.js Basic 2.27.0** - Wykresy interaktywne
+- **jStat 1.9.6** - Obliczenia statystyczne (korelacje, regresja, p-values)
+- **html2canvas 1.4.1** - Eksport długich obrazów (NOWY)
+- **jsPDF 2.5.1 + autoTable** - Generowanie PDF (NOWY)
 - **LocalStorage** - Persystencja danych
 - **Vanilla JavaScript** - Zero zależności buildowych
-- **CSS Variables** - Dynamiczne motywy
+- **CSS Variables + Glassmorphism** - Dynamiczne motywy z Liquid Glass
 
 ## Design System
 

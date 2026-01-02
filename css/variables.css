@@ -62,17 +62,11 @@
   --accent-red: var(--error);
   --accent-amber: var(--warning);
   
-  /* Adjust shadows for dark mode */
+  /* Shadows - Softer, warmer feel for dark mode */
   --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
   --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.4), 0 4px 6px -2px rgba(0, 0, 0, 0.3);
-  
-  /* Shadows - Softer, warmer feel */
-  --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.08), 0 1px 2px 0 rgba(0, 0, 0, 0.04);
-  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.04);
-  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -2px rgba(0, 0, 0, 0.04);
   
   /* Spacing */
   --spacing-xs: 0.25rem;
@@ -92,6 +86,21 @@
   --transition-fast: 150ms ease;
   --transition-base: 300ms ease;
   --transition-slow: 500ms ease;
+  
+  /* ===== LIQUID GLASS (iOS 26 Style) ===== */
+  --glass-bg: rgba(255, 255, 255, 0.03);
+  --glass-bg-hover: rgba(255, 255, 255, 0.06);
+  --glass-bg-active: rgba(255, 255, 255, 0.08);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-border-hover: rgba(255, 255, 255, 0.15);
+  --glass-blur: 20px;
+  --glass-blur-heavy: 32px;
+  --glass-shadow: 
+      0 8px 32px rgba(0, 0, 0, 0.35),
+      0 2px 8px rgba(0, 0, 0, 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  --glass-glow: 0 0 30px rgba(13, 148, 136, 0.12);
+  --glass-inner-glow: inset 0 0 20px rgba(255, 255, 255, 0.02);
 }
 
 

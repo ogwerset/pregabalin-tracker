@@ -5,6 +5,7 @@ const UIController = {
         'chart-intraday': true,
         'chart-adhd': true,
         'chart-stacked-area': true,
+        'chart-pharmacokinetics': true,
         'chart-sleep': true,
         'chart-correlation': true,
         'chart-sleep-anxiety': true,
@@ -17,19 +18,94 @@ const UIController = {
     
     init: function() {
         this.bindEvents();
+        this.checkLandingPage();
         this.loadData();
+        
+        // Hide back button on landing page initially
+        const btnBackToLanding = document.getElementById('btn-back-to-landing');
+        if (btnBackToLanding) {
+            const landingPage = document.getElementById('landing-page');
+            if (landingPage && landingPage.classList.contains('active')) {
+                btnBackToLanding.style.display = 'none';
+            }
+        }
+    },
+    
+    checkLandingPage: function() {
+        const data = DataStore.load ? DataStore.load() : [];
+        const landingPage = document.getElementById('landing-page');
+        const importTab = document.getElementById('tab-import');
+        
+        if (data.length === 0) {
+            // Show landing page by default if no data
+            if (landingPage) {
+                landingPage.classList.add('active');
+                landingPage.style.display = 'block';
+            }
+            if (importTab) importTab.classList.remove('active');
+            // Hide other tabs
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                if (tab.id !== 'landing-page') {
+                    tab.classList.remove('active');
+                    tab.style.display = 'none';
+                }
+            });
+            // Activate landing tab in nav
+            document.querySelectorAll('.nav-tab').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.tab === 'landing-page') {
+                    btn.classList.add('active');
+                }
+            });
+        } else {
+            // Hide landing page if data exists, show import tab
+            if (landingPage) {
+                landingPage.classList.remove('active');
+                landingPage.style.display = 'none';
+            }
+            if (importTab && !importTab.classList.contains('active')) {
+                importTab.classList.add('active');
+                importTab.style.display = 'block';
+            }
+        }
+    },
+    
+    showImportTab: function() {
+        this.navigateFromLanding('tab-import');
+    },
+    
+    navigateFromLanding: function(tabId) {
+        const landingPage = document.getElementById('landing-page');
+        const targetTab = document.getElementById(tabId);
+        
+        if (landingPage) landingPage.style.display = 'none';
+        if (targetTab) {
+            this.switchTab(tabId);
+        }
+        // Close mobile menu if open
+        const navTabs = document.getElementById('nav-tabs');
+        const hamburgerBtn = document.getElementById('hamburger-btn');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+        if (navTabs && navTabs.classList.contains('open')) {
+            navTabs.classList.remove('open');
+            if (hamburgerBtn) hamburgerBtn.classList.remove('active');
+            if (menuBackdrop) menuBackdrop.classList.remove('open');
+            document.body.style.overflow = '';
+        }
     },
     
     switchTab: function(tabId) {
         // Hide all tabs
         document.querySelectorAll('.tab-content').forEach(tab => {
             tab.classList.remove('active');
+            tab.style.display = 'none';
         });
         
         // Show selected tab
         const targetTab = document.getElementById(tabId);
         if (targetTab) {
             targetTab.classList.add('active');
+            targetTab.style.display = 'block';
         }
         
         // Update nav
@@ -39,6 +115,16 @@ const UIController = {
                 btn.classList.add('active');
             }
         });
+        
+        // Show/hide back to landing button
+        const btnBackToLanding = document.getElementById('btn-back-to-landing');
+        if (btnBackToLanding) {
+            if (tabId === 'landing-page') {
+                btnBackToLanding.style.display = 'none';
+            } else {
+                btnBackToLanding.style.display = 'flex';
+            }
+        }
         
         // Lazy load charts when dashboard tab is shown
         if (tabId === 'tab-dashboard') {
@@ -88,18 +174,59 @@ const UIController = {
             });
         };
         
-        // Hamburger menu toggle
+        // Hamburger menu toggle with animation
         const hamburgerBtn = document.getElementById('hamburger-btn');
         const navTabs = document.getElementById('nav-tabs');
+        const menuBackdrop = document.getElementById('menu-backdrop');
+        
+        const closeMenu = () => {
+            if (navTabs) navTabs.classList.remove('open');
+            if (hamburgerBtn) hamburgerBtn.classList.remove('active');
+            if (menuBackdrop) menuBackdrop.classList.remove('open');
+            document.body.style.overflow = '';
+        };
+        
+        const openMenu = () => {
+            if (navTabs) navTabs.classList.add('open');
+            if (hamburgerBtn) hamburgerBtn.classList.add('active');
+            if (menuBackdrop) menuBackdrop.classList.add('open');
+            document.body.style.overflow = 'hidden'; // Prevent scroll when menu open
+        };
+        
         if (hamburgerBtn && navTabs) {
             addTapEvent(hamburgerBtn, () => {
-                navTabs.classList.toggle('open');
+                if (navTabs.classList.contains('open')) {
+                    closeMenu();
+                } else {
+                    openMenu();
+                }
             });
+            
             // Close menu when clicking on a tab
             document.querySelectorAll('.nav-tab').forEach(tab => {
                 addTapEvent(tab, () => {
-                    navTabs.classList.remove('open');
+                    closeMenu();
                 });
+            });
+            
+            // Close menu when clicking backdrop
+            if (menuBackdrop) {
+                addTapEvent(menuBackdrop, closeMenu);
+            }
+            
+            // Close menu on Escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && navTabs.classList.contains('open')) {
+                    closeMenu();
+                }
+            });
+        }
+        
+        // Back to landing button
+        const btnBackToLanding = document.getElementById('btn-back-to-landing');
+        if (btnBackToLanding) {
+            addTapEvent(btnBackToLanding, () => {
+                this.switchTab('landing-page');
             });
         }
         
@@ -112,6 +239,14 @@ const UIController = {
             }
         });
         
+        // Landing page navigation cards
+        document.querySelectorAll('.nav-card[data-tab]').forEach(card => {
+            addTapEvent(card, (e) => {
+                e.preventDefault();
+                this.navigateFromLanding(card.dataset.tab);
+            });
+        });
+        
         // Import buttons
         const btnImport = document.getElementById('btn-import');
         const btnAppend = document.getElementById('btn-append');
@@ -122,15 +257,67 @@ const UIController = {
             addTapEvent(btnAppend, () => this.handleImport('append'));
         }
         
-        // CSV upload
+        // Import tabs (paste vs file)
+        document.querySelectorAll('.import-tab').forEach(tab => {
+            addTapEvent(tab, () => {
+                const mode = tab.dataset.mode;
+                document.querySelectorAll('.import-tab').forEach(t => t.classList.remove('active'));
+                document.querySelectorAll('.import-panel').forEach(p => p.classList.remove('active'));
+                tab.classList.add('active');
+                document.getElementById(`import-${mode}`).classList.add('active');
+            });
+        });
+        
+        // File upload area (click)
+        const fileUploadArea = document.getElementById('file-upload-area');
         const csvUpload = document.getElementById('csv-upload');
-        if (csvUpload) {
+        if (fileUploadArea && csvUpload) {
+            addTapEvent(fileUploadArea, () => {
+                csvUpload.click();
+            });
+            
+            // Drag and drop
+            fileUploadArea.addEventListener('dragover', (e) => {
+                e.preventDefault();
+                fileUploadArea.style.borderColor = 'var(--accent)';
+                fileUploadArea.style.background = 'rgba(13, 148, 136, 0.1)';
+            });
+            
+            fileUploadArea.addEventListener('dragleave', () => {
+                fileUploadArea.style.borderColor = 'var(--border)';
+                fileUploadArea.style.background = 'var(--bg-hover)';
+            });
+            
+            fileUploadArea.addEventListener('drop', (e) => {
+                e.preventDefault();
+                fileUploadArea.style.borderColor = 'var(--border)';
+                fileUploadArea.style.background = 'var(--bg-hover)';
+                
+                const file = e.dataTransfer.files[0];
+                if (file && (file.name.endsWith('.csv') || file.name.endsWith('.txt'))) {
+                    const reader = new FileReader();
+                    reader.onload = (event) => {
+                        document.getElementById('raw-input').value = event.target.result;
+                        // Switch to paste tab
+                        document.querySelector('.import-tab[data-mode="paste"]').click();
+                        this.showToast('success', `Załadowano plik: ${file.name}`);
+                    };
+                    reader.readAsText(file);
+                } else {
+                    this.showToast('error', 'Nieprawidłowy format pliku. Wybierz plik .csv lub .txt');
+                }
+            });
+            
+            // File input change
             csvUpload.addEventListener('change', (e) => {
                 const file = e.target.files[0];
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (event) => {
                         document.getElementById('raw-input').value = event.target.result;
+                        // Switch to paste tab to show content
+                        document.querySelector('.import-tab[data-mode="paste"]').click();
+                        this.showToast('success', `Załadowano plik: ${file.name}`);
                     };
                     reader.readAsText(file);
                 }
@@ -171,11 +358,15 @@ const UIController = {
         // Print/Export
         const btnPrint = document.getElementById('btn-print');
         const btnExportPNG = document.getElementById('btn-export-png');
+        const btnExportLongImage = document.getElementById('btn-export-long-image');
         if (btnPrint) {
             addTapEvent(btnPrint, () => this.exportSelected());
         }
         if (btnExportPNG) {
             addTapEvent(btnExportPNG, () => this.exportAllChartsPNG());
+        }
+        if (btnExportLongImage) {
+            addTapEvent(btnExportLongImage, () => this.exportAllAsLongImage());
         }
         
         // Segment checkboxes - synchronizacja między panel export a checkboxy przy wykresach
@@ -184,6 +375,7 @@ const UIController = {
             'check-chart-intraday': 'chart-intraday',
             'check-chart-adhd': 'chart-adhd',
             'check-chart-stacked-area': 'chart-stacked-area',
+            'check-chart-pharmacokinetics': 'chart-pharmacokinetics',
             'check-chart-correlation': 'chart-correlation',
             'check-chart-positive-vs-negative': 'chart-positive-vs-negative',
             'check-chart-metrics-by-time': 'chart-metrics-by-time',
@@ -261,6 +453,22 @@ const UIController = {
             });
         }
         
+        // PDF Export button
+        const btnExportPDF = document.getElementById('btn-export-pdf');
+        if (btnExportPDF) {
+            addTapEvent(btnExportPDF, () => {
+                const data = DataStore.load ? DataStore.load() : [];
+                if (data.length === 0) {
+                    this.showToast('warning', 'Brak danych do eksportu');
+                    return;
+                }
+                const stats = StatsEngine.computeAll ? StatsEngine.computeAll(data) : null;
+                if (stats && DoctorReport.exportToPDF) {
+                    DoctorReport.exportToPDF(data, stats);
+                }
+            });
+        }
+        
         // Load and save medications
         const medicationsInput = document.getElementById('medications-input');
         const btnSaveMeds = document.getElementById('btn-save-meds');
@@ -320,9 +528,7 @@ const UIController = {
             this.showToast('error', `Nie udało się zaimportować danych. ${result.errors.length} błędów.`);
             if (feedback) {
                 feedback.style.display = 'block';
-                feedback.style.background = 'rgba(239, 68, 68, 0.1)';
-                feedback.style.border = '1px solid var(--accent-red)';
-                feedback.style.color = 'var(--accent-red)';
+                feedback.className = 'import-feedback error';
                 feedback.innerHTML = `<strong>Błędy walidacji (${result.errors.length}):</strong><br>` + 
                     result.errors.slice(0, 10).join('<br>') + 
                     (result.errors.length > 10 ? `<br>... i ${result.errors.length - 10} więcej` : '');
@@ -334,24 +540,28 @@ const UIController = {
         if (mode === 'replace') {
             DataStore.save(result.data);
             this.showToast('success', `Zaimportowano ${result.data.length} wpisów${result.errors.length > 0 ? ` (pominięto ${result.errors.length} błędnych linii)` : ''}`);
+            if (feedback && result.errors.length === 0) {
+                feedback.style.display = 'block';
+                feedback.className = 'import-feedback success';
+                feedback.innerHTML = `✓ Pomyślnie zaimportowano <strong>${result.data.length}</strong> wpisów.`;
+            }
         } else {
             const appendResult = DataStore.append(result.data);
             this.showToast('success', `Dodano ${appendResult.added} nowych wpisów${appendResult.duplicates > 0 ? ` (${appendResult.duplicates} duplikatów pominięto)` : ''}${result.errors.length > 0 ? `, pominięto ${result.errors.length} błędnych linii` : ''}`);
+            if (feedback && result.errors.length === 0) {
+                feedback.style.display = 'block';
+                feedback.className = 'import-feedback success';
+                feedback.innerHTML = `✓ Dodano <strong>${appendResult.added}</strong> nowych wpisów${appendResult.duplicates > 0 ? ` (${appendResult.duplicates} duplikatów pominięto)` : ''}.`;
+            }
         }
         
         // Pokaż feedback z błędami jeśli są
-        if (feedback) {
-            if (result.errors.length > 0) {
-                feedback.style.display = 'block';
-                feedback.style.background = 'rgba(245, 158, 11, 0.1)';
-                feedback.style.border = '1px solid var(--accent-amber)';
-                feedback.style.color = 'var(--accent-amber)';
-                feedback.innerHTML = `<strong>Ostrzeżenia (${result.errors.length}):</strong><br>` + 
-                    result.errors.slice(0, 5).join('<br>') + 
-                    (result.errors.length > 5 ? `<br>... i ${result.errors.length - 5} więcej` : '');
-            } else {
-                feedback.style.display = 'none';
-            }
+        if (feedback && result.errors.length > 0) {
+            feedback.style.display = 'block';
+            feedback.className = 'import-feedback warning';
+            feedback.innerHTML = `<strong>Ostrzeżenia (${result.errors.length}):</strong><br>` + 
+                result.errors.slice(0, 5).join('<br>') + 
+                (result.errors.length > 5 ? `<br>... i ${result.errors.length - 5} więcej` : '');
         }
         
         // Wyczyść input
@@ -380,12 +590,16 @@ const UIController = {
         const data = DataStore.load ? DataStore.load() : [];
         this.updateDataSummary(data);
         
+        // Sprawdź czy pokazać landing page
+        this.checkLandingPage();
+        
         // Aktualizuj tabelę
         if (TableManager.render) {
             TableManager.render('data-table', data);
         }
         
         // Aktualizuj raport
+        const btnExportPDF = document.getElementById('btn-export-pdf');
         if (data.length > 0 && StatsEngine.computeAll && DoctorReport.generate) {
             const stats = StatsEngine.computeAll(data);
             const reportHTML = DoctorReport.generate(data, stats);
@@ -393,11 +607,13 @@ const UIController = {
             if (reportContainer) {
                 reportContainer.innerHTML = reportHTML;
             }
+            if (btnExportPDF) btnExportPDF.style.display = 'block';
         } else {
             const reportContainer = document.getElementById('doctor-report');
             if (reportContainer) {
                 reportContainer.innerHTML = '<p style="color: var(--text-secondary); text-align: center; padding: 40px;">Brak danych. Zaimportuj dane w zakładce "Import Danych", aby wygenerować raport.</p>';
             }
+            if (btnExportPDF) btnExportPDF.style.display = 'none';
         }
         
         // Wykresy będą renderowane lazy przy pierwszym pokazaniu tabu Dashboard
@@ -476,12 +692,102 @@ const UIController = {
         }, 100);
     },
     
+    exportAllAsLongImage: async function() {
+        if (typeof html2canvas === 'undefined') {
+            this.showToast('error', 'Biblioteka html2canvas nie jest załadowana');
+            return;
+        }
+        
+        this.showToast('info', 'Generowanie obrazu... To może chwilę potrwać.');
+        
+        try {
+            // Hide UI elements
+            const elementsToHide = document.querySelectorAll('.chart-buttons, .export-panel, .button-group, header, footer, .nav-tabs');
+            const hiddenElements = [];
+            elementsToHide.forEach(el => {
+                if (el && el.style.display !== 'none') {
+                    hiddenElements.push({ el, display: el.style.display });
+                    el.style.display = 'none';
+                }
+            });
+            
+            // Get content to export
+            const dashboardTab = document.getElementById('tab-dashboard');
+            const reportTab = document.getElementById('tab-report');
+            
+            if (!dashboardTab) {
+                this.showToast('error', 'Nie znaleziono zawartości do eksportu');
+                return;
+            }
+            
+            // Create temporary container
+            const tempContainer = document.createElement('div');
+            tempContainer.style.position = 'absolute';
+            tempContainer.style.left = '-9999px';
+            tempContainer.style.width = dashboardTab.offsetWidth + 'px';
+            tempContainer.style.background = 'var(--bg-primary)';
+            tempContainer.style.padding = '20px';
+            
+            // Clone dashboard content
+            const dashboardClone = dashboardTab.cloneNode(true);
+            dashboardClone.style.display = 'block';
+            dashboardClone.style.background = 'var(--bg-primary)';
+            tempContainer.appendChild(dashboardClone);
+            
+            // Clone report if exists and has content
+            if (reportTab && reportTab.innerHTML.trim() && !reportTab.innerHTML.includes('Brak danych')) {
+                const reportClone = reportTab.cloneNode(true);
+                reportClone.style.display = 'block';
+                reportClone.style.background = 'var(--bg-primary)';
+                reportClone.style.marginTop = '40px';
+                tempContainer.appendChild(reportClone);
+            }
+            
+            document.body.appendChild(tempContainer);
+            
+            // Wait for images and charts to load
+            await new Promise(resolve => setTimeout(resolve, 500));
+            
+            // Render to canvas
+            const canvas = await html2canvas(tempContainer, {
+                scale: 2,
+                useCORS: true,
+                logging: false,
+                backgroundColor: '#1C1917',
+                width: tempContainer.scrollWidth,
+                height: tempContainer.scrollHeight
+            });
+            
+            // Cleanup
+            document.body.removeChild(tempContainer);
+            hiddenElements.forEach(({ el, display }) => {
+                el.style.display = display;
+            });
+            
+            // Download
+            canvas.toBlob((blob) => {
+                const url = URL.createObjectURL(blob);
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = `symptom-tracker-export-${new Date().toISOString().split('T')[0]}.png`;
+                a.click();
+                URL.revokeObjectURL(url);
+                this.showToast('success', 'Obraz został wyeksportowany');
+            }, 'image/png');
+            
+        } catch (error) {
+            console.error('Błąd eksportu:', error);
+            this.showToast('error', 'Wystąpił błąd podczas eksportu obrazu');
+        }
+    },
+    
     exportAllChartsPNG: async function() {
         const chartMapping = {
             'chart-gad': 'plot-gad',
             'chart-intraday': 'plot-intraday',
             'chart-adhd': 'plot-adhd',
             'chart-stacked-area': 'plot-stacked-area',
+            'chart-pharmacokinetics': 'plot-pharmacokinetics',
             'chart-sleep': 'plot-sleep',
             'chart-correlation': 'plot-correlation',
             'chart-sleep-anxiety': 'plot-sleep-anxiety',
@@ -561,15 +867,27 @@ const UIController = {
         const originalLayout = JSON.parse(JSON.stringify(chartElement.layout));
         
         // Calculate proper dimensions
-        const containerHeight = Math.max(600, window.innerHeight - 200);
+        const containerHeight = Math.max(500, window.innerHeight - 180);
         const containerWidth = fullscreenContainer.offsetWidth || window.innerWidth - 40;
         
-        // Update layout for fullscreen
+        // FIX: Adjust legend position for fullscreen to prevent overlap
         const fullscreenLayout = {
             ...originalLayout,
             width: containerWidth,
             height: containerHeight,
-            margin: { t: 60, r: 40, b: 60, l: 60 }
+            margin: { t: 50, r: 30, b: 100, l: 50 }, // Increased bottom margin for legend
+            legend: {
+                ...(originalLayout.legend || {}),
+                orientation: 'h',
+                x: 0.5,
+                xanchor: 'center',
+                y: -0.15, // Position legend below chart but within visible area
+                yanchor: 'top',
+                font: { size: 11 },
+                bgcolor: 'rgba(0,0,0,0.5)',
+                bordercolor: 'var(--border)',
+                borderwidth: 1
+            }
         };
         
         Plotly.newPlot(fullscreenContainer.id, originalData, fullscreenLayout, {
