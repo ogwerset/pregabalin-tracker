@@ -6,8 +6,11 @@ const UIController = {
         'chart-adhd': true,
         'chart-stacked-area': true,
         'chart-pharmacokinetics': true,
+        'chart-elvanse-symptoms': true,
+        'chart-pregabalina-symptoms': true,
         'chart-sleep': true,
         'chart-correlation': true,
+        'chart-weed-correlation': true,
         'chart-sleep-anxiety': true,
         'chart-rolling-avg': true,
         'chart-weekly': true,
@@ -15,6 +18,8 @@ const UIController = {
         'chart-metrics-by-time': true,
         'report': true
     },
+    
+    currentTimeRange: 'all',
     
     init: function() {
         this.bindEvents();
@@ -144,6 +149,19 @@ const UIController = {
             }
         }
         
+        // Show/hide datetime and time range selector based on active tab
+        const headerDateTime = document.getElementById('header-datetime');
+        const headerTimeRange = document.getElementById('header-time-range');
+        if (tabId === 'tab-dashboard') {
+            // On dashboard: hide datetime, show time range selector
+            if (headerDateTime) headerDateTime.style.display = 'none';
+            if (headerTimeRange) headerTimeRange.style.display = 'flex';
+        } else {
+            // On other tabs: show datetime, hide time range selector
+            if (headerDateTime) headerDateTime.style.display = 'flex';
+            if (headerTimeRange) headerTimeRange.style.display = 'none';
+        }
+        
         // Auto-focus textarea when switching to Import tab
         if (tabId === 'tab-import') {
             setTimeout(() => {
@@ -157,12 +175,14 @@ const UIController = {
         // Lazy load charts when dashboard tab is shown
         if (tabId === 'tab-dashboard') {
             const plotGad = document.getElementById('plot-gad');
-            if (plotGad && (!plotGad.data || plotGad.data.length === 0)) {
+            // Renderuj wszystkie wykresy gdy dashboard jest pokazany (nie tylko przy pierwszym załadowaniu)
+            if (plotGad) {
                 const data = DataStore.load();
                 if (data && data.length > 0) {
                     const stats = StatsEngine.computeAll ? StatsEngine.computeAll(data) : null;
                     if (stats && ChartRenderer.renderAllCharts) {
-                        ChartRenderer.renderAllCharts(data, stats);
+                        // Zawsze renderuj wszystkie wykresy z aktualnym zakresem czasowym
+                        ChartRenderer.renderAllCharts(data, stats, this.currentTimeRange);
                     }
                 }
             }
@@ -388,6 +408,7 @@ const UIController = {
             'check-chart-elvanse-symptoms': 'chart-elvanse-symptoms',
             'check-chart-pregabalina-symptoms': 'chart-pregabalina-symptoms',
             'check-chart-correlation': 'chart-correlation',
+            'check-chart-weed-correlation': 'chart-weed-correlation',
             'check-chart-positive-vs-negative': 'chart-positive-vs-negative',
             'check-chart-metrics-by-time': 'chart-metrics-by-time',
             'check-chart-sleep': 'chart-sleep',
@@ -480,6 +501,29 @@ const UIController = {
             });
         }
         
+        // Collapsible template section
+        const templateHeader = document.getElementById('template-header');
+        const templateContent = document.getElementById('template-content');
+        if (templateHeader && templateContent) {
+            addTapEvent(templateHeader, () => {
+                const isExpanded = templateHeader.getAttribute('aria-expanded') === 'true';
+                templateHeader.setAttribute('aria-expanded', !isExpanded);
+                if (isExpanded) {
+                    templateContent.style.display = 'none';
+                } else {
+                    templateContent.style.display = 'block';
+                }
+            });
+        }
+        
+        // Download CSV template
+        const btnDownloadTemplate = document.getElementById('btn-download-template');
+        if (btnDownloadTemplate) {
+            addTapEvent(btnDownloadTemplate, () => {
+                this.downloadCSVTemplate();
+            });
+        }
+        
         // Load and save medications
         const medicationsInput = document.getElementById('medications-input');
         const btnSaveMeds = document.getElementById('btn-save-meds');
@@ -510,6 +554,24 @@ const UIController = {
                     }
                     // Refresh report if it's visible
                     this.refreshDashboard();
+                }
+            });
+        }
+        
+        // Time range dropdown
+        const timeRangeSelect = document.getElementById('time-range-select');
+        if (timeRangeSelect) {
+            timeRangeSelect.addEventListener('change', (e) => {
+                this.currentTimeRange = e.target.value;
+                // Re-render ALL charts when time range changes
+                const data = DataStore.load ? DataStore.load() : [];
+                if (data.length > 0) {
+                    // Oblicz pełne stats dla pełnych danych (potrzebne dla wykresów bez filtrowania)
+                    const fullStats = StatsEngine.computeAll(data);
+                    if (ChartRenderer && ChartRenderer.renderAllCharts) {
+                        // Wywołaj renderAllCharts - to powinno zrenderować wszystkie wykresy
+                        ChartRenderer.renderAllCharts(data, fullStats, this.currentTimeRange);
+                    }
                 }
             });
         }
@@ -799,8 +861,11 @@ const UIController = {
             'chart-adhd': 'plot-adhd',
             'chart-stacked-area': 'plot-stacked-area',
             'chart-pharmacokinetics': 'plot-pharmacokinetics',
+            'chart-elvanse-symptoms': 'plot-elvanse-symptoms',
+            'chart-pregabalina-symptoms': 'plot-pregabalina-symptoms',
             'chart-sleep': 'plot-sleep',
             'chart-correlation': 'plot-correlation',
+            'chart-weed-correlation': 'plot-weed-correlation',
             'chart-sleep-anxiety': 'plot-sleep-anxiety',
             'chart-rolling-avg': 'plot-rolling-avg',
             'chart-weekly': 'plot-weekly',
@@ -955,5 +1020,28 @@ const UIController = {
             overlay.remove();
             document.body.style.overflow = '';
         }
+    },
+    
+    // Download CSV template
+    downloadCSVTemplate: function() {
+        // CSV header with all fields including Weed
+        const csvHeader = 'Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,Notatki,Elvanse,ElvanseGodzina,Pregabalina,PregabalinaGodzina,Weed,WeedGodzina';
+        
+        // Example row
+        const exampleRow = '22/12/2025,11:32,3,5,2,6,8,6,6,RANO,-,TAK(70MG),08:00,TAK(75MG),09:00,NIE,-';
+        
+        const csvContent = csvHeader + '\n' + exampleRow;
+        
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'symptom-tracker-template.csv';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        this.showToast('success', 'Templatka CSV została pobrana');
     }
 };

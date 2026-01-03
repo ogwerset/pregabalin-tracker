@@ -21,7 +21,7 @@
 
 ## 🏗️ Architecture
 
-### Current State: v4.3.0
+### Current State: v4.5.0
 
 **Deployment**: Vercel (automatyczny deploy z GitHub)
 
@@ -72,7 +72,77 @@ app.js
 
 ---
 
-## 🔧 Recent Session Summary (v4.3.0)
+## 🔧 Recent Session Summary (v4.5.0)
+
+### Major Features Added (v4.5.0)
+1. **Time Range Filters**
+   - Dropdown do wyboru zakresu czasowego (Dzisiaj / Ten tydzień / Ten miesiąc / Cały okres)
+   - Kalendarzowe zakresy czasowe (nie względne)
+   - Selektywne filtrowanie wykresów:
+     - **Reagujące na filtr**: Trajektoria, Stacked Area, Trend z Wygładzeniem, Pozytywne vs Negatywne, Analiza Snu, Sen vs Objawy Następnego Dnia
+     - **Zawsze pełne dane**: Macierz Korelacji, Porównanie Tygodniowe, Profil Stężenia Leków, Zależności od leków, Wpływ Marihuany, Profil Dobowy, Metryki per Pora Dnia
+
+2. **UI/UX Improvements**
+   - Selektor zakresu czasu przeniesiony do headera (widoczny tylko na dashboardzie)
+   - Data i czas ukryte na dashboardzie, widoczne na innych podstronach
+   - Sticky header - pozostaje na górze podczas przewijania na wszystkich podstronach
+   - Poprawiona logika renderowania - wszystkie wykresy reagują na zmiany selektora
+
+3. **Implementation Details**
+   - Nowa funkcja `filterByTimeRange` w `stats-engine.js`
+   - Modyfikacja `renderAllCharts` w `chart-renderer.js` do obsługi parametru `timeRange`
+   - Event handler w `ui-controller.js` dla dropdown w headerze
+   - Poprawiona logika obliczania statystyk dla przefiltrowanych danych
+   - Responsywny design dropdown z mobile support
+   - Safari fallback dla sticky positioning (`-webkit-sticky`)
+
+### Technical Changes (v4.5.0)
+- **stats-engine.js**: Dodana funkcja `filterByTimeRange(data, range)` z logiką kalendarzową
+- **chart-renderer.js**: `renderAllCharts` przyjmuje parametr `timeRange` i filtruje selektywnie
+- **ui-controller.js**: Dodana właściwość `currentTimeRange` i event handler dla dropdown
+- **index.html**: Dodany dropdown przed sekcją wykresów
+- **styles.css**: Style dla `.time-range-controls` i `.time-range-dropdown` z mobile support
+
+## 🔧 Previous Session Summary (v4.4.0)
+
+### Major Features Added (v4.4.0)
+1. **Cannabis Tracking**
+   - Nowe pole Weed w CSV (format v2 - 17 kolumn)
+   - Wykres korelacji marihuany z objawami (porównanie dni z/bez)
+   - Pełna integracja z parserem danych i stats engine
+
+2. **Templatka CSV**
+   - Rozwijana sekcja z instrukcją dla Apple Notes
+   - Przycisk pobierania templatki CSV
+   - Instrukcja krok po kroku dla użytkownika
+
+3. **Live DateTime Display**
+   - Wyświetlacz daty i godziny w headerze (po prawej stronie)
+   - Polski format daty i czasu
+   - Automatyczna aktualizacja co minutę
+
+4. **Raport dla Lekarza - Pełna Analiza ADHD**
+   - Dodana logika oceniania energii i fokusu
+   - Trendy regresji liniowej dla fokus i energia
+   - Scenariusze kliniczne (poprawa/pogorszenie/stabilizacja)
+
+5. **Naprawione Błędy**
+   - Stacked Area Chart: zmiana z stacking na overlay z alpha blending
+   - PDF Export: naprawiony błąd inicjalizacji jsPDF (doc przed deklaracją)
+   - Mniejszy przycisk PDF w raporcie
+
+### Bugs Fixed (v4.4.0)
+1. **PDF Export Critical Bug**
+   - **Issue**: Zmienna `doc` była sprawdzana przed deklaracją
+   - **Fix**: Przeniesiono check autoTable po utworzeniu instancji jsPDF
+   - **Impact**: Eksport PDF działa poprawnie
+
+2. **Stacked Area Chart**
+   - **Issue**: Wykres sumował wartości zamiast nakładać je (stacking)
+   - **Fix**: Zmieniono na overlay z alpha blending, usunięto stackgroup
+   - **Impact**: Wykres pokazuje niezależne metryki nakładające się na siebie
+
+## 🔧 Previous Session Summary (v4.3.0)
 
 ### Major Features Added (v4.3.0)
 1. **UI/UX Polish Pass**
@@ -350,7 +420,9 @@ Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,
 
 ## 🔄 Version History
 
-- **v4.3.0** (Current): UI/UX polish, darker theme, new charts, frozen columns, fullscreen improvements
+- **v4.5.0** (Current): Przełączniki czasowe dashboardu (dzień/tydzień/miesiąc/cały okres) z selektywnym filtrowaniem wykresów
+- **v4.4.0**: Cannabis tracking, templatka CSV, live datetime, pełna analiza ADHD, naprawione PDF i stacked chart
+- **v4.3.0**: UI/UX polish, darker theme, new charts, frozen columns, fullscreen improvements
 - **v4.2.0**: Critical bug fixes (chart rendering, navigation, menu backdrop)
 - **v4.0.0**: Liquid Glass UI, landing page, pharmacokinetics chart, PDF export, iOS fixes, anonymization
 - **v3.0.0**: Bug fixes (DataStore, selectors, ResizeObserver)
@@ -360,7 +432,7 @@ Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,
 
 ---
 
-**Last Updated**: v4.3.0 release
+**Last Updated**: v4.5.0 release
 **Maintainer**: User (ogwerset)
 **Repository**: GitHub (auto-deployed to Vercel)
 

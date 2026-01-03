@@ -56,6 +56,10 @@ const StatsEngine = {
             const pregDoses = items.map(i => i.Pregabalina_Dawka).filter(v => v !== null);
             daily.pregabalinaMg = pregDoses.length > 0 ? pregDoses.reduce((a, b) => a + b, 0) : null;
             
+            // Marihuana (Weed) - czy użyto tego dnia
+            const weedUsage = items.map(i => i.Weed_Tak).filter(v => v !== null && v !== undefined);
+            daily.weed = weedUsage.some(v => v === true) ? 1 : 0;
+            
             dailyData.push(daily);
         });
         
@@ -250,7 +254,8 @@ const StatsEngine = {
             'brainfog': 'brainfog',
             'energia': 'energia',
             'fokus': 'fokus',
-            'pregabalina': 'pregabalinaMg'
+            'pregabalina': 'pregabalinaMg',
+            'weed': 'weed'
         };
         
         // Pobierz wartości dla każdej zmiennej
@@ -439,8 +444,14 @@ const StatsEngine = {
         const lekValues = dailyData.map(d => d.lek).filter(v => v !== null);
         const napiecieValues = dailyData.map(d => d.napiecie).filter(v => v !== null);
         
+        // Trendy ADHD (Fokus i Energia) - dla raportu lekarza
+        const fokusValues = dailyData.map(d => d.fokus).filter(v => v !== null);
+        const energiaValues = dailyData.map(d => d.energia).filter(v => v !== null);
+        
         const lekTrend = this.linearRegression(dayNumbers.slice(0, lekValues.length), lekValues);
         const napiecieTrend = this.linearRegression(dayNumbers.slice(0, napiecieValues.length), napiecieValues);
+        const fokusTrend = this.linearRegression(dayNumbers.slice(0, fokusValues.length), fokusValues);
+        const energiaTrend = this.linearRegression(dayNumbers.slice(0, energiaValues.length), energiaValues);
         
         // Porównanie połów
         const comparison = this.compareHalves(dailyData);
@@ -485,7 +496,9 @@ const StatsEngine = {
             period,
             gadTrend: {
                 lek: { ...lekTrend, significant: lekTrend.pValue < 0.05 },
-                napiecie: { ...napiecieTrend, significant: napiecieTrend.pValue < 0.05 }
+                napiecie: { ...napiecieTrend, significant: napiecieTrend.pValue < 0.05 },
+                fokus: { ...fokusTrend, significant: fokusTrend.pValue < 0.05 },
+                energia: { ...energiaTrend, significant: energiaTrend.pValue < 0.05 }
             },
             comparison,
             adhdStability,
@@ -498,5 +511,47 @@ const StatsEngine = {
             dailyData,
             intradayData
         };
+    },
+    
+    // Filtrowanie danych według zakresu czasowego
+    filterByTimeRange: function(data, range) {
+        if (!data || data.length === 0) return data;
+        if (range === 'all') return data;
+        
+        const now = new Date();
+        let startDate;
+        
+        switch(range) {
+            case 'day':
+                // Dzisiaj - od początku dzisiejszego dnia
+                startDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+                startDate.setHours(0, 0, 0, 0);
+                break;
+            case 'week':
+                // Ten tydzień - od poniedziałku bieżącego tygodnia
+                const dayOfWeek = now.getDay() || 7; // 0 = niedziela, 1 = poniedziałek, ..., 6 = sobota
+                // Konwertuj: niedziela (0) -> 7, poniedziałek (1) -> 1, ..., sobota (6) -> 6
+                const mondayOffset = dayOfWeek === 0 ? 6 : dayOfWeek - 1;
+                startDate = new Date(now);
+                startDate.setDate(now.getDate() - mondayOffset);
+                startDate.setHours(0, 0, 0, 0);
+                break;
+            case 'month':
+                // Ten miesiąc - od pierwszego dnia bieżącego miesiąca
+                startDate = new Date(now.getFullYear(), now.getMonth(), 1);
+                startDate.setHours(0, 0, 0, 0);
+                break;
+            default:
+                return data;
+        }
+        
+        // Filtruj dane - porównuj daty w formacie DD/MM/YYYY
+        return data.filter(d => {
+            if (!d.Data) return false;
+            const [day, month, year] = d.Data.split('/').map(Number);
+            const recordDate = new Date(year, month - 1, day);
+            recordDate.setHours(0, 0, 0, 0);
+            return recordDate >= startDate;
+        });
     }
 };

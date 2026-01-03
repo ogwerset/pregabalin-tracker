@@ -566,18 +566,31 @@ const DoctorReport = {
     
     // Eksport do PDF
     exportToPDF: function(data, stats) {
-        if (typeof window.jspdf === 'undefined' || !window.jspdf.jsPDF) {
+        // Check for jsPDF in different possible locations
+        let jsPDF;
+        if (typeof window.jspdf !== 'undefined' && window.jspdf.jsPDF) {
+            jsPDF = window.jspdf.jsPDF;
+        } else if (typeof window.jsPDF !== 'undefined') {
+            jsPDF = window.jsPDF;
+        } else if (typeof jspdf !== 'undefined' && jspdf.jsPDF) {
+            jsPDF = jspdf.jsPDF;
+        } else {
             console.error('jsPDF nie jest załadowany');
-            UIController.showToast('error', 'Biblioteka PDF nie jest załadowana');
+            UIController.showToast('error', 'Biblioteka PDF nie jest załadowana. Odśwież stronę.');
             return;
         }
         
-        const { jsPDF } = window.jspdf;
+        // Create jsPDF instance
         const doc = new jsPDF({
             orientation: 'portrait',
             unit: 'mm',
             format: 'a4'
         });
+        
+        // Check for autoTable plugin AFTER creating doc
+        if (typeof doc.autoTable === 'undefined') {
+            console.warn('autoTable plugin może nie być dostępny - tabele mogą nie działać poprawnie');
+        }
         
         let yPos = 20;
         const pageWidth = doc.internal.pageSize.getWidth();

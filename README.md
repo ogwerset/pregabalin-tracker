@@ -1,8 +1,33 @@
-# Symptom Tracker Dashboard v4.3.0
+# Symptom Tracker Dashboard v4.5.0
 
 Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawansowanymi wykresami i raportami.
 
-## ✨ Nowości w v4.3.0
+## ✨ Nowości w v4.5.0
+
+- ⏱️ **Przełączniki czasowe**: Dropdown do wyboru zakresu czasowego (Dzisiaj / Ten tydzień / Ten miesiąc / Cały okres)
+- 📊 **Selektywne filtrowanie**: Niektóre wykresy reagują na filtr czasowy (trajektoria, stacked area, trend), inne zawsze pokazują cały okres (korelacje, porównania)
+- 🎯 **Inteligentna logika**: Wykresy wymagające dużej próbki (korelacje, porównania) zawsze używają pełnych danych
+- 🔄 **Dynamiczne odświeżanie**: Wykresy automatycznie aktualizują się przy zmianie zakresu czasowego
+- 📍 **Selektor w headerze**: Selektor zakresu czasu przeniesiony do headera (widoczny tylko na dashboardzie)
+- 📅 **Ukryta data/czas na dashboardzie**: Data i czas są ukryte na dashboardzie, widoczne na innych podstronach
+- 📌 **Sticky header**: Header pozostaje na górze ekranu podczas przewijania na wszystkich podstronach
+
+## Poprzednie wersje
+
+### v4.4.0
+
+- 🌿 **Cannabis Tracking**: Nowe pole Weed w CSV do śledzenia marihuany
+- 📊 **Nowy wykres**: Korelacja marihuany z objawami (porównanie dni z/bez)
+- 📋 **Templatka CSV**: Rozwijana sekcja z instrukcją i pobieraniem templatki
+- 🕐 **Live datetime**: Wyświetlacz daty i godziny w headerze (polski format)
+- 📈 **Naprawiony wykres**: Stacked Area teraz używa overlay zamiast sumowania
+- 🐛 **Naprawiony PDF**: Poprawiony błąd inicjalizacji jsPDF
+- 🔘 **Mniejszy przycisk PDF**: Kompaktowy przycisk eksportu w raporcie
+- 📊 **Pełna analiza ADHD**: Dodana logika oceniania energii i fokusu dla lekarza w raporcie
+
+## Poprzednie wersje
+
+### v4.3.0
 
 - 🎨 **Ciemniejsze tło**: Cursor-like dark theme (#252525) dla lepszej czytelności
 - ⬅️ **Przycisk powrotu**: Strzałka powrotu do startu (tylko ikona, bez tekstu)
@@ -62,7 +87,7 @@ Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawa
 
 ## Funkcje
 
-- 📊 **14 wykresów analitycznych**: 
+- 📊 **15 wykresów analitycznych**: 
   - Trajektoria Głównych Objawów
   - Profil Dobowy Nasilenia
   - Stabilność Funkcjonowania Poznawczego
@@ -70,6 +95,7 @@ Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawa
   - Profil Stężenia Leków (farmakokinetyka - bazuje na rzeczywistych czasach przyjęcia)
   - **Zależność Objawów od Elvanse** (NOWY - Energia, Fokus, Klarowność)
   - **Zależność Objawów od Pregabaliny** (NOWY - Lęk, Napięcie)
+  - **Wpływ Marihuany na Objawy** (NOWY v4.4.0 - porównanie dni z/bez)
   - Pozytywne vs Negatywne
   - Metryki per Pora Dnia
   - Analiza Snu

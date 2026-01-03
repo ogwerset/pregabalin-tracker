@@ -413,7 +413,7 @@ const ChartRenderer = {
         this.setupResizeObserver(containerId);
     },
     
-    // Wykres 4: Stacked Area Chart - Objawy w ciągu dnia
+    // Wykres 4: Overlaid Area Chart - Objawy w ciągu dnia (FIXED: overlay instead of stacking)
     renderStackedAreaByTimeOfDay: function(containerId, data) {
         if (!data || data.length === 0) return;
         
@@ -443,6 +443,11 @@ const ChartRenderer = {
         });
         
         const calculateMean = (arr) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
+        const calculateStd = (arr, mean) => {
+            if (arr.length < 2) return 0;
+            const variance = arr.reduce((sum, v) => sum + Math.pow(v - mean, 2), 0) / arr.length;
+            return Math.sqrt(variance);
+        };
         
         const lek = timeOrder.map(t => calculateMean(aggregated[t].lek));
         const napiecie = timeOrder.map(t => calculateMean(aggregated[t].napiecie));
@@ -453,16 +458,18 @@ const ChartRenderer = {
             return vals.length > 0 ? calculateMean(vals.map(v => 11 - v)) : 0;
         });
         
+        // FIX: Overlaid traces with alpha blending (no stackgroup = independent layers)
         const trace1 = {
             x: timeOrder,
             y: lek,
             name: 'Lęk',
             type: 'scatter',
-            mode: 'lines',
-            fill: 'tonexty',
-            fillcolor: 'rgba(239, 68, 68, 0.3)',
-            line: { color: '#EF4444', width: 2 },
-            stackgroup: 'one'
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(239, 68, 68, 0.25)',
+            line: { color: '#EF4444', width: 3 },
+            marker: { size: 8, color: '#EF4444' },
+            hovertemplate: '<b>%{x}</b><br>Lęk: %{y:.2f}<extra></extra>'
         };
         
         const trace2 = {
@@ -470,11 +477,12 @@ const ChartRenderer = {
             y: napiecie,
             name: 'Napięcie',
             type: 'scatter',
-            mode: 'lines',
-            fill: 'tonexty',
-            fillcolor: 'rgba(59, 130, 246, 0.3)',
-            line: { color: '#3B82F6', width: 2 },
-            stackgroup: 'one'
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(59, 130, 246, 0.25)',
+            line: { color: '#3B82F6', width: 3 },
+            marker: { size: 8, color: '#3B82F6', symbol: 'square' },
+            hovertemplate: '<b>%{x}</b><br>Napięcie: %{y:.2f}<extra></extra>'
         };
         
         const trace3 = {
@@ -482,11 +490,12 @@ const ChartRenderer = {
             y: fokus,
             name: 'Fokus',
             type: 'scatter',
-            mode: 'lines',
-            fill: 'tonexty',
-            fillcolor: 'rgba(16, 185, 129, 0.3)',
-            line: { color: '#10B981', width: 2 },
-            stackgroup: 'two'
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(16, 185, 129, 0.2)',
+            line: { color: '#10B981', width: 3 },
+            marker: { size: 8, color: '#10B981', symbol: 'diamond' },
+            hovertemplate: '<b>%{x}</b><br>Fokus: %{y:.2f}<extra></extra>'
         };
         
         const trace4 = {
@@ -494,11 +503,12 @@ const ChartRenderer = {
             y: energia,
             name: 'Energia',
             type: 'scatter',
-            mode: 'lines',
-            fill: 'tonexty',
-            fillcolor: 'rgba(245, 158, 11, 0.3)',
-            line: { color: '#F59E0B', width: 2 },
-            stackgroup: 'two'
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(245, 158, 11, 0.2)',
+            line: { color: '#F59E0B', width: 3 },
+            marker: { size: 8, color: '#F59E0B', symbol: 'triangle-up' },
+            hovertemplate: '<b>%{x}</b><br>Energia: %{y:.2f}<extra></extra>'
         };
         
         const trace5 = {
@@ -506,18 +516,19 @@ const ChartRenderer = {
             y: klarownosc,
             name: 'Klarowność',
             type: 'scatter',
-            mode: 'lines',
-            fill: 'tonexty',
-            fillcolor: 'rgba(139, 92, 246, 0.3)',
-                    line: { color: '#14B8A6', width: 2 }, // Medical teal
-            stackgroup: 'two'
+            mode: 'lines+markers',
+            fill: 'tozeroy',
+            fillcolor: 'rgba(20, 184, 166, 0.2)',
+            line: { color: '#14B8A6', width: 3, dash: 'dot' },
+            marker: { size: 8, color: '#14B8A6', symbol: 'star' },
+            hovertemplate: '<b>%{x}</b><br>Klarowność: %{y:.2f}<extra></extra>'
         };
         
         const template = this.getTemplate();
         const layout = {
             ...template,
             title: {
-                text: CONFIG.CHART_TITLES.stackedArea || 'Objawy w Ciągu Dnia',
+                text: CONFIG.CHART_TITLES.stackedArea || 'Profil Objawów w Ciągu Dnia',
                 font: { size: 16 }
             },
             xaxis: {
@@ -527,8 +538,8 @@ const ChartRenderer = {
             },
             yaxis: {
                 ...template.yaxis,
-                title: 'Suma Wartości',
-                range: [0, null]
+                title: 'Średnia Wartość (1-10)',
+                range: [0, 10]
             },
             legend: { 
                 orientation: 'h',
@@ -543,7 +554,8 @@ const ChartRenderer = {
             margin: (() => {
                 const m = ChartRenderer.getMobileMargin();
                 return { t: m.t, r: m.r, b: m.b + 100, l: m.l };
-            })()
+            })(),
+            hovermode: 'x unified'
         };
         
         Plotly.newPlot(containerId, [trace1, trace2, trace3, trace4, trace5], layout, {
@@ -1786,109 +1798,276 @@ const ChartRenderer = {
         }
     },
     
-    // Render wszystkich wykresów
-    renderAllCharts: function(data, stats) {
+    // Wykres: Korelacja Marihuany z Objawami
+    renderWeedCorrelation: function(containerId, data) {
         try {
             if (!data || data.length === 0) return;
             
-            const dailyData = stats.dailyData || StatsEngine.aggregateDaily(data);
-            const intradayData = stats.intradayData || StatsEngine.aggregateByTimeOfDay(data);
+            // Grupuj dane po użyciu marihuany
+            const groups = {
+                noWeed: { lek: [], napiecie: [], fokus: [], energia: [], brainfog: [], jakoscSnu: [] },
+                withWeed: { lek: [], napiecie: [], fokus: [], energia: [], brainfog: [], jakoscSnu: [] }
+            };
             
-            // 1. Trajektoria
+            data.forEach(d => {
+                const hasWeed = d.Weed_Tak === true;
+                const lek = d['Lęk'] !== null && d['Lęk'] !== undefined && !isNaN(d['Lęk']) ? parseFloat(d['Lęk']) : null;
+                const napiecie = d['Napięcie'] !== null && d['Napięcie'] !== undefined && !isNaN(d['Napięcie']) ? parseFloat(d['Napięcie']) : null;
+                const fokus = d['Fokus'] !== null && d['Fokus'] !== undefined && !isNaN(d['Fokus']) ? parseFloat(d['Fokus']) : null;
+                const energia = d['Energia'] !== null && d['Energia'] !== undefined && !isNaN(d['Energia']) ? parseFloat(d['Energia']) : null;
+                const brainfog = d['BrainFog'] !== null && d['BrainFog'] !== undefined && !isNaN(d['BrainFog']) ? parseFloat(d['BrainFog']) : null;
+                const jakoscSnu = d['JakośćSnu'] !== null && d['JakośćSnu'] !== undefined && !isNaN(d['JakośćSnu']) ? parseFloat(d['JakośćSnu']) : null;
+                
+                const group = hasWeed ? groups.withWeed : groups.noWeed;
+                if (lek !== null) group.lek.push(lek);
+                if (napiecie !== null) group.napiecie.push(napiecie);
+                if (fokus !== null) group.fokus.push(fokus);
+                if (energia !== null) group.energia.push(energia);
+                if (brainfog !== null) group.brainfog.push(brainfog);
+                if (jakoscSnu !== null) group.jakoscSnu.push(jakoscSnu);
+            });
+            
+            const calcAvg = (arr) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+            const calcKlarownosc = (arr) => arr.length > 0 ? arr.map(v => 11 - v).reduce((a, b) => a + b, 0) / arr.length : null;
+            
+            // Sprawdź czy są dane dla obu grup
+            const hasWeedData = groups.withWeed.lek.length > 0;
+            const hasNoWeedData = groups.noWeed.lek.length > 0;
+            
+            if (!hasWeedData && !hasNoWeedData) {
+                const container = document.getElementById(containerId);
+                if (container) {
+                    container.innerHTML = '<p style="color: var(--text-secondary); padding: 40px; text-align: center;">Brak danych o marihuanie. Dodaj pole Weed do importu CSV.</p>';
+                }
+                return;
+            }
+            
+            const categories = ['Lęk', 'Napięcie', 'Fokus', 'Energia', 'Klarowność', 'Jakość Snu'];
+            const withWeedValues = [
+                calcAvg(groups.withWeed.lek),
+                calcAvg(groups.withWeed.napiecie),
+                calcAvg(groups.withWeed.fokus),
+                calcAvg(groups.withWeed.energia),
+                calcKlarownosc(groups.withWeed.brainfog),
+                calcAvg(groups.withWeed.jakoscSnu)
+            ];
+            const noWeedValues = [
+                calcAvg(groups.noWeed.lek),
+                calcAvg(groups.noWeed.napiecie),
+                calcAvg(groups.noWeed.fokus),
+                calcAvg(groups.noWeed.energia),
+                calcKlarownosc(groups.noWeed.brainfog),
+                calcAvg(groups.noWeed.jakoscSnu)
+            ];
+            
+            const traces = [];
+            
+            // Bez marihuany
+            if (hasNoWeedData) {
+                traces.push({
+                    x: categories,
+                    y: noWeedValues,
+                    type: 'bar',
+                    name: `Bez marihuany (n=${groups.noWeed.lek.length})`,
+                    marker: { color: '#10B981' },
+                    text: noWeedValues.map(v => v !== null ? v.toFixed(1) : '-'),
+                    textposition: 'auto',
+                    hovertemplate: '%{x}<br>Wartość: %{y:.2f}<extra>Bez marihuany</extra>'
+                });
+            }
+            
+            // Z marihuaną
+            if (hasWeedData) {
+                traces.push({
+                    x: categories,
+                    y: withWeedValues,
+                    type: 'bar',
+                    name: `Z marihuaną (n=${groups.withWeed.lek.length})`,
+                    marker: { color: '#22C55E', pattern: { shape: '/' } },
+                    text: withWeedValues.map(v => v !== null ? v.toFixed(1) : '-'),
+                    textposition: 'auto',
+                    hovertemplate: '%{x}<br>Wartość: %{y:.2f}<extra>Z marihuaną</extra>'
+                });
+            }
+            
+            if (traces.length === 0) return;
+            
+            const template = this.getTemplate();
+            const layout = {
+                ...template,
+                title: {
+                    text: '🌿 Wpływ Marihuany na Objawy',
+                    font: { size: 16 }
+                },
+                xaxis: {
+                    ...template.xaxis,
+                    title: '',
+                    type: 'category'
+                },
+                yaxis: {
+                    ...template.yaxis,
+                    title: 'Średnia wartość',
+                    range: [0, 10]
+                },
+                barmode: 'group',
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.2,
+                    font: { color: '#78716C', family: 'Inter, sans-serif', size: 11 }
+                },
+                annotations: hasWeedData && hasNoWeedData ? [{
+                    x: 0.5,
+                    y: 1.12,
+                    xref: 'paper',
+                    yref: 'paper',
+                    text: '💡 Porównanie średnich wartości objawów w dniach z/bez użycia marihuany',
+                    showarrow: false,
+                    font: { size: 11, color: '#78716C' }
+                }] : [],
+                margin: (() => {
+                    const m = ChartRenderer.getMobileMargin();
+                    return { t: m.t + 30, r: m.r, b: m.b + 60, l: m.l };
+                })()
+            };
+            
+            Plotly.newPlot(containerId, traces, layout, {
+                responsive: true,
+                displayModeBar: false
+            });
+            this.setupResizeObserver(containerId);
+        } catch (error) {
+            console.error('Error rendering weed correlation chart:', error);
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px; text-align: center;">Błąd renderowania wykresu marihuany.</p>';
+            }
+        }
+    },
+    
+    // Render wszystkich wykresów
+    renderAllCharts: function(data, stats, timeRange = 'all') {
+        try {
+            if (!data || data.length === 0) return;
+            
+            // Filtruj dane dla wykresów reagujących na zakres czasowy
+            const filteredData = StatsEngine.filterByTimeRange(data, timeRange);
+            
+            // Zawsze obliczaj pełne stats dla pełnych danych
+            const fullStats = stats || StatsEngine.computeAll(data);
+            
+            // Oblicz stats dla przefiltrowanych danych (zawsze, nawet dla 'all' aby mieć spójność)
+            const filteredStats = StatsEngine.computeAll(filteredData);
+            const filteredDailyData = filteredStats.dailyData || StatsEngine.aggregateDaily(filteredData);
+            const filteredIntradayData = filteredStats.intradayData || StatsEngine.aggregateByTimeOfDay(filteredData);
+            
+            // Dane pełne (dla wykresów, które zawsze pokazują cały okres)
+            const fullDailyData = fullStats.dailyData || StatsEngine.aggregateDaily(data);
+            const fullIntradayData = fullStats.intradayData || StatsEngine.aggregateByTimeOfDay(data);
+            
+            // 1. Trajektoria (z filtrowaniem czasowym)
             try {
-                this.renderGADTrajectory('plot-gad', dailyData, stats);
+                this.renderGADTrajectory('plot-gad', filteredDailyData, filteredStats);
             } catch (e) {
                 console.error('Error rendering GAD trajectory:', e);
             }
             
-            // 2. Profil Dobowy
+            // 2. Profil Dobowy (zawsze pełne dane - agregacja dobowa)
             try {
-                this.renderIntradayProfile('plot-intraday', intradayData);
+                this.renderIntradayProfile('plot-intraday', fullIntradayData);
             } catch (e) {
                 console.error('Error rendering intraday profile:', e);
             }
             
-            // 3. ADHD
+            // 3. ADHD (zawsze pełne dane - agregacja)
             try {
-                this.renderADHDStability('plot-adhd', dailyData);
+                this.renderADHDStability('plot-adhd', fullDailyData);
             } catch (e) {
                 console.error('Error rendering ADHD stability:', e);
             }
             
-            // 4. Stacked Area (zamiast heatmapy)
+            // 4. Stacked Area (z filtrowaniem czasowym)
             try {
-                this.renderStackedAreaByTimeOfDay('plot-stacked-area', data);
+                this.renderStackedAreaByTimeOfDay('plot-stacked-area', filteredData);
             } catch (e) {
                 console.error('Error rendering stacked area:', e);
             }
             
-            // 5. Pharmacokinetics
+            // 5. Pharmacokinetics (zawsze pełne dane - teoretyczny profil)
             try {
                 this.renderPharmacokineticsCurves('plot-pharmacokinetics', data);
             } catch (e) {
                 console.error('Error rendering pharmacokinetics:', e);
             }
             
-            // 5a. Elvanse Symptoms
+            // 5a. Elvanse Symptoms (zawsze pełne dane - wymaga pełnej próbki)
             try {
                 this.renderElvanseSymptoms('plot-elvanse-symptoms', data);
             } catch (e) {
                 console.error('Error rendering Elvanse symptoms:', e);
             }
             
-            // 5b. Pregabalina Symptoms
+            // 5b. Pregabalina Symptoms (zawsze pełne dane - wymaga pełnej próbki)
             try {
                 this.renderPregabalinaSymptoms('plot-pregabalina-symptoms', data);
             } catch (e) {
                 console.error('Error rendering Pregabalina symptoms:', e);
             }
             
-            // 6. Sleep Analysis
+            // 6. Sleep Analysis (z filtrowaniem czasowym)
             try {
-                this.renderSleepChart('plot-sleep', dailyData);
+                this.renderSleepChart('plot-sleep', filteredDailyData);
             } catch (e) {
                 console.error('Error rendering sleep chart:', e);
             }
 
-            // 7. Korelacje (Tabela)
+            // 7. Korelacje (Tabela) - z marihuaną (zawsze pełne dane - wymaga dużej próbki)
             try {
-                const variables = ['lek', 'napiecie', 'jakoscSnu', 'brainfog', 'energia', 'fokus', 'pregabalina'];
+                const variables = ['lek', 'napiecie', 'jakoscSnu', 'brainfog', 'energia', 'fokus', 'pregabalina', 'weed'];
                 const corrData = StatsEngine.correlationMatrix(data, variables);
-                const labels = ['Lęk', 'Napięcie', 'Sen (Jakość)', 'Klarowność', 'Energia', 'Fokus', 'Pregabalina'];
+                const labels = ['Lęk', 'Napięcie', 'Sen (Jakość)', 'Klarowność', 'Energia', 'Fokus', 'Pregabalina', 'Marihuana'];
                 this.renderCorrelationTable('correlation-table-container', { matrix: corrData.matrix, labels: labels });
             } catch (e) {
                 console.error('Error rendering correlation table:', e);
             }
-
-            // 8. Sen vs Lęk Następnego Dnia
+            
+            // 7a. Wykres korelacji marihuany (zawsze pełne dane - wymaga pełnej próbki)
             try {
-                this.renderSleepVsAnxiety('plot-sleep-anxiety', dailyData);
+                this.renderWeedCorrelation('plot-weed-correlation', data);
+            } catch (e) {
+                console.error('Error rendering weed correlation:', e);
+            }
+
+            // 8. Sen vs Lęk Następnego Dnia (z filtrowaniem czasowym)
+            try {
+                this.renderSleepVsAnxiety('plot-sleep-anxiety', filteredDailyData);
             } catch (e) {
                 console.error('Error rendering sleep vs anxiety:', e);
             }
 
-            // 9. Rolling Average
+            // 9. Rolling Average (z filtrowaniem czasowym)
             try {
-                this.renderRollingAverage('plot-rolling-avg', dailyData);
+                this.renderRollingAverage('plot-rolling-avg', filteredDailyData);
             } catch (e) {
                 console.error('Error rendering rolling average:', e);
             }
 
-            // 10. Porównanie Tygodniowe
+            // 10. Porównanie Tygodniowe (zawsze pełne dane - z definicji tygodniowy)
             try {
-                this.renderWeeklyComparison('plot-weekly', dailyData);
+                this.renderWeeklyComparison('plot-weekly', fullDailyData);
             } catch (e) {
                 console.error('Error rendering weekly comparison:', e);
             }
 
-            // 11. Pozytywne vs Negatywne
+            // 11. Pozytywne vs Negatywne (z filtrowaniem czasowym)
             try {
-                this.renderPositiveVsNegative('plot-positive-vs-negative', dailyData);
+                this.renderPositiveVsNegative('plot-positive-vs-negative', filteredDailyData);
             } catch (e) {
                 console.error('Error rendering positive vs negative:', e);
             }
 
-            // 12. Metryki per Pora Dnia
+            // 12. Metryki per Pora Dnia (zawsze pełne dane - agregacja)
             try {
                 this.renderMetricsByTimeOfDay('plot-metrics-by-time', data);
             } catch (e) {
