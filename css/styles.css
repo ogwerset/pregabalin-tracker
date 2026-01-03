@@ -126,6 +126,29 @@ header h1 {
     align-items: center;
 }
 
+.header-logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--accent);
+    font-weight: 600;
+    font-size: 1rem;
+    letter-spacing: -0.01em;
+}
+
+.header-logo svg {
+    flex-shrink: 0;
+    transition: transform 0.3s ease;
+}
+
+.header-logo:hover svg {
+    transform: scale(1.1);
+}
+
+.logo-text {
+    font-family: 'Inter', sans-serif;
+}
+
 .btn-back-to-landing {
     display: flex;
     align-items: center;
@@ -731,10 +754,16 @@ th:nth-child(2) {
 
 th:nth-child(1) {
     width: 120px; /* Data - stała szerokość */
+    position: sticky;
+    left: 0;
+    z-index: 10;
 }
 
 th:nth-child(2) {
     width: 80px; /* Czas - stała szerokość */
+    position: sticky;
+    left: 120px; /* After first column */
+    z-index: 10;
 }
 
 /* Pozostałe kolumny - równe szerokości */
@@ -752,13 +781,25 @@ td {
     text-align: center;
 }
 
-/* Komórki Data i Czas - pogrubione i oddzielone */
-td:nth-child(1),
+/* Komórki Data i Czas - pogrubione i oddzielone, sticky */
+td:nth-child(1) {
+    font-weight: 600;
+    border-right: 2px solid var(--border);
+    background: var(--bg-card);
+    text-align: center;
+    position: sticky;
+    left: 0;
+    z-index: 5;
+}
+
 td:nth-child(2) {
     font-weight: 600;
     border-right: 2px solid var(--border);
     background: var(--bg-card);
     text-align: center;
+    position: sticky;
+    left: 120px; /* After first column */
+    z-index: 5;
 }
 
 th {
@@ -993,29 +1034,65 @@ a[href="#export-panel"]:hover {
     border-bottom-color: var(--medical-600) !important;
 }
 
+.export-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 15px;
+}
+
 .export-panel h3 {
     font-size: 1.1rem;
-    margin-bottom: 15px;
+    margin: 0;
     color: var(--text-primary);
     font-weight: 600;
+}
+
+.export-quick-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.btn-quick-select {
+    padding: 6px 14px;
+    font-size: 0.85rem;
+    background: var(--bg-hover);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-sm);
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-quick-select:hover {
+    background: var(--bg-card);
+    border-color: var(--accent);
+    color: var(--accent);
 }
 
 .export-checkboxes {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
     gap: 12px;
-    margin-bottom: 20px;
-    padding: 15px;
+    margin-bottom: 24px;
+    padding: 20px;
     background: var(--bg-hover);
     border-radius: var(--radius-md);
+    border: 1px solid var(--border);
 }
 
 .export-checkboxes .segment-checkbox {
-    padding: 8px 12px;
+    padding: 10px 14px;
     background: var(--bg-card);
     border-radius: var(--radius-sm);
     border: 1px solid var(--border);
     transition: all var(--transition-base);
+    display: flex;
+    align-items: center;
+    gap: 10px;
 }
 
 .export-checkboxes .segment-checkbox:hover {
@@ -1026,13 +1103,29 @@ a[href="#export-panel"]:hover {
 }
 
 .export-checkboxes .segment-checkbox input[type="checkbox"] {
-    width: 16px;
-    height: 16px;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    accent-color: var(--accent);
 }
 
 .export-checkboxes .segment-checkbox label {
     font-size: 0.875rem;
     font-weight: 500;
+    cursor: pointer;
+    flex: 1;
+}
+
+.export-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.export-actions .btn-primary,
+.export-actions .btn-export {
+    flex: 1;
+    min-width: 150px;
 }
 
 /* ===== LIQUID GLASS COMPONENTS ===== */
@@ -1243,26 +1336,51 @@ a[href="#export-panel"]:hover {
 }
 
 #import-paste textarea,
-#raw-input {
+#raw-input,
+.import-textarea {
     width: 100%;
-    min-height: 200px;
-    max-height: 300px;
-    padding: 12px;
+    min-height: 300px;
+    max-height: 500px;
+    padding: 16px;
     font-family: 'JetBrains Mono', monospace;
-    font-size: 0.85rem;
-    line-height: 1.5;
+    font-size: 0.9rem;
+    line-height: 1.6;
     background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
+    border: 2px solid var(--border);
+    border-radius: var(--radius-lg);
     color: var(--text-primary);
     resize: vertical;
+    transition: all 0.2s ease;
 }
 
 #import-paste textarea:focus,
-#raw-input:focus {
+#raw-input:focus,
+.import-textarea:focus {
     outline: none;
     border-color: var(--accent);
-    box-shadow: 0 0 0 3px rgba(13, 148, 136, 0.1);
+    box-shadow: 0 0 0 4px rgba(13, 148, 136, 0.15);
+    background: var(--bg-hover);
+}
+
+.import-file-section {
+    margin-top: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+.btn-file-upload {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 20px;
+}
+
+.import-file-section .file-hint {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    margin: 0;
 }
 
 .import-tabs {
@@ -1630,16 +1748,36 @@ a[href="#export-panel"]:hover {
     }
     
     /* Mobile - Data i Czas mniejsze ale nadal oddzielone */
-    th:nth-child(1),
+    th:nth-child(1) {
+        width: 90px;
+        font-size: 0.7rem;
+        position: sticky;
+        left: 0;
+        z-index: 10;
+    }
+    
+    th:nth-child(2) {
+        width: 60px;
+        font-size: 0.7rem;
+        position: sticky;
+        left: 90px;
+        z-index: 10;
+    }
+    
     td:nth-child(1) {
         width: 90px;
         font-size: 0.7rem;
+        position: sticky;
+        left: 0;
+        z-index: 5;
     }
     
-    th:nth-child(2),
     td:nth-child(2) {
         width: 60px;
         font-size: 0.7rem;
+        position: sticky;
+        left: 90px;
+        z-index: 5;
     }
     
     /* Pozostałe kolumny - równomierne */

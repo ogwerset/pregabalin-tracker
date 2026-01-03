@@ -232,8 +232,13 @@ const DoctorReport = {
         const lekAnalysis = this.analyzeSymptomTrajectory(lekTrend, 'lek');
         const napiecieAnalysis = this.analyzeSymptomTrajectory(napiecieTrend, 'napiecie');
         
-        const getSeverityColor = (severity) => {
-            if (severity === 'high') return 'var(--accent-green)';
+        const getSeverityColor = (severity, scenario) => {
+            const isImprovement = scenario && (scenario.includes('poprawa') || scenario.includes('Stabilizacja'));
+            const isWorsening = scenario && scenario.includes('pogorszenie');
+            
+            if (severity === 'high') {
+                return isImprovement ? 'var(--accent-green)' : isWorsening ? 'var(--accent-red)' : 'var(--accent-green)';
+            }
             if (severity === 'medium') return 'var(--accent-amber)';
             if (severity === 'low') return 'var(--text-secondary)';
             if (severity === 'neutral') return 'var(--text-secondary)';
@@ -262,7 +267,7 @@ const DoctorReport = {
                                 <td style="padding: 10px; text-align: center;">${lekTrend.slope !== null ? lekTrend.slope.toFixed(4) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${lekTrend.r !== null ? lekTrend.r.toFixed(3) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${this.formatPValue(lekTrend.pValue)}</td>
-                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(lekAnalysis.severity)}; font-weight: 600;">${lekAnalysis.scenario}</td>
+                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(lekAnalysis.severity, lekAnalysis.scenario)}; font-weight: 600;">${lekAnalysis.scenario}</td>
                                 <td style="padding: 10px; text-align: center;">
                                     ${comparison.firstHalf && comparison.secondHalf && comparison.firstHalf.lek && comparison.secondHalf.lek ? 
                                         `${comparison.firstHalf.lek.toFixed(2)} → ${comparison.secondHalf.lek.toFixed(2)} (${comparison.change.lek ? comparison.change.lek.toFixed(1) : '-'}%)` : '-'}
@@ -273,7 +278,7 @@ const DoctorReport = {
                                 <td style="padding: 10px; text-align: center;">${napiecieTrend.slope !== null ? napiecieTrend.slope.toFixed(4) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${napiecieTrend.r !== null ? napiecieTrend.r.toFixed(3) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${this.formatPValue(napiecieTrend.pValue)}</td>
-                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(napiecieAnalysis.severity)}; font-weight: 600;">${napiecieAnalysis.scenario}</td>
+                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(napiecieAnalysis.severity, napiecieAnalysis.scenario)}; font-weight: 600;">${napiecieAnalysis.scenario}</td>
                                 <td style="padding: 10px; text-align: center;">
                                     ${comparison.firstHalf && comparison.secondHalf && comparison.firstHalf.napiecie && comparison.secondHalf.napiecie ? 
                                         `${comparison.firstHalf.napiecie.toFixed(2)} → ${comparison.secondHalf.napiecie.toFixed(2)} (${comparison.change.napiecie ? comparison.change.napiecie.toFixed(1) : '-'}%)` : '-'}
@@ -305,8 +310,13 @@ const DoctorReport = {
         const fokusAnalysis = this.analyzeSymptomTrajectory(fokusTrend, 'fokus');
         const energiaAnalysis = this.analyzeSymptomTrajectory(energiaTrend, 'energia');
         
-        const getSeverityColor = (severity) => {
-            if (severity === 'high') return 'var(--accent-green)';
+        const getSeverityColor = (severity, scenario) => {
+            const isImprovement = scenario && (scenario.includes('poprawa') || scenario.includes('Stabilizacja'));
+            const isWorsening = scenario && scenario.includes('pogorszenie');
+            
+            if (severity === 'high') {
+                return isImprovement ? 'var(--accent-green)' : isWorsening ? 'var(--accent-red)' : 'var(--accent-green)';
+            }
             if (severity === 'medium') return 'var(--accent-amber)';
             if (severity === 'low') return 'var(--text-secondary)';
             if (severity === 'neutral') return 'var(--text-secondary)';
@@ -335,7 +345,7 @@ const DoctorReport = {
                                 <td style="padding: 10px; text-align: center;">${fokusTrend.slope !== null ? fokusTrend.slope.toFixed(4) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${fokusTrend.r !== null ? fokusTrend.r.toFixed(3) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${this.formatPValue(fokusTrend.pValue)}</td>
-                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(fokusAnalysis.severity)}; font-weight: 600;">${fokusAnalysis.scenario}</td>
+                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(fokusAnalysis.severity, fokusAnalysis.scenario)}; font-weight: 600;">${fokusAnalysis.scenario}</td>
                                 <td style="padding: 10px; text-align: center;">
                                     ${fokus.firstHalf && fokus.secondHalf ? 
                                         `${fokus.firstHalf.toFixed(2)} → ${fokus.secondHalf.toFixed(2)}` : '-'}
@@ -346,7 +356,7 @@ const DoctorReport = {
                                 <td style="padding: 10px; text-align: center;">${energiaTrend.slope !== null ? energiaTrend.slope.toFixed(4) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${energiaTrend.r !== null ? energiaTrend.r.toFixed(3) : '-'}</td>
                                 <td style="padding: 10px; text-align: center;">${this.formatPValue(energiaTrend.pValue)}</td>
-                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(energiaAnalysis.severity)}; font-weight: 600;">${energiaAnalysis.scenario}</td>
+                                <td style="padding: 10px; text-align: center; color: ${getSeverityColor(energiaAnalysis.severity, energiaAnalysis.scenario)}; font-weight: 600;">${energiaAnalysis.scenario}</td>
                                 <td style="padding: 10px; text-align: center;">
                                     ${energia.firstHalf && energia.secondHalf ? 
                                         `${energia.firstHalf.toFixed(2)} → ${energia.secondHalf.toFixed(2)}` : '-'}

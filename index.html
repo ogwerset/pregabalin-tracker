@@ -35,21 +35,30 @@
         <div class="container">
             <div class="header-content">
                 <div class="header-left">
+                    <button class="hamburger" id="hamburger-btn" aria-label="Menu">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </button>
                     <button class="btn-back-to-landing" id="btn-back-to-landing" style="display: none;" aria-label="Powrót do startu">
                         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                             <path d="M19 12H5M12 19l-7-7 7-7"/>
                         </svg>
                         <span>Start</span>
                     </button>
-                    <button class="hamburger" id="hamburger-btn" aria-label="Menu">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </button>
                 </div>
                 
                 <div class="header-actions">
-                    <!-- Reserved for future actions -->
+                    <div class="header-logo" id="header-logo" style="display: none;">
+                        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <!-- Medical cross -->
+                            <rect x="14" y="8" width="4" height="16" rx="2" fill="currentColor" opacity="0.9"/>
+                            <rect x="8" y="14" width="16" height="4" rx="2" fill="currentColor" opacity="0.9"/>
+                            <!-- Waveform/chart line -->
+                            <path d="M4 20 L8 18 L12 20 L16 16 L20 20 L24 18 L28 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.7"/>
+                        </svg>
+                        <span class="logo-text">Tracker</span>
+                    </div>
                 </div>
             </div>
             
@@ -123,27 +132,20 @@
                     <p class="import-subtitle">Wklej dane z notatnika lub załaduj plik CSV</p>
                 </div>
                 
-                <div class="import-tabs">
-                    <button class="import-tab active" data-mode="paste">📋 Wklej tekst</button>
-                    <button class="import-tab" data-mode="file">📁 Załaduj plik</button>
-                </div>
-                
                 <div class="import-content">
-                    <div id="import-paste" class="import-panel active">
-                        <textarea id="raw-input" placeholder="Wklej tutaj dane z trackera...&#10;&#10;Format CSV:&#10;Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,Notatki,Lek1,Lek1Godzina,Lek2,Lek2Godzina&#10;&#10;Przykład:&#10;22/12/2025,11:32,3,5,2,6,8,6,6,RANO,-,TAK(DAWKA),-,TAK(DAWKA),-"></textarea>
-                    </div>
+                    <textarea id="raw-input" class="import-textarea" placeholder="Wklej tutaj dane z trackera...&#10;&#10;Format CSV:&#10;Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,Notatki,Lek1,Lek1Godzina,Lek2,Lek2Godzina&#10;&#10;Przykład:&#10;22/12/2025,11:32,3,5,2,6,8,6,6,RANO,-,TAK(DAWKA),-,TAK(DAWKA),-"></textarea>
                     
-                    <div id="import-file" class="import-panel">
-                        <div class="file-upload-area" id="file-upload-area">
-                            <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <div class="import-file-section">
+                        <button class="btn-secondary btn-file-upload" id="btn-file-upload">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                                 <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
                                 <polyline points="17 8 12 3 7 8"/>
                                 <line x1="12" y1="3" x2="12" y2="15"/>
                             </svg>
-                            <p><strong>Kliknij aby wybrać plik</strong> lub przeciągnij i upuść</p>
-                            <p class="file-hint">Obsługiwane formaty: .csv, .txt</p>
-                            <input type="file" id="csv-upload" accept=".csv,.txt" style="display: none;">
-                        </div>
+                            <span>Załaduj plik CSV</span>
+                        </button>
+                        <input type="file" id="csv-upload" accept=".csv,.txt" style="display: none;">
+                        <p class="file-hint">Obsługiwane formaty: .csv, .txt</p>
                     </div>
                 </div>
                 
@@ -297,6 +299,40 @@
                     </div>
                 </div>
 
+                <div class="chart-card full-width" id="chart-elvanse-symptoms">
+                    <div id="plot-elvanse-symptoms" class="chart-container"></div>
+                    <div class="chart-buttons">
+                        <label class="btn-chart btn-export-checkbox">
+                            <input type="checkbox" id="check-elvanse-symptoms" checked>
+                            Eksport
+                        </label>
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-elvanse-symptoms', 'Zależność Objawów od Elvanse')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                            Rozwiń
+                        </button>
+                        <button class="btn-chart btn-download" onclick="ChartRenderer.exportChart('plot-elvanse-symptoms', 'elvanse-symptoms')">Pobierz PNG</button>
+                    </div>
+                </div>
+
+                <div class="chart-card full-width" id="chart-pregabalina-symptoms">
+                    <div id="plot-pregabalina-symptoms" class="chart-container"></div>
+                    <div class="chart-buttons">
+                        <label class="btn-chart btn-export-checkbox">
+                            <input type="checkbox" id="check-pregabalina-symptoms" checked>
+                            Eksport
+                        </label>
+                        <button class="btn-chart btn-expand" onclick="UIController.openChartFullscreen('plot-pregabalina-symptoms', 'Zależność Objawów od Pregabaliny')" aria-label="Rozwiń wykres">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+                            </svg>
+                            Rozwiń
+                        </button>
+                        <button class="btn-chart btn-download" onclick="ChartRenderer.exportChart('plot-pregabalina-symptoms', 'pregabalina-symptoms')">Pobierz PNG</button>
+                    </div>
+                </div>
+
                 <div class="chart-card" id="chart-positive-vs-negative">
                     <div id="plot-positive-vs-negative" class="chart-container"></div>
                     <div class="chart-buttons">
@@ -429,7 +465,14 @@
             
             <!-- Export Selection Panel (moved to bottom) -->
             <div class="export-panel" id="export-panel">
-                <h3>Wybierz segmenty do eksportu</h3>
+                <div class="export-header">
+                    <h3>Wybierz segmenty do eksportu</h3>
+                    <div class="export-quick-actions">
+                        <button class="btn-quick-select" id="btn-select-all">Zaznacz wszystkie</button>
+                        <button class="btn-quick-select" id="btn-deselect-all">Odznacz wszystkie</button>
+                    </div>
+                </div>
+                
                 <div class="export-checkboxes">
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-gad" checked>
@@ -450,6 +493,14 @@
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-pharmacokinetics" checked>
                         <label for="check-chart-pharmacokinetics">Wykres 5: Profil Stężenia Leków</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-elvanse-symptoms" checked>
+                        <label for="check-chart-elvanse-symptoms">Wykres 5a: Zależność Objawów od Elvanse</label>
+                    </div>
+                    <div class="segment-checkbox">
+                        <input type="checkbox" id="check-chart-pregabalina-symptoms" checked>
+                        <label for="check-chart-pregabalina-symptoms">Wykres 5b: Zależność Objawów od Pregabaliny</label>
                     </div>
                     <div class="segment-checkbox">
                         <input type="checkbox" id="check-chart-positive-vs-negative" checked>
@@ -484,10 +535,11 @@
                         <label for="check-report">Raport dla Lekarza</label>
                     </div>
                 </div>
-                <div class="button-group">
-                    <button class="btn-primary" id="btn-print">Drukuj / Zapisz PDF (tylko wybrane)</button>
-                    <button class="btn-export" id="btn-export-png">Eksportuj wybrane jako PNG</button>
-                    <button class="btn-export" id="btn-export-long-image">Eksportuj Wszystko jako Obraz</button>
+                
+                <div class="export-actions">
+                    <button class="btn-primary" id="btn-print">Drukuj / Zapisz PDF</button>
+                    <button class="btn-export" id="btn-export-png">Eksportuj PNG</button>
+                    <button class="btn-export" id="btn-export-long-image">Eksportuj Wszystko</button>
                 </div>
             </div>
         </section>
@@ -557,18 +609,18 @@
     
     <!-- ===== FOOTER ===== -->
     <footer style="text-align: center; padding: 20px; padding-bottom: max(20px, env(safe-area-inset-bottom)); color: var(--text-secondary); font-size: 0.8rem; border-top: 1px solid var(--border); margin-top: 40px;">
-        <p>Symptom Tracker <strong>v4.2.0</strong></p>
+        <p>Symptom Tracker <strong>v4.3.0</strong></p>
     </footer>
 
     <!-- ===== JAVASCRIPT MODULES ===== -->
-    <script src="js/config.js?v=4.2.0"></script>
-    <script src="js/data-parser.js?v=4.2.0"></script>
-    <script src="js/data-store.js?v=4.2.0"></script>
-    <script src="js/stats-engine.js?v=4.2.0"></script>
-    <script src="js/chart-renderer.js?v=4.2.0"></script>
-    <script src="js/table-manager.js?v=4.2.0"></script>
-    <script src="js/doctor-report.js?v=4.2.0"></script>
-    <script src="js/ui-controller.js?v=4.2.0"></script>
-    <script src="js/app.js?v=4.2.0"></script>
+    <script src="js/config.js?v=4.3.0"></script>
+    <script src="js/data-parser.js?v=4.3.0"></script>
+    <script src="js/data-store.js?v=4.3.0"></script>
+    <script src="js/stats-engine.js?v=4.3.0"></script>
+    <script src="js/chart-renderer.js?v=4.3.0"></script>
+    <script src="js/table-manager.js?v=4.3.0"></script>
+    <script src="js/doctor-report.js?v=4.3.0"></script>
+    <script src="js/ui-controller.js?v=4.3.0"></script>
+    <script src="js/app.js?v=4.3.0"></script>
 </body>
 </html>

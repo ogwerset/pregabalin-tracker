@@ -8,7 +8,7 @@ const CONFIG = {
     
     // App info (generic for privacy)
     APP_NAME: 'Symptom Tracker',
-    APP_VERSION: '4.2.0',
+    APP_VERSION: '4.3.0',
     
     // Default disease context (can be overridden by user settings)
     DEFAULT_CONTEXT: {

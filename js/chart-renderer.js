@@ -1560,6 +1560,232 @@ const ChartRenderer = {
         return null;
     },
     
+    // Wykres: Zależność Objawów od Elvanse
+    renderElvanseSymptoms: function(containerId, data) {
+        try {
+            if (!data || data.length === 0) return;
+            
+            // Group data by Elvanse dose and time since dose
+            const groups = {
+                noDose: { energia: [], fokus: [], brainfog: [] },
+                withDose: { energia: [], fokus: [], brainfog: [] }
+            };
+            
+            data.forEach(d => {
+                const hasElvanse = d.Elvanse && d.Elvanse !== '-' && d.Elvanse !== null;
+                const energia = d.Energia !== null && d.Energia !== undefined && !isNaN(d.Energia) ? parseFloat(d.Energia) : null;
+                const fokus = d.Fokus !== null && d.Fokus !== undefined && !isNaN(d.Fokus) ? parseFloat(d.Fokus) : null;
+                const brainfog = d.BrainFog !== null && d.BrainFog !== undefined && !isNaN(d.BrainFog) ? parseFloat(d.BrainFog) : null;
+                
+                if (hasElvanse) {
+                    if (energia !== null) groups.withDose.energia.push(energia);
+                    if (fokus !== null) groups.withDose.fokus.push(fokus);
+                    if (brainfog !== null) groups.withDose.brainfog.push(brainfog);
+                } else {
+                    if (energia !== null) groups.noDose.energia.push(energia);
+                    if (fokus !== null) groups.noDose.fokus.push(fokus);
+                    if (brainfog !== null) groups.noDose.brainfog.push(brainfog);
+                }
+            });
+            
+            const calcAvg = (arr) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+            const calcKlarownosc = (arr) => arr.length > 0 ? arr.map(v => 11 - v).reduce((a, b) => a + b, 0) / arr.length : null;
+            
+            const traces = [];
+            
+            // Energia
+            const energiaWith = calcAvg(groups.withDose.energia);
+            const energiaWithout = calcAvg(groups.noDose.energia);
+            if (energiaWith !== null && energiaWithout !== null) {
+                traces.push({
+                    x: ['Bez Elvanse', 'Z Elvanse'],
+                    y: [energiaWithout, energiaWith],
+                    type: 'bar',
+                    name: 'Energia',
+                    marker: { color: '#3B82F6' },
+                    hovertemplate: '%{x}<br>Energia: %{y:.2f}<extra></extra>'
+                });
+            }
+            
+            // Fokus
+            const fokusWith = calcAvg(groups.withDose.fokus);
+            const fokusWithout = calcAvg(groups.noDose.fokus);
+            if (fokusWith !== null && fokusWithout !== null) {
+                traces.push({
+                    x: ['Bez Elvanse', 'Z Elvanse'],
+                    y: [fokusWithout, fokusWith],
+                    type: 'bar',
+                    name: 'Fokus',
+                    marker: { color: '#10B981' },
+                    hovertemplate: '%{x}<br>Fokus: %{y:.2f}<extra></extra>'
+                });
+            }
+            
+            // Klarowność (odwrócony BrainFog)
+            const klarownoscWith = calcKlarownosc(groups.withDose.brainfog);
+            const klarownoscWithout = calcKlarownosc(groups.noDose.brainfog);
+            if (klarownoscWith !== null && klarownoscWithout !== null) {
+                traces.push({
+                    x: ['Bez Elvanse', 'Z Elvanse'],
+                    y: [klarownoscWithout, klarownoscWith],
+                    type: 'bar',
+                    name: 'Klarowność',
+                    marker: { color: '#8B5CF6' },
+                    hovertemplate: '%{x}<br>Klarowność: %{y:.2f}<extra></extra>'
+                });
+            }
+            
+            if (traces.length === 0) return;
+            
+            const template = this.getTemplate();
+            const layout = {
+                ...template,
+                title: {
+                    text: 'Zależność Objawów od Elvanse',
+                    font: { size: 16 }
+                },
+                xaxis: {
+                    ...template.xaxis,
+                    title: 'Stan',
+                    type: 'category'
+                },
+                yaxis: {
+                    ...template.yaxis,
+                    title: 'Średnia wartość objawu',
+                    range: [0, 10]
+                },
+                barmode: 'group',
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.15,
+                    font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 }
+                },
+                margin: (() => {
+                    const m = ChartRenderer.getMobileMargin();
+                    return { t: m.t, r: m.r, b: m.b + 60, l: m.l };
+                })()
+            };
+            
+            Plotly.newPlot(containerId, traces, layout, {
+                responsive: true,
+                displayModeBar: false
+            });
+            this.setupResizeObserver(containerId);
+        } catch (error) {
+            console.error('Error rendering Elvanse symptoms chart:', error);
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px; text-align: center;">Błąd renderowania wykresu. Sprawdź konsolę przeglądarki.</p>';
+            }
+        }
+    },
+    
+    // Wykres: Zależność Objawów od Pregabaliny
+    renderPregabalinaSymptoms: function(containerId, data) {
+        try {
+            if (!data || data.length === 0) return;
+            
+            // Group data by Pregabalina dose
+            const groups = {
+                noDose: { lek: [], napiecie: [] },
+                withDose: { lek: [], napiecie: [] }
+            };
+            
+            data.forEach(d => {
+                const hasPregab = d.Pregabalina && d.Pregabalina !== '-' && d.Pregabalina !== null;
+                const lek = d['Lęk'] !== null && d['Lęk'] !== undefined && !isNaN(d['Lęk']) ? parseFloat(d['Lęk']) : null;
+                const napiecie = d['Napięcie'] !== null && d['Napięcie'] !== undefined && !isNaN(d['Napięcie']) ? parseFloat(d['Napięcie']) : null;
+                
+                if (hasPregab) {
+                    if (lek !== null) groups.withDose.lek.push(lek);
+                    if (napiecie !== null) groups.withDose.napiecie.push(napiecie);
+                } else {
+                    if (lek !== null) groups.noDose.lek.push(lek);
+                    if (napiecie !== null) groups.noDose.napiecie.push(napiecie);
+                }
+            });
+            
+            const calcAvg = (arr) => arr.length > 0 ? arr.reduce((a, b) => a + b, 0) / arr.length : null;
+            
+            const traces = [];
+            
+            // Lęk
+            const lekWith = calcAvg(groups.withDose.lek);
+            const lekWithout = calcAvg(groups.noDose.lek);
+            if (lekWith !== null && lekWithout !== null) {
+                traces.push({
+                    x: ['Bez Pregabaliny', 'Z Pregabaliną'],
+                    y: [lekWithout, lekWith],
+                    type: 'bar',
+                    name: 'Lęk',
+                    marker: { color: '#EF4444' },
+                    hovertemplate: '%{x}<br>Lęk: %{y:.2f}<extra></extra>'
+                });
+            }
+            
+            // Napięcie
+            const napiecieWith = calcAvg(groups.withDose.napiecie);
+            const napiecieWithout = calcAvg(groups.noDose.napiecie);
+            if (napiecieWith !== null && napiecieWithout !== null) {
+                traces.push({
+                    x: ['Bez Pregabaliny', 'Z Pregabaliną'],
+                    y: [napiecieWithout, napiecieWith],
+                    type: 'bar',
+                    name: 'Napięcie',
+                    marker: { color: '#F59E0B' },
+                    hovertemplate: '%{x}<br>Napięcie: %{y:.2f}<extra></extra>'
+                });
+            }
+            
+            if (traces.length === 0) return;
+            
+            const template = this.getTemplate();
+            const layout = {
+                ...template,
+                title: {
+                    text: 'Zależność Objawów od Pregabaliny',
+                    font: { size: 16 }
+                },
+                xaxis: {
+                    ...template.xaxis,
+                    title: 'Stan',
+                    type: 'category'
+                },
+                yaxis: {
+                    ...template.yaxis,
+                    title: 'Średnia wartość objawu',
+                    range: [0, 10]
+                },
+                barmode: 'group',
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.15,
+                    font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 }
+                },
+                margin: (() => {
+                    const m = ChartRenderer.getMobileMargin();
+                    return { t: m.t, r: m.r, b: m.b + 60, l: m.l };
+                })()
+            };
+            
+            Plotly.newPlot(containerId, traces, layout, {
+                responsive: true,
+                displayModeBar: false
+            });
+            this.setupResizeObserver(containerId);
+        } catch (error) {
+            console.error('Error rendering Pregabalina symptoms chart:', error);
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px; text-align: center;">Błąd renderowania wykresu. Sprawdź konsolę przeglądarki.</p>';
+            }
+        }
+    },
+    
     // Render wszystkich wykresów
     renderAllCharts: function(data, stats) {
         try {
@@ -1601,6 +1827,20 @@ const ChartRenderer = {
                 this.renderPharmacokineticsCurves('plot-pharmacokinetics', data);
             } catch (e) {
                 console.error('Error rendering pharmacokinetics:', e);
+            }
+            
+            // 5a. Elvanse Symptoms
+            try {
+                this.renderElvanseSymptoms('plot-elvanse-symptoms', data);
+            } catch (e) {
+                console.error('Error rendering Elvanse symptoms:', e);
+            }
+            
+            // 5b. Pregabalina Symptoms
+            try {
+                this.renderPregabalinaSymptoms('plot-pregabalina-symptoms', data);
+            } catch (e) {
+                console.error('Error rendering Pregabalina symptoms:', e);
             }
             
             // 6. Sleep Analysis

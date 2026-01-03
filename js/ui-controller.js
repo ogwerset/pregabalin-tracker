@@ -21,12 +21,20 @@ const UIController = {
         this.checkLandingPage();
         this.loadData();
         
-        // Hide back button on landing page initially
+        // Hide back button and logo on landing page initially
         const btnBackToLanding = document.getElementById('btn-back-to-landing');
         if (btnBackToLanding) {
             const landingPage = document.getElementById('landing-page');
             if (landingPage && landingPage.classList.contains('active')) {
                 btnBackToLanding.style.display = 'none';
+            }
+        }
+        
+        const headerLogo = document.getElementById('header-logo');
+        if (headerLogo) {
+            const landingPage = document.getElementById('landing-page');
+            if (landingPage && landingPage.classList.contains('active')) {
+                headerLogo.style.display = 'none';
             }
         }
     },
@@ -124,6 +132,26 @@ const UIController = {
             } else {
                 btnBackToLanding.style.display = 'flex';
             }
+        }
+        
+        // Show/hide header logo
+        const headerLogo = document.getElementById('header-logo');
+        if (headerLogo) {
+            if (tabId === 'landing-page') {
+                headerLogo.style.display = 'none';
+            } else {
+                headerLogo.style.display = 'flex';
+            }
+        }
+        
+        // Auto-focus textarea when switching to Import tab
+        if (tabId === 'tab-import') {
+            setTimeout(() => {
+                const textarea = document.getElementById('raw-input');
+                if (textarea) {
+                    textarea.focus();
+                }
+            }, 100);
         }
         
         // Lazy load charts when dashboard tab is shown
@@ -257,55 +285,12 @@ const UIController = {
             addTapEvent(btnAppend, () => this.handleImport('append'));
         }
         
-        // Import tabs (paste vs file)
-        document.querySelectorAll('.import-tab').forEach(tab => {
-            addTapEvent(tab, () => {
-                const mode = tab.dataset.mode;
-                document.querySelectorAll('.import-tab').forEach(t => t.classList.remove('active'));
-                document.querySelectorAll('.import-panel').forEach(p => p.classList.remove('active'));
-                tab.classList.add('active');
-                document.getElementById(`import-${mode}`).classList.add('active');
-            });
-        });
-        
-        // File upload area (click)
-        const fileUploadArea = document.getElementById('file-upload-area');
+        // File upload button
+        const btnFileUpload = document.getElementById('btn-file-upload');
         const csvUpload = document.getElementById('csv-upload');
-        if (fileUploadArea && csvUpload) {
-            addTapEvent(fileUploadArea, () => {
+        if (btnFileUpload && csvUpload) {
+            addTapEvent(btnFileUpload, () => {
                 csvUpload.click();
-            });
-            
-            // Drag and drop
-            fileUploadArea.addEventListener('dragover', (e) => {
-                e.preventDefault();
-                fileUploadArea.style.borderColor = 'var(--accent)';
-                fileUploadArea.style.background = 'rgba(13, 148, 136, 0.1)';
-            });
-            
-            fileUploadArea.addEventListener('dragleave', () => {
-                fileUploadArea.style.borderColor = 'var(--border)';
-                fileUploadArea.style.background = 'var(--bg-hover)';
-            });
-            
-            fileUploadArea.addEventListener('drop', (e) => {
-                e.preventDefault();
-                fileUploadArea.style.borderColor = 'var(--border)';
-                fileUploadArea.style.background = 'var(--bg-hover)';
-                
-                const file = e.dataTransfer.files[0];
-                if (file && (file.name.endsWith('.csv') || file.name.endsWith('.txt'))) {
-                    const reader = new FileReader();
-                    reader.onload = (event) => {
-                        document.getElementById('raw-input').value = event.target.result;
-                        // Switch to paste tab
-                        document.querySelector('.import-tab[data-mode="paste"]').click();
-                        this.showToast('success', `Załadowano plik: ${file.name}`);
-                    };
-                    reader.readAsText(file);
-                } else {
-                    this.showToast('error', 'Nieprawidłowy format pliku. Wybierz plik .csv lub .txt');
-                }
             });
             
             // File input change
@@ -314,9 +299,11 @@ const UIController = {
                 if (file) {
                     const reader = new FileReader();
                     reader.onload = (event) => {
-                        document.getElementById('raw-input').value = event.target.result;
-                        // Switch to paste tab to show content
-                        document.querySelector('.import-tab[data-mode="paste"]').click();
+                        const textarea = document.getElementById('raw-input');
+                        if (textarea) {
+                            textarea.value = event.target.result;
+                            textarea.focus();
+                        }
                         this.showToast('success', `Załadowano plik: ${file.name}`);
                     };
                     reader.readAsText(file);
@@ -369,6 +356,28 @@ const UIController = {
             addTapEvent(btnExportLongImage, () => this.exportAllAsLongImage());
         }
         
+        // Quick select buttons
+        const btnSelectAll = document.getElementById('btn-select-all');
+        const btnDeselectAll = document.getElementById('btn-deselect-all');
+        if (btnSelectAll) {
+            addTapEvent(btnSelectAll, () => {
+                document.querySelectorAll('.export-checkboxes input[type="checkbox"]').forEach(cb => {
+                    cb.checked = true;
+                    const segmentId = segmentMapping[cb.id] || cb.id.replace('check-', '');
+                    this.toggleSegment(segmentId);
+                });
+            });
+        }
+        if (btnDeselectAll) {
+            addTapEvent(btnDeselectAll, () => {
+                document.querySelectorAll('.export-checkboxes input[type="checkbox"]').forEach(cb => {
+                    cb.checked = false;
+                    const segmentId = segmentMapping[cb.id] || cb.id.replace('check-', '');
+                    this.toggleSegment(segmentId);
+                });
+            });
+        }
+        
         // Segment checkboxes - synchronizacja między panel export a checkboxy przy wykresach
         const segmentMapping = {
             'check-chart-gad': 'chart-gad',
@@ -376,6 +385,8 @@ const UIController = {
             'check-chart-adhd': 'chart-adhd',
             'check-chart-stacked-area': 'chart-stacked-area',
             'check-chart-pharmacokinetics': 'chart-pharmacokinetics',
+            'check-chart-elvanse-symptoms': 'chart-elvanse-symptoms',
+            'check-chart-pregabalina-symptoms': 'chart-pregabalina-symptoms',
             'check-chart-correlation': 'chart-correlation',
             'check-chart-positive-vs-negative': 'chart-positive-vs-negative',
             'check-chart-metrics-by-time': 'chart-metrics-by-time',
