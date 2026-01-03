@@ -416,7 +416,7 @@ const DoctorReport = {
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.85rem; text-align: center;">
                         <thead>
                             <tr style="background: var(--bg-hover); border-bottom: 2px solid var(--border);">
-                                <th style="padding: 10px 8px; text-align: left; font-weight: 600;">Zmienna</th>
+                                <th style="padding: 10px 8px; text-align: left; font-weight: 600; background-color: var(--bg-card) !important; position: sticky; left: 0; z-index: 10; border-right: 2px solid var(--border);">Zmienna</th>
                                 ${labels.map(l => `<th style="padding: 10px 8px; font-weight: 600;">${l}</th>`).join('')}
                             </tr>
                         </thead>
@@ -424,7 +424,7 @@ const DoctorReport = {
         `;
         
         matrix.forEach((row, i) => {
-            html += `<tr><td style="padding: 10px 8px; background: var(--bg-hover); font-weight: 600; text-align: left; border-right: 2px solid var(--border);">${labels[i]}</td>`;
+            html += `<tr><td style="padding: 10px 8px; background-color: var(--bg-card) !important; font-weight: 600; text-align: left; border-right: 2px solid var(--border); position: sticky; left: 0; z-index: 5;">${labels[i]}</td>`;
             row.forEach((val, j) => {
                 let bgColor = 'transparent';
                 let textColor = 'inherit';

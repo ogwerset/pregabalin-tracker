@@ -21,13 +21,13 @@
 
 ## 🏗️ Architecture
 
-### Current State: v4.0.0
+### Current State: v4.3.0
 
 **Deployment**: Vercel (automatyczny deploy z GitHub)
 
 **Architecture Pattern**: Modular JavaScript (9 plików JS) + 2 pliki CSS + 1 HTML entry point
 
-**New Libraries**: html2canvas 1.4.1, jsPDF 2.5.1 + autoTable plugin
+**Libraries**: html2canvas 1.4.1, jsPDF 2.5.1 + autoTable plugin, Plotly.js Basic 2.27.0, jStat 1.9.6
 
 ### File Structure
 ```
@@ -72,7 +72,63 @@ app.js
 
 ---
 
-## 🔧 Recent Session Summary (v4.0.0)
+## 🔧 Recent Session Summary (v4.3.0)
+
+### Major Features Added (v4.3.0)
+1. **UI/UX Polish Pass**
+   - Darker background theme (#252525 - Cursor-like)
+   - Back arrow button (icon-only, positioned after hamburger)
+   - Header logo redesign (abstract pill/capsule icon)
+   - Import section redesign (textarea-focused, file button below)
+   - Export panel improvements (quick select buttons)
+   - Two new medication-symptom correlation charts
+   - Frozen table columns (sticky date/time with opaque background)
+   - Fullscreen chart improvements (full-window background, hidden modebar, auto-hide rotate hint)
+
+2. **New Charts**
+   - Elvanse-symptoms correlation (Energia, Fokus, Klarowność)
+   - Pregabalina-symptoms correlation (Lęk, Napięcie)
+   - Both show average symptom values with/without medication
+
+3. **Table Improvements**
+   - Sticky positioning for Data and Czas columns
+   - Fully opaque backgrounds to prevent content bleed-through
+   - Applied to both data table and correlation matrix in doctor report
+
+4. **Fullscreen Chart Fixes**
+   - Full-window opaque background with backdrop blur
+   - Plotly modebar hidden in fullscreen
+   - Rotate hint auto-hides when device is rotated to landscape
+
+### Bugs Fixed (v4.2.0 - v4.3.0)
+1. **Critical Chart Rendering Bug** (v4.2.0)
+   - **Issue**: Missing catch block in `renderPharmacokineticsCurves` caused syntax error
+   - **Fix**: Added proper error handling with catch block
+   - **Impact**: All charts now render correctly
+
+2. **Navigation Link** (v4.2.0)
+   - **Issue**: Landing page "Tabela Danych" card linked to wrong tab
+   - **Fix**: Changed `data-tab="tab-data"` to `data-tab="tab-table"`
+   - **Impact**: Correct navigation from landing page
+
+3. **Menu Backdrop** (v4.2.0)
+   - **Issue**: Missing backdrop element for mobile menu
+   - **Fix**: Added `<div id="menu-backdrop">` element
+   - **Impact**: Proper mobile menu functionality
+
+4. **Doctor Report Highlighting** (v4.3.0)
+   - **Issue**: Red/green colors not correctly reflecting improvement/worsening
+   - **Fix**: Updated `getSeverityColor` to check scenario, not just severity
+   - **Impact**: Correct color coding in doctor report
+
+5. **Frozen Columns Transparency** (v4.3.0)
+   - **Issue**: Sticky columns showed scrolled content through them
+   - **Fix**: Added `background-color: var(--bg-card) !important` to all sticky cells
+   - **Impact**: Clean, opaque frozen columns
+
+---
+
+## 🔧 Previous Session Summary (v4.0.0)
 
 ### Major Features Added
 1. **Liquid Glass UI** (iOS 26 style)
@@ -159,7 +215,7 @@ app.js
 
 ## 🐛 Known Issues
 
-**None currently** - All bugs fixed in v3.0.0
+**None currently** - All bugs fixed in v4.3.0
 
 ---
 
@@ -200,10 +256,12 @@ python -m http.server 8000
 
 ### Version Bumping
 When making changes:
-1. Update footer version in `index.html` (line ~452): `v3.0.0` → `v3.0.1`
-2. Update all JS import query params (lines 456-464): `?v=3.0.0` → `?v=3.0.1`
-3. Update `README.md` changelog
-4. Commit with version in message: `v3.0.1: description`
+1. Update `APP_VERSION` in `js/config.js`: `'4.3.0'` → `'4.4.0'`
+2. Update footer version in `index.html`: `v4.3.0` → `v4.4.0`
+3. Update all JS import query params in `index.html`: `?v=4.3.0` → `?v=4.4.0`
+4. Update `README.md` changelog with new version section
+5. Update `CURSOR-CONTEXT.md` version history
+6. Commit with version in message: `feat: v4.4.0 - description`
 
 ---
 
@@ -229,7 +287,7 @@ const ModuleName = {
 ### Cache Busting
 **IMPORTANT**: When modifying JS files, update version query params in `index.html`:
 ```html
-<script src="js/module.js?v=3.0.0"></script>
+<script src="js/module.js?v=4.3.0"></script>
 ```
 This forces browser to reload updated files.
 
@@ -259,7 +317,8 @@ Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,
 
 ### Colors (CSS Variables)
 - **Primary Accent**: `--accent` = `#0D9488` (Warm Teal)
-- **Background**: `--bg-primary` = `#1C1917` (Dark grey)
+- **Background**: `--bg-primary` = `#252525` (Cursor-like dark grey, v4.3.0)
+- **Card Background**: `--bg-card` = `#2D2D2D` (Slightly lighter for cards)
 - **Text**: `--text-primary` = `#D6D3CE` (Light grey)
 - See `css/variables.css` for full palette
 
@@ -291,7 +350,9 @@ Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,
 
 ## 🔄 Version History
 
-- **v4.0.0** (Current): Liquid Glass UI, landing page, pharmacokinetics chart, PDF export, iOS fixes, anonymization
+- **v4.3.0** (Current): UI/UX polish, darker theme, new charts, frozen columns, fullscreen improvements
+- **v4.2.0**: Critical bug fixes (chart rendering, navigation, menu backdrop)
+- **v4.0.0**: Liquid Glass UI, landing page, pharmacokinetics chart, PDF export, iOS fixes, anonymization
 - **v3.0.0**: Bug fixes (DataStore, selectors, ResizeObserver)
 - **v2.5**: UI improvements, mobile fixes
 - **v2.4**: Dark mode removal, print fixes
@@ -299,7 +360,7 @@ Data,Czas,JakośćSnu,GodzinySnu,Lęk,Napięcie,BrainFog,Energia,Fokus,PoraDnia,
 
 ---
 
-**Last Updated**: v4.0.0 release
+**Last Updated**: v4.3.0 release
 **Maintainer**: User (ogwerset)
 **Repository**: GitHub (auto-deployed to Vercel)
 

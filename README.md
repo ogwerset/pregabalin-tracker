@@ -1,9 +1,28 @@
-# Symptom Tracker Dashboard v4.0.0
+# Symptom Tracker Dashboard v4.3.0
 
 Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawansowanymi wykresami i raportami.
 
-## ✨ Nowości w v4.0.0
+## ✨ Nowości w v4.3.0
 
+- 🎨 **Ciemniejsze tło**: Cursor-like dark theme (#252525) dla lepszej czytelności
+- ⬅️ **Przycisk powrotu**: Strzałka powrotu do startu (tylko ikona, bez tekstu)
+- 💊 **Nowe logo**: Abstrakcyjna kapsułka zamiast krzyża medycznego
+- 📥 **Redesign importu**: Textarea jako główny element, przycisk pliku poniżej
+- 📤 **Panel eksportu**: Przyciski szybkiego wyboru (Zaznacz wszystkie/Odznacz wszystkie)
+- 📊 **Dwa nowe wykresy**: Zależność objawów od Elvanse i Pregabaliny
+- 📋 **Zamrożone kolumny**: Data i Czas w tabeli pozostają widoczne przy przewijaniu
+- 🖼️ **Pełnoekranowe wykresy**: Pełne tło, ukryty pasek narzędzi Plotly, auto-ukrywanie podpowiedzi o obrocie
+- 🐛 **Naprawione podświetlanie**: Poprawiona logika kolorów w raporcie dla lekarza
+
+## Poprzednie wersje
+
+### v4.2.0
+- 🐛 **Naprawione renderowanie**: Dodany brakujący catch block w wykresie farmakokinetyki
+- 🔗 **Naprawiona nawigacja**: Poprawiony link z landing page do tabeli danych
+- 🍔 **Menu backdrop**: Dodany element backdrop dla menu mobilnego
+- ⬅️ **Pozycjonowanie przycisku**: Przycisk powrotu przeniesiony na prawo od hamburgera
+
+### v4.0.0
 - 🎨 **Liquid Glass UI**: Nowa estetyka inspirowana iOS 26 z glassmorphism i blur effects
 - 📱 **Naprawiony iOS Safari**: Poprawiony viewport bug (110% zoom) i overflow issues
 - 🍔 **Ulepszone menu mobilne**: Animacje, backdrop overlay, lepsze pozycjonowanie
@@ -15,8 +34,6 @@ Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawa
 - 🔒 **Anonimizacja**: Generyczne tytuły wykresów, konfigurowalny kontekst choroby
 - 🐛 **Naprawione tygodnie**: Poprawione sortowanie tygodni na przełomie roku (ISO week)
 - 📐 **Naprawione legendy**: Poprawione wyświetlanie legend w fullscreen view
-
-## Poprzednie wersje
 
 ### v2.5
 - 🎨 **Przeprojektowane przyciski**: Ciemne guziki z kolorowymi akcentami (teal/coral)
@@ -45,12 +62,14 @@ Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawa
 
 ## Funkcje
 
-- 📊 **12 wykresów analitycznych**: 
+- 📊 **14 wykresów analitycznych**: 
   - Trajektoria Głównych Objawów
   - Profil Dobowy Nasilenia
   - Stabilność Funkcjonowania Poznawczego
   - Stacked Area (Objawy w ciągu dnia)
-  - **Profil Stężenia Leków** (NOWY - farmakokinetyka)
+  - Profil Stężenia Leków (farmakokinetyka - bazuje na rzeczywistych czasach przyjęcia)
+  - **Zależność Objawów od Elvanse** (NOWY - Energia, Fokus, Klarowność)
+  - **Zależność Objawów od Pregabaliny** (NOWY - Lęk, Napięcie)
   - Pozytywne vs Negatywne
   - Metryki per Pora Dnia
   - Analiza Snu
@@ -69,8 +88,9 @@ Modern, modularny dashboard do wizualizacji i analizy danych zdrowotnych z zaawa
 - 💾 **Import Danych**: 
   - Format CSV z walidacją
   - Format tekstowy (RAW)
-  - **Drag & Drop** (NOWY)
-  - **Tabs: Wklej/Plik** (NOWY)
+  - **Textarea jako główny element** (v4.3.0)
+  - **Przycisk wczytywania pliku** (v4.3.0)
+  - Auto-focus na textarea przy przejściu do zakładki
   - Edytowalny wpis leków i kontekstu choroby
 
 - 📱 **Responsywny Design**: 
@@ -124,7 +144,7 @@ pregabalin-tracker/
 Aplikacja używa ciepłego, medycznego design systemu:
 
 ### Kolory
-- **Tło**: Ciepłe szarości (#1C1917 - #FAF9F7)
+- **Tło**: Ciemnoszare (#252525 - Cursor-like) z ciepłymi odcieniami
 - **Akcent główny**: Warm Teal (#0D9488)
 - **Akcent dodatkowy**: Coral (#F97316)
 - **Info**: Medical Blue (#3B82F6)

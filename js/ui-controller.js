@@ -872,6 +872,18 @@ const UIController = {
             }, { passive: false });
         }
         
+        // Handle orientation change to hide rotate hint
+        const handleOrientationChange = () => {
+            const hint = overlay.querySelector('.chart-fullscreen-hint');
+            if (hint && window.innerWidth > window.innerHeight) {
+                hint.style.display = 'none';
+            }
+        };
+        window.addEventListener('resize', handleOrientationChange);
+        window.addEventListener('orientationchange', handleOrientationChange);
+        // Store handler reference for cleanup
+        overlay._orientationHandler = handleOrientationChange;
+        
         // Clone chart data and render in fullscreen
         const fullscreenContainer = document.getElementById(`chart-fullscreen-${chartId}`);
         const originalData = JSON.parse(JSON.stringify(chartElement.data));
@@ -903,8 +915,7 @@ const UIController = {
         
         Plotly.newPlot(fullscreenContainer.id, originalData, fullscreenLayout, {
             responsive: true,
-            displayModeBar: true,
-            modeBarButtonsToRemove: ['lasso2d', 'select2d']
+            displayModeBar: false
         });
         
         // Handle resize
@@ -935,9 +946,11 @@ const UIController = {
     closeChartFullscreen: function() {
         const overlay = document.getElementById('chart-fullscreen-overlay');
         if (overlay) {
-            // Clean up event listeners
-            window.removeEventListener('resize', () => {});
-            document.removeEventListener('keydown', () => {});
+            // Clean up orientation change listeners
+            if (overlay._orientationHandler) {
+                window.removeEventListener('resize', overlay._orientationHandler);
+                window.removeEventListener('orientationchange', overlay._orientationHandler);
+            }
             
             overlay.remove();
             document.body.style.overflow = '';

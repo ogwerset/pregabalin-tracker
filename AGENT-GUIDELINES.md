@@ -39,9 +39,9 @@ js/
 
 Wszystkie importy JS w `index.html` używają wersjonowania query params:
 ```html
-<script src="js/config.js?v=3.0.0"></script>
+<script src="js/config.js?v=4.3.0"></script>
 ```
-**WAŻNE**: Przy każdej zmianie kodu JS, zaktualizuj wersję w `index.html` aby wymusić odświeżenie cache przeglądarki.
+**WAŻNE**: Przy każdej zmianie kodu JS, zaktualizuj wersję w `index.html` (i `js/config.js`) aby wymusić odświeżenie cache przeglądarki.
 
 ### Moduły jako Obiekty
 
@@ -377,13 +377,32 @@ const ChartRenderer = {
         // Wartości w komórkach
     },
     
-    // Wykres 5: Correlation Heatmap
+    // Wykres 5: Pharmacokinetics (Farmakokinetyka)
+    renderPharmacokineticsCurves(containerId, data) {
+        // Profil stężenia leków w czasie (0-24h)
+        // Bazuje na rzeczywistych czasach przyjęcia z danych (PregabalinaGodzina, ElvanseGodzina)
+        // Pokazuje krzywe stężenia dla pregabaliny i elvanse
+    },
+    
+    // Wykres 5a: Elvanse Symptoms Correlation
+    renderElvanseSymptoms(containerId, data) {
+        // Porównanie średnich wartości: Energia, Fokus, Klarowność
+        // Z Elvanse vs Bez Elvanse
+    },
+    
+    // Wykres 5b: Pregabalina Symptoms Correlation
+    renderPregabalinaSymptoms(containerId, data) {
+        // Porównanie średnich wartości: Lęk, Napięcie
+        // Z Pregabaliną vs Bez Pregabaliny
+    },
+    
+    // Wykres 6: Correlation Heatmap
     renderCorrelationHeatmap(containerId, correlationMatrix, labels) {
         // Heatmap z wartościami
         // Kolorskala: czerwony (negatywna) → zielony (pozytywna)
     },
     
-    // Render wszystkich wykresów
+    // Render wszystkich wykresów (14 wykresów w v4.3.0)
     renderAllCharts(data, stats) {
         // Wywołaj wszystkie render*
     },
@@ -727,38 +746,50 @@ Integracja wszystkich modułów, testy, cleanup.
     <script src="https://cdn.jsdelivr.net/npm/jstat@1.9.6/dist/jstat.min.js"></script>
     
     <!-- Modular JS Files -->
-    <script src="js/config.js?v=3.0.0"></script>
-    <script src="js/data-parser.js?v=3.0.0"></script>
-    <script src="js/data-store.js?v=3.0.0"></script>
-    <script src="js/stats-engine.js?v=3.0.0"></script>
-    <script src="js/chart-renderer.js?v=3.0.0"></script>
-    <script src="js/table-manager.js?v=3.0.0"></script>
-    <script src="js/doctor-report.js?v=3.0.0"></script>
-    <script src="js/ui-controller.js?v=3.0.0"></script>
-    <script src="js/app.js?v=3.0.0"></script>
+    <script src="js/config.js?v=4.3.0"></script>
+    <script src="js/data-parser.js?v=4.3.0"></script>
+    <script src="js/data-store.js?v=4.3.0"></script>
+    <script src="js/stats-engine.js?v=4.3.0"></script>
+    <script src="js/chart-renderer.js?v=4.3.0"></script>
+    <script src="js/table-manager.js?v=4.3.0"></script>
+    <script src="js/doctor-report.js?v=4.3.0"></script>
+    <script src="js/ui-controller.js?v=4.3.0"></script>
+    <script src="js/app.js?v=4.3.0"></script>
 </body>
 </html>
 ```
 
-### Struktura plików
+### Struktura plików (v4.3.0)
 ```
 pregabalin-tracker/
-├── index.html              # ~467 lines - główny HTML
+├── index.html              # ~627 lines - główny HTML
 ├── css/
-│   ├── variables.css       # ~98 lines - design tokens
-│   └── styles.css          # ~1260 lines - style komponentów
+│   ├── variables.css       # ~107 lines - design tokens
+│   └── styles.css          # ~2000+ lines - style komponentów
 ├── js/
-│   ├── config.js           # ~8 lines
+│   ├── config.js           # ~107 lines
 │   ├── data-parser.js      # ~213 lines
 │   ├── data-store.js       # ~120 lines
 │   ├── stats-engine.js     # ~503 lines
-│   ├── chart-renderer.js   # ~1365 lines
+│   ├── chart-renderer.js   # ~1900+ lines (14 wykresów)
 │   ├── table-manager.js    # ~140 lines
-│   ├── doctor-report.js    # ~361 lines
-│   ├── ui-controller.js    # ~618 lines
+│   ├── doctor-report.js    # ~817 lines
+│   ├── ui-controller.js    # ~950+ lines
 │   └── app.js              # ~5 lines
-└── README.md
+├── README.md               # User documentation
+├── CURSOR-CONTEXT.md       # AI session context
+└── AGENT-GUIDELINES.md     # Development guidelines (this file)
 ```
 
-**Łączna estymacja: ~5000+ linii kodu (modularna architektura)**
+**Łączna estymacja: ~7000+ linii kodu (modularna architektura)**
+
+### Aktualna wersja: v4.3.0
+
+**Kluczowe zmiany w v4.3.0:**
+- 14 wykresów (dodano 2 nowe: Elvanse-symptoms, Pregabalina-symptoms)
+- Ciemniejsze tło (#252525 - Cursor-like)
+- Zamrożone kolumny w tabeli (sticky positioning z nieprzezroczystym tłem)
+- Pełnoekranowe wykresy z pełnym tłem i ukrytym modebarem Plotly
+- Redesign importu (textarea-focused) i panelu eksportu (quick select)
+- Przycisk powrotu (arrow-only) i nowe logo (pill/capsule)
 
