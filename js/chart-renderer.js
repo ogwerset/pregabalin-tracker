@@ -1327,204 +1327,220 @@ const ChartRenderer = {
     
     // Wykres: Farmakokinetyka - Profil Stężenia Leków
     renderPharmacokineticsCurves: function(containerId, data) {
-        if (!data || data.length === 0) return;
-        
-        // Extract medication times from data
-        const medicationTimes = {
-            pregabalina: [],
-            elvanse: []
-        };
-        
-        data.forEach(d => {
-            // Extract Pregabalina times
-            if (d.Pregabalina && d.Pregabalina !== '-' && d.Pregabalina !== null) {
-                const dose = this.extractDoseFromText(d.Pregabalina);
-                if (dose && d.PregabalinaGodzina && d.PregabalinaGodzina !== '-') {
-                    const time = this.parseTime(d.PregabalinaGodzina);
-                    if (time !== null) {
-                        medicationTimes.pregabalina.push({ time, dose });
+        try {
+            if (!data || data.length === 0) return;
+            
+            // Extract medication times from data
+            const medicationTimes = {
+                pregabalina: [],
+                elvanse: []
+            };
+            
+            data.forEach(d => {
+                // Extract Pregabalina times
+                if (d.Pregabalina && d.Pregabalina !== '-' && d.Pregabalina !== null) {
+                    const dose = this.extractDoseFromText(d.Pregabalina);
+                    if (dose && d.PregabalinaGodzina && d.PregabalinaGodzina !== '-') {
+                        const time = this.parseTime(d.PregabalinaGodzina);
+                        if (time !== null) {
+                            medicationTimes.pregabalina.push({ time, dose });
+                        }
                     }
                 }
-            }
-            
-            // Extract Elvanse times
-            if (d.Elvanse && d.Elvanse !== '-' && d.Elvanse !== null) {
-                const dose = this.extractDoseFromText(d.Elvanse);
-                if (dose && d.ElvanseGodzina && d.ElvanseGodzina !== '-') {
-                    const time = this.parseTime(d.ElvanseGodzina);
-                    if (time !== null) {
-                        medicationTimes.elvanse.push({ time, dose });
+                
+                // Extract Elvanse times
+                if (d.Elvanse && d.Elvanse !== '-' && d.Elvanse !== null) {
+                    const dose = this.extractDoseFromText(d.Elvanse);
+                    if (dose && d.ElvanseGodzina && d.ElvanseGodzina !== '-') {
+                        const time = this.parseTime(d.ElvanseGodzina);
+                        if (time !== null) {
+                            medicationTimes.elvanse.push({ time, dose });
+                        }
                     }
                 }
+            });
+            
+            // Generate 24-hour time points
+            const hours = Array.from({ length: 25 }, (_, i) => i); // 0-24
+            
+            // Calculate PK curves for each medication
+            const traces = [];
+            const shapes = [];
+            const annotations = [];
+            
+            // Pregabalina curve
+            if (medicationTimes.pregabalina.length > 0) {
+                if (!CONFIG.PK_PROFILES || !CONFIG.PK_PROFILES.pregabalina) {
+                    console.error('CONFIG.PK_PROFILES.pregabalina is not defined');
+                    return;
+                }
+                const pk = CONFIG.PK_PROFILES.pregabalina;
+                const pregabCurve = hours.map(hour => {
+                    let maxConc = 0;
+                    medicationTimes.pregabalina.forEach(({ time, dose }) => {
+                        const hoursSinceDose = (hour - time + 24) % 24;
+                        if (hoursSinceDose >= 0 && hoursSinceDose <= pk.duration) {
+                            // Simplified PK model: absorption + elimination
+                            const t = hoursSinceDose;
+                            const ka = 2.0; // absorption rate
+                            const ke = Math.log(2) / pk.thalf; // elimination rate
+                            const tmax = pk.tmax;
+                            
+                            let conc = 0;
+                            if (t <= tmax) {
+                                // Absorption phase
+                                conc = (dose / 75) * 100 * (1 - Math.exp(-ka * t));
+                            } else {
+                                // Elimination phase
+                                const cmax = (dose / 75) * 100 * (1 - Math.exp(-ka * tmax));
+                                conc = cmax * Math.exp(-ke * (t - tmax));
+                            }
+                            maxConc = Math.max(maxConc, conc);
+                        }
+                    });
+                    return maxConc;
+                });
+                
+                traces.push({
+                    x: hours,
+                    y: pregabCurve,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Pregabalina',
+                    fill: 'tozeroy',
+                    fillcolor: `rgba(139, 92, 246, 0.2)`,
+                    line: { color: pk.color, width: 3 },
+                    hovertemplate: 'Godzina: %{x}:00<br>Stężenie: %{y:.1f}%<extra></extra>'
+                });
+                
+                // Add vertical lines for dose times
+                medicationTimes.pregabalina.forEach(({ time }) => {
+                    shapes.push({
+                        type: 'line',
+                        x0: time,
+                        x1: time,
+                        y0: 0,
+                        y1: 100,
+                        line: { color: pk.color, width: 1, dash: 'dot' }
+                    });
+                });
             }
-        });
         
-        // Generate 24-hour time points
-        const hours = Array.from({ length: 25 }, (_, i) => i); // 0-24
-        
-        // Calculate PK curves for each medication
-        const traces = [];
-        const shapes = [];
-        const annotations = [];
-        
-        // Pregabalina curve
-        if (medicationTimes.pregabalina.length > 0) {
-            const pk = CONFIG.PK_PROFILES.pregabalina;
-            const pregabCurve = hours.map(hour => {
-                let maxConc = 0;
-                medicationTimes.pregabalina.forEach(({ time, dose }) => {
-                    const hoursSinceDose = (hour - time + 24) % 24;
-                    if (hoursSinceDose >= 0 && hoursSinceDose <= pk.duration) {
-                        // Simplified PK model: absorption + elimination
-                        const t = hoursSinceDose;
-                        const ka = 2.0; // absorption rate
-                        const ke = Math.log(2) / pk.thalf; // elimination rate
-                        const tmax = pk.tmax;
-                        
-                        let conc = 0;
-                        if (t <= tmax) {
-                            // Absorption phase
-                            conc = (dose / 75) * 100 * (1 - Math.exp(-ka * t));
-                        } else {
-                            // Elimination phase
-                            const cmax = (dose / 75) * 100 * (1 - Math.exp(-ka * tmax));
-                            conc = cmax * Math.exp(-ke * (t - tmax));
+            // Elvanse curve
+            if (medicationTimes.elvanse.length > 0) {
+                if (!CONFIG.PK_PROFILES || !CONFIG.PK_PROFILES.elvanse) {
+                    console.error('CONFIG.PK_PROFILES.elvanse is not defined');
+                    return;
+                }
+                const pk = CONFIG.PK_PROFILES.elvanse;
+                const elvanseCurve = hours.map(hour => {
+                    let maxConc = 0;
+                    medicationTimes.elvanse.forEach(({ time, dose }) => {
+                        const hoursSinceDose = (hour - time + 24) % 24;
+                        if (hoursSinceDose >= 0 && hoursSinceDose <= pk.duration) {
+                            const t = hoursSinceDose;
+                            const ka = 0.5; // slower absorption
+                            const ke = Math.log(2) / pk.thalf;
+                            const tmax = pk.tmax;
+                            
+                            let conc = 0;
+                            if (t <= tmax) {
+                                conc = (dose / 70) * 100 * (1 - Math.exp(-ka * t));
+                            } else {
+                                const cmax = (dose / 70) * 100 * (1 - Math.exp(-ka * tmax));
+                                conc = cmax * Math.exp(-ke * (t - tmax));
+                            }
+                            maxConc = Math.max(maxConc, conc);
                         }
-                        maxConc = Math.max(maxConc, conc);
-                    }
+                    });
+                    return maxConc;
                 });
-                return maxConc;
+                
+                traces.push({
+                    x: hours,
+                    y: elvanseCurve,
+                    type: 'scatter',
+                    mode: 'lines',
+                    name: 'Elvanse',
+                    fill: 'tozeroy',
+                    fillcolor: `rgba(245, 158, 11, 0.2)`,
+                    line: { color: pk.color, width: 3 },
+                    hovertemplate: 'Godzina: %{x}:00<br>Stężenie: %{y:.1f}%<extra></extra>'
+                });
+                
+                medicationTimes.elvanse.forEach(({ time }) => {
+                    shapes.push({
+                        type: 'line',
+                        x0: time,
+                        x1: time,
+                        y0: 0,
+                        y1: 100,
+                        line: { color: pk.color, width: 1, dash: 'dot' }
+                    });
+                });
+            }
+            
+            if (traces.length === 0) return;
+            
+            // Therapeutic window (50% of max)
+            shapes.push({
+                type: 'rect',
+                xref: 'paper',
+                yref: 'y',
+                x0: 0,
+                y0: 50,
+                x1: 1,
+                y1: 100,
+                fillcolor: 'rgba(16, 185, 129, 0.1)',
+                line: { width: 0 }
             });
             
-            traces.push({
-                x: hours,
-                y: pregabCurve,
-                type: 'scatter',
-                mode: 'lines',
-                name: 'Pregabalina',
-                fill: 'tozeroy',
-                fillcolor: `rgba(139, 92, 246, 0.2)`,
-                line: { color: pk.color, width: 3 },
-                hovertemplate: 'Godzina: %{x}:00<br>Stężenie: %{y:.1f}%<extra></extra>'
-            });
+            const template = this.getTemplate();
+            const layout = {
+                ...template,
+                title: {
+                    text: CONFIG.CHART_TITLES.pharmacokinetics || 'Profil Stężenia Leków w Czasie',
+                    font: { size: 16 }
+                },
+                xaxis: {
+                    ...template.xaxis,
+                    title: 'Godzina dnia',
+                    range: [0, 24],
+                    tickmode: 'linear',
+                    tick0: 0,
+                    dtick: 3
+                },
+                yaxis: {
+                    ...template.yaxis,
+                    title: 'Względne stężenie (%)',
+                    range: [0, 110]
+                },
+                shapes: shapes,
+                legend: {
+                    orientation: 'h',
+                    x: 0.5,
+                    xanchor: 'center',
+                    y: -0.2,
+                    font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 }
+                },
+                margin: (() => {
+                    const m = ChartRenderer.getMobileMargin();
+                    return { t: m.t, r: m.r, b: m.b + 80, l: m.l };
+                })()
+            };
             
-            // Add vertical lines for dose times
-            medicationTimes.pregabalina.forEach(({ time }) => {
-                shapes.push({
-                    type: 'line',
-                    x0: time,
-                    x1: time,
-                    y0: 0,
-                    y1: 100,
-                    line: { color: pk.color, width: 1, dash: 'dot' }
-                });
+            Plotly.newPlot(containerId, traces, layout, {
+                responsive: true,
+                displayModeBar: false
             });
+            this.setupResizeObserver(containerId);
+        } catch (error) {
+            console.error('Error rendering pharmacokinetics chart:', error);
+            const container = document.getElementById(containerId);
+            if (container) {
+                container.innerHTML = '<p style="color: var(--text-secondary); padding: 20px; text-align: center;">Błąd renderowania wykresu farmakokinetyki. Sprawdź konsolę przeglądarki.</p>';
+            }
         }
-        
-        // Elvanse curve
-        if (medicationTimes.elvanse.length > 0) {
-            const pk = CONFIG.PK_PROFILES.elvanse;
-            const elvanseCurve = hours.map(hour => {
-                let maxConc = 0;
-                medicationTimes.elvanse.forEach(({ time, dose }) => {
-                    const hoursSinceDose = (hour - time + 24) % 24;
-                    if (hoursSinceDose >= 0 && hoursSinceDose <= pk.duration) {
-                        const t = hoursSinceDose;
-                        const ka = 0.5; // slower absorption
-                        const ke = Math.log(2) / pk.thalf;
-                        const tmax = pk.tmax;
-                        
-                        let conc = 0;
-                        if (t <= tmax) {
-                            conc = (dose / 70) * 100 * (1 - Math.exp(-ka * t));
-                        } else {
-                            const cmax = (dose / 70) * 100 * (1 - Math.exp(-ka * tmax));
-                            conc = cmax * Math.exp(-ke * (t - tmax));
-                        }
-                        maxConc = Math.max(maxConc, conc);
-                    }
-                });
-                return maxConc;
-            });
-            
-            traces.push({
-                x: hours,
-                y: elvanseCurve,
-                type: 'scatter',
-                mode: 'lines',
-                name: 'Elvanse',
-                fill: 'tozeroy',
-                fillcolor: `rgba(245, 158, 11, 0.2)`,
-                line: { color: pk.color, width: 3 },
-                hovertemplate: 'Godzina: %{x}:00<br>Stężenie: %{y:.1f}%<extra></extra>'
-            });
-            
-            medicationTimes.elvanse.forEach(({ time }) => {
-                shapes.push({
-                    type: 'line',
-                    x0: time,
-                    x1: time,
-                    y0: 0,
-                    y1: 100,
-                    line: { color: pk.color, width: 1, dash: 'dot' }
-                });
-            });
-        }
-        
-        if (traces.length === 0) return;
-        
-        // Therapeutic window (50% of max)
-        shapes.push({
-            type: 'rect',
-            xref: 'paper',
-            yref: 'y',
-            x0: 0,
-            y0: 50,
-            x1: 1,
-            y1: 100,
-            fillcolor: 'rgba(16, 185, 129, 0.1)',
-            line: { width: 0 }
-        });
-        
-        const template = this.getTemplate();
-        const layout = {
-            ...template,
-            title: {
-                text: CONFIG.CHART_TITLES.pharmacokinetics || 'Profil Stężenia Leków w Czasie',
-                font: { size: 16 }
-            },
-            xaxis: {
-                ...template.xaxis,
-                title: 'Godzina dnia',
-                range: [0, 24],
-                tickmode: 'linear',
-                tick0: 0,
-                dtick: 3
-            },
-            yaxis: {
-                ...template.yaxis,
-                title: 'Względne stężenie (%)',
-                range: [0, 110]
-            },
-            shapes: shapes,
-            legend: {
-                orientation: 'h',
-                x: 0.5,
-                xanchor: 'center',
-                y: -0.2,
-                font: { color: '#78716C', family: 'Inter, sans-serif', size: 12 }
-            },
-            margin: (() => {
-                const m = ChartRenderer.getMobileMargin();
-                return { t: m.t, r: m.r, b: m.b + 80, l: m.l };
-            })()
-        };
-        
-        Plotly.newPlot(containerId, traces, layout, {
-            responsive: true,
-            displayModeBar: false
-        });
-        this.setupResizeObserver(containerId);
     },
     
     // Helper: Extract dose from text like "TAK(75MG)"
@@ -1546,49 +1562,101 @@ const ChartRenderer = {
     
     // Render wszystkich wykresów
     renderAllCharts: function(data, stats) {
-        if (!data || data.length === 0) return;
-        
-        const dailyData = stats.dailyData || StatsEngine.aggregateDaily(data);
-        const intradayData = stats.intradayData || StatsEngine.aggregateByTimeOfDay(data);
-        
-        // 1. Trajektoria
-        this.renderGADTrajectory('plot-gad', dailyData, stats);
-        
-        // 2. Profil Dobowy
-        this.renderIntradayProfile('plot-intraday', intradayData);
-        
-        // 3. ADHD
-        this.renderADHDStability('plot-adhd', dailyData);
-        
-        // 4. Stacked Area (zamiast heatmapy)
-        this.renderStackedAreaByTimeOfDay('plot-stacked-area', data);
-        
-        // 5. Pharmacokinetics
-        this.renderPharmacokineticsCurves('plot-pharmacokinetics', data);
-        
-        // 6. Sleep Analysis
-        this.renderSleepChart('plot-sleep', dailyData);
+        try {
+            if (!data || data.length === 0) return;
+            
+            const dailyData = stats.dailyData || StatsEngine.aggregateDaily(data);
+            const intradayData = stats.intradayData || StatsEngine.aggregateByTimeOfDay(data);
+            
+            // 1. Trajektoria
+            try {
+                this.renderGADTrajectory('plot-gad', dailyData, stats);
+            } catch (e) {
+                console.error('Error rendering GAD trajectory:', e);
+            }
+            
+            // 2. Profil Dobowy
+            try {
+                this.renderIntradayProfile('plot-intraday', intradayData);
+            } catch (e) {
+                console.error('Error rendering intraday profile:', e);
+            }
+            
+            // 3. ADHD
+            try {
+                this.renderADHDStability('plot-adhd', dailyData);
+            } catch (e) {
+                console.error('Error rendering ADHD stability:', e);
+            }
+            
+            // 4. Stacked Area (zamiast heatmapy)
+            try {
+                this.renderStackedAreaByTimeOfDay('plot-stacked-area', data);
+            } catch (e) {
+                console.error('Error rendering stacked area:', e);
+            }
+            
+            // 5. Pharmacokinetics
+            try {
+                this.renderPharmacokineticsCurves('plot-pharmacokinetics', data);
+            } catch (e) {
+                console.error('Error rendering pharmacokinetics:', e);
+            }
+            
+            // 6. Sleep Analysis
+            try {
+                this.renderSleepChart('plot-sleep', dailyData);
+            } catch (e) {
+                console.error('Error rendering sleep chart:', e);
+            }
 
-        // 7. Korelacje (Tabela)
-        const variables = ['lek', 'napiecie', 'jakoscSnu', 'brainfog', 'energia', 'fokus', 'pregabalina'];
-        const corrData = StatsEngine.correlationMatrix(data, variables);
-        const labels = ['Lęk', 'Napięcie', 'Sen (Jakość)', 'Klarowność', 'Energia', 'Fokus', 'Pregabalina'];
-        this.renderCorrelationTable('correlation-table-container', { matrix: corrData.matrix, labels: labels });
+            // 7. Korelacje (Tabela)
+            try {
+                const variables = ['lek', 'napiecie', 'jakoscSnu', 'brainfog', 'energia', 'fokus', 'pregabalina'];
+                const corrData = StatsEngine.correlationMatrix(data, variables);
+                const labels = ['Lęk', 'Napięcie', 'Sen (Jakość)', 'Klarowność', 'Energia', 'Fokus', 'Pregabalina'];
+                this.renderCorrelationTable('correlation-table-container', { matrix: corrData.matrix, labels: labels });
+            } catch (e) {
+                console.error('Error rendering correlation table:', e);
+            }
 
-        // 8. Sen vs Lęk Następnego Dnia
-        this.renderSleepVsAnxiety('plot-sleep-anxiety', dailyData);
+            // 8. Sen vs Lęk Następnego Dnia
+            try {
+                this.renderSleepVsAnxiety('plot-sleep-anxiety', dailyData);
+            } catch (e) {
+                console.error('Error rendering sleep vs anxiety:', e);
+            }
 
-        // 9. Rolling Average
-        this.renderRollingAverage('plot-rolling-avg', dailyData);
+            // 9. Rolling Average
+            try {
+                this.renderRollingAverage('plot-rolling-avg', dailyData);
+            } catch (e) {
+                console.error('Error rendering rolling average:', e);
+            }
 
-        // 10. Porównanie Tygodniowe
-        this.renderWeeklyComparison('plot-weekly', dailyData);
+            // 10. Porównanie Tygodniowe
+            try {
+                this.renderWeeklyComparison('plot-weekly', dailyData);
+            } catch (e) {
+                console.error('Error rendering weekly comparison:', e);
+            }
 
-        // 11. Pozytywne vs Negatywne
-        this.renderPositiveVsNegative('plot-positive-vs-negative', dailyData);
+            // 11. Pozytywne vs Negatywne
+            try {
+                this.renderPositiveVsNegative('plot-positive-vs-negative', dailyData);
+            } catch (e) {
+                console.error('Error rendering positive vs negative:', e);
+            }
 
-        // 12. Metryki per Pora Dnia
-        this.renderMetricsByTimeOfDay('plot-metrics-by-time', data);
+            // 12. Metryki per Pora Dnia
+            try {
+                this.renderMetricsByTimeOfDay('plot-metrics-by-time', data);
+            } catch (e) {
+                console.error('Error rendering metrics by time:', e);
+            }
+        } catch (error) {
+            console.error('Critical error in renderAllCharts:', error);
+        }
     },
     
     // Eksport do PNG

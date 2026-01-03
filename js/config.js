@@ -8,7 +8,7 @@ const CONFIG = {
     
     // App info (generic for privacy)
     APP_NAME: 'Symptom Tracker',
-    APP_VERSION: '4.1.0',
+    APP_VERSION: '4.2.0',
     
     // Default disease context (can be overridden by user settings)
     DEFAULT_CONTEXT: {
@@ -45,6 +45,24 @@ const CONFIG = {
     // Pharmacokinetics profiles (generic - can be customized)
     // Users can configure their own medications in settings
     PK_PROFILES: {
+        // Pregabalina profile
+        pregabalina: {
+            name: 'Pregabalina',
+            tmax: 1.0,      // hours to peak
+            thalf: 6.3,     // elimination half-life
+            duration: 12,   // effective duration
+            color: '#8B5CF6',
+            doses: []
+        },
+        // Elvanse (lisdexamfetamine) profile
+        elvanse: {
+            name: 'Elvanse',
+            tmax: 3.5,
+            thalf: 11,
+            duration: 14,
+            color: '#F59E0B',
+            doses: []
+        },
         // Generic profile 1 - can be customized via settings
         medication1: {
             name: 'Lek 1',
